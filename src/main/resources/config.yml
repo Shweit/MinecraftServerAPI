@@ -2,3 +2,24 @@
 
 # The port the API should listen on.
 port: 7000
+
+# If you want to enable Authentication, set this to true.
+# It is not recommended to disable this. If you do, everyone can access the API.
+authentication: true
+authentication_key: "CHANGE_ME"
+
+# Here you can turn on/off the different Webhooks.
+# If you want to disable a Webhook, set it to false.
+webhooks:
+  player_location: true
+  player_join: true
+  player_leave: true
+  player_death: true
+  server_start: true
+  server_stop: true
+  server_chat: true
+
+# Here you can list an extra set of Files or Directories which should be saved by the Backup-System.
+# Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config.yml", "server.properties"]
+# e.g.: ["plugins/MyPlugin/config.yml", "plugins/MyPlugin/data/"]
+backup_files: []

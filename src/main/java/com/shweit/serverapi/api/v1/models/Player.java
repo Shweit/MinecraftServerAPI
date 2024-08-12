@@ -1,4 +1,4 @@
-package com.shweit.serverapi.models;
+package com.shweit.serverapi.api.v1.models;
 
 import com.google.gson.annotations.Expose;
 import org.bukkit.GameMode;
@@ -61,6 +61,9 @@ public class Player {
 
     @Expose
     private Long lastPlayed = null;
+
+    @Expose
+    private Boolean isBedrockPlayer = null;
 
     public Player uuid(String uuid) {
         this.uuid = uuid;
@@ -340,5 +343,13 @@ public class Player {
 
     public void setLastPlayed(Long lastPlayed) {
         this.lastPlayed = lastPlayed;
+    }
+
+    public Boolean getIsBedrockPlayer() {
+        return isBedrockPlayer;
+    }
+
+    public void setIsBedrockPlayer(Boolean isFloodgate) {
+        this.isBedrockPlayer = isFloodgate;
     }
 }

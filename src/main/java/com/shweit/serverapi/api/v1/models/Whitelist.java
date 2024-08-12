@@ -1,4 +1,4 @@
-package com.shweit.serverapi.models;
+package com.shweit.serverapi.api.v1.models;
 
 import com.google.gson.annotations.Expose;
 
