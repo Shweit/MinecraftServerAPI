@@ -9,5 +9,44 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
 paths:
-
+  /v1/players:
+    get:
+      summary: Retrieve the list of online players
+      description: >
+        This endpoint returns a list of all players who are currently online on the Minecraft server.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A JSON array of online players
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  onlinePlayers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the player
+                          example: "Steve"
+                        uuid:
+                          type: string
+                          description: The UUID of the player
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error

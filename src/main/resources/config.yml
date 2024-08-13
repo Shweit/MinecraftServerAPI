@@ -9,6 +9,10 @@ authentication:
   enabled: true
   key: "CHANGE_ME"
 
+# If you want to enable the debug mode, set this to true.
+# This will print more information to the console.
+debug: false
+
 # Here you can turn on/off the different Webhooks.
 # If you want to disable a Webhook, set it to false.
 webhooks:

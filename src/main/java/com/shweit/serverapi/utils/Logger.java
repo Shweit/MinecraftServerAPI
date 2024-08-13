@@ -1,6 +1,9 @@
 package com.shweit.serverapi.utils;
 
+import com.shweit.serverapi.MinecraftServerAPI;
 import org.bukkit.Bukkit;
+
+import java.util.logging.Level;
 
 public class Logger {
     private static final String PREFIX = "[MinecraftServerAPI] ";
@@ -18,6 +21,10 @@ public class Logger {
     }
 
     public static void debug(String message) {
-        Bukkit.getLogger().log(java.util.logging.Level.FINE, PREFIX + message);
+        boolean debugMode = MinecraftServerAPI.config.getBoolean("debug", false);
+
+        if (debugMode) {
+            Bukkit.getLogger().log(Level.INFO, "[DEBUG] " + PREFIX + message);
+        }
     }
 }
