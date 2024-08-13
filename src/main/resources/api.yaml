@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: Minecraft Server API
+  description: API für den Minecraft Server
+  version: 1.0.0
+servers:
+  - url: http://localhost:7000
+paths:
+  /v1/whitelist:
+    get:
+      summary: Get the whitelist with all players
+      description: This endpoint returns the whitelist with all players.
+      tags:
+        - Whitelist
+      responses:
+        '200':
+          description: Erfolgreiche Antwort
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Whitelist disabled

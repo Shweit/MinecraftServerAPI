@@ -5,8 +5,9 @@ port: 7000
 
 # If you want to enable Authentication, set this to true.
 # It is not recommended to disable this. If you do, everyone can access the API.
-authentication: true
-authentication_key: "CHANGE_ME"
+authentication:
+  enabled: true
+  key: "CHANGE_ME"
 
 # Here you can turn on/off the different Webhooks.
 # If you want to disable a Webhook, set it to false.
