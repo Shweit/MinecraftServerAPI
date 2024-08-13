@@ -20,5 +20,8 @@ public class RegisterEndpoints {
 
         server.get("/v1/banned-players", playerAPI::getBannedPlayers);
         Logger.info("Registered GET /v1/banned-players");
+
+        server.get("/v1/offline-players", playerAPI::getOfflinePlayers);
+        Logger.info("Registered GET /v1/offline-players");
     }
 }

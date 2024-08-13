@@ -39,4 +39,20 @@ public class PlayerAPI {
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", responseJson.toString());
     }
+
+    public NanoHTTPD.Response getOfflinePlayers() {
+        JSONArray offlinePlayersArray = new JSONArray();
+
+        for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+            JSONObject playerJson = new JSONObject();
+            playerJson.put("name", player.getName());
+            playerJson.put("uuid", player.getUniqueId().toString());
+            offlinePlayersArray.put(playerJson);
+        }
+
+        JSONObject responseJson = new JSONObject();
+        responseJson.put("offlinePlayers", offlinePlayersArray);
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", responseJson.toString());
+    }
 }
