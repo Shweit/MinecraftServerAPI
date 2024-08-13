@@ -50,3 +50,37 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/banned-players:
+    get:
+      summary: Retrieve the list of banned players
+      description: >
+        This endpoint returns a list of all banned players.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A JSON array of banned players
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bannedPlayers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the player
+                          example: "Steve"
+                        uuid:
+                          type: string
+                          description: The UUID of the player
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error

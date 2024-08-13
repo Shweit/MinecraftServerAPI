@@ -17,5 +17,8 @@ public class RegisterEndpoints {
     public void registerEndpoints() {
         server.get("/v1/players", playerAPI::getPlayers);
         Logger.info("Registered GET /v1/players");
+
+        server.get("/v1/banned-players", playerAPI::getBannedPlayers);
+        Logger.info("Registered GET /v1/banned-players");
     }
 }
