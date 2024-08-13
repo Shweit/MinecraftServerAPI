@@ -1,25 +1,13 @@
 openapi: 3.0.0
 info:
   title: Minecraft Server API
-  description: API für den Minecraft Server
+  description: This API provides endpoints for interacting with and managing various aspects of a Minecraft server.
   version: 1.0.0
-servers:
-  - url: http://localhost:7000
+  contact:
+    name: Dennis van den Brock
+    email: dennisvandenbrock54@gmail.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 paths:
-  /v1/whitelist:
-    get:
-      summary: Get the whitelist with all players
-      description: This endpoint returns the whitelist with all players.
-      tags:
-        - Whitelist
-      responses:
-        '200':
-          description: Erfolgreiche Antwort
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-        '400':
-          description: Whitelist disabled
+
