@@ -369,4 +369,71 @@ public class PlayerAPI {
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
+
+    public NanoHTTPD.Response getPlayerLocation(Map<String, String> params) {
+        String username = params.get("username");
+        UUID uuid = Helper.usernameToUUID(username);
+
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        JSONObject locationJson = new JSONObject();
+
+        locationJson.put("world", offlinePlayer.getLocation().getWorld().getName());
+        locationJson.put("x", offlinePlayer.getLocation().getX());
+        locationJson.put("y", offlinePlayer.getLocation().getY());
+        locationJson.put("z", offlinePlayer.getLocation().getZ());
+        locationJson.put("yaw", offlinePlayer.getLocation().getYaw());
+        locationJson.put("pitch", offlinePlayer.getLocation().getPitch());
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", locationJson.toString());
+    }
+
+    public NanoHTTPD.Response setPlayerLocation(Map<String, String> params) {
+        String username = params.get("username");
+        UUID uuid = Helper.usernameToUUID(username);
+
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Player needs to be online to be able to set location
+        Player player = offlinePlayer.getPlayer();
+        if (player == null || !player.isOnline()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Get location from request
+        String worldName = params.get("world");
+        double x = Double.parseDouble(params.get("x"));
+        double y = Double.parseDouble(params.get("y"));
+        double z = Double.parseDouble(params.get("z"));
+        float yaw = params.get("yaw") != null ? Float.parseFloat(params.get("yaw")) : player.getLocation().getYaw();
+        float pitch = params.get("pitch") != null ? Float.parseFloat(params.get("pitch")) : player.getLocation().getPitch();
+
+        World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        Location location = new Location(world, x, y, z, yaw, pitch);
+        Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
+            player.teleport(location);
+        });
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+    }
 }

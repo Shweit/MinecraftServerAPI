@@ -49,5 +49,11 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/pardon", playerAPI::pardonPlayer);
         Logger.info("Registered POST /v1/players/{username}/pardon");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/location", playerAPI::getPlayerLocation);
+        Logger.info("Registered GET /v1/players/{username}/location");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/location", playerAPI::setPlayerLocation);
+        Logger.info("Registered POST /v1/players/{username}/location");
     }
 }

@@ -477,3 +477,131 @@ paths:
           description: Player not found
         '500':
           description: Internal server error
+  /v1/players/{username}/location:
+    get:
+      summary: Retrieve player location by username
+      description: >
+        This endpoint returns the current location of a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player location
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  location:
+                    type: object
+                    description: Player location
+                    properties:
+                      world:
+                        type: string
+                        description: The world the player is in
+                        example: "world"
+                      x:
+                        type: number
+                        format: double
+                        description: The X coordinate of the player
+                        example: 100.5
+                      y:
+                        type: number
+                        format: double
+                        description: The Y coordinate of the player
+                        example: 64.0
+                      z:
+                        type: number
+                        format: double
+                        description: The Z coordinate of the player
+                        example: -200.5
+                      yaw:
+                        type: number
+                        format: double
+                        description: The yaw of the player
+                        example: 0.0
+                      pitch:
+                        type: number
+                        format: double
+                        description: The pitch of the player
+                        example: 0.0
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+    post:
+      summary: Teleport a player by username
+      description: >
+          This endpoint teleports a player to a specified location based on their username. The player must be online.
+      tags:
+          - Players
+      security:
+          - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+              type: string
+        - name: world
+          in: query
+          description: The world to teleport the player to
+          required: true
+          schema:
+              type: string
+        - name: x
+          in: query
+          description: The X coordinate to teleport the player to
+          required: true
+          schema:
+              type: number
+              format: double
+        - name: y
+          in: query
+          description: The Y coordinate to teleport the player to
+          required: true
+          schema:
+              type: number
+              format: double
+        - name: z
+          in: query
+          description: The Z coordinate to teleport the player to
+          required: true
+          schema:
+              type: number
+              format: double
+        - name: yaw
+          in: query
+          description: The yaw to set the player to
+          required: false
+          schema:
+              type: number
+              format: double
+        - name: pitch
+          in: query
+          description: The pitch to set the player to
+          required: false
+          schema:
+              type: number
+              format: double
+      responses:
+        '200':
+          description: Player teleported successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
