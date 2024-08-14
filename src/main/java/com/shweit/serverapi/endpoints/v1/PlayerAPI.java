@@ -12,11 +12,11 @@ import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.annotation.Target;
 import java.time.Duration;
 import java.util.*;
 
 public class PlayerAPI {
+
     public NanoHTTPD.Response getPlayers(Map<String, String> params) {
         JSONArray playersArray = new JSONArray();
 
