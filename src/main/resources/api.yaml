@@ -246,3 +246,36 @@ paths:
           description: Player not found
         '500':
           description: Internal server error
+  /v1/players/{username}/stats:
+    get:
+      summary: Retrieve player statistics by username
+      description: >
+        This endpoint returns statistics about a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    type: object
+                    description: Player statistics
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found
+        '500':
+          description: Internal server error

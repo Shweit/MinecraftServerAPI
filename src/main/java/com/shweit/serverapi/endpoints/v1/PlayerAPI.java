@@ -1,12 +1,17 @@
 package com.shweit.serverapi.endpoints.v1;
 
+import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerAPI {
@@ -97,5 +102,45 @@ public class PlayerAPI {
         playerJson.put("lastDeathLocation", lastDeathLocationJson);
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", playerJson.toString());
+    }
+
+    public NanoHTTPD.Response getPlayerStats(Map<String, String> params) {
+        String username = params.get("username");
+        OfflinePlayer player = Bukkit.getOfflinePlayer(username);
+        if (player == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        Map<String, Object> stats = new HashMap<>();
+
+        for (Statistic stat : Statistic.values()) {
+            if (!stat.isSubstatistic()) {
+                stats.put(stat.name(), player.getStatistic(stat));
+            }
+        }
+
+        for (Material material : Material.values()) {
+            try {
+                if (material.isBlock()) {
+                    stats.put("MINE_BLOCK_" + material.name(), player.getStatistic(Statistic.MINE_BLOCK, material));
+                }
+                stats.put("USE_ITEM_" + material.name(), player.getStatistic(Statistic.USE_ITEM, material));
+                stats.put("BREAK_ITEM_" + material.name(), player.getStatistic(Statistic.BREAK_ITEM, material));
+                stats.put("CRAFT_ITEM_" + material.name(), player.getStatistic(Statistic.CRAFT_ITEM, material));
+            } catch (IllegalArgumentException e) {
+                Logger.warning("Failed to get statistic for material: " + material.name());
+            }
+        }
+
+        for (EntityType entityType : EntityType.values()) {
+            try {
+                stats.put("KILL_ENTITY_" + entityType.name(), player.getStatistic(Statistic.KILL_ENTITY, entityType));
+                stats.put("ENTITY_KILLED_BY_" + entityType.name(), player.getStatistic(Statistic.ENTITY_KILLED_BY, entityType));
+            } catch (IllegalArgumentException e) {
+                Logger.warning("Failed to get statistic for entity type: " + entityType.name());
+            }
+        }
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", new JSONObject(stats).toString());
     }
 }
