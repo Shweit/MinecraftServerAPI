@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -282,6 +283,24 @@ public class PlayerAPI {
         String reason = params.get("reason");
         Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
             player.kickPlayer(reason != null ? reason : "You have been kicked from the server.");
+        });
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+    }
+
+    public NanoHTTPD.Response banPlayer(Map<String, String> params) {
+        String username = params.get("username");
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+
+        if (offlinePlayer == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Get reason from request
+        String reason = params.get("reason");
+        Duration duration = params.containsKey("duration") ? Duration.parse("PT" + params.get("duration") + "S") : null;
+        Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
+            offlinePlayer.ban(reason != null ? reason : "You have been banned from the server.", duration, null);
         });
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
