@@ -312,3 +312,36 @@ paths:
           description: Player not found or Player is not online
         '500':
           description: Internal server error
+  /v1/players/{username}/inventory:
+    get:
+      summary: Retrieve player inventory by username
+      description: >
+        This endpoint returns the inventory of a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player inventory
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inventory:
+                    type: object
+                    description: Player inventory
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error

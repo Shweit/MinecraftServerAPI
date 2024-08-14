@@ -182,4 +182,46 @@ public class PlayerAPI {
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", advancementsJson.toString());
     }
+
+    public NanoHTTPD.Response getPlayerInventory(Map<String, String> params) {
+        String username = params.get("username");
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+
+        if (offlinePlayer == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Spieler muss online sein, um Inventar abrufen zu können
+        Player player = offlinePlayer.getPlayer();
+        if (player == null || !player.isOnline()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        JSONObject inventoryJson = new JSONObject();
+
+        for (int i = 0; i < player.getInventory().getSize(); i++) {
+            if (player.getInventory().getItem(i) == null || player.getInventory().getItem(i).getType() == Material.AIR) {
+                continue;
+            }
+
+            JSONObject itemJson = new JSONObject();
+            itemJson.put("type", player.getInventory().getItem(i).getType().name());
+            itemJson.put("amount", player.getInventory().getItem(i).getAmount());
+            itemJson.put("durability", player.getInventory().getItem(i).getDurability());
+            itemJson.put("displayName", player.getInventory().getItem(i).getItemMeta().getDisplayName());
+            itemJson.put("lore", player.getInventory().getItem(i).getItemMeta().getLore());
+            itemJson.put("enchantments", player.getInventory().getItem(i).getEnchantments());
+            itemJson.put("attributes", player.getInventory().getItem(i).getItemMeta().getAttributeModifiers());
+            itemJson.put("flags", player.getInventory().getItem(i).getItemMeta().getItemFlags());
+            itemJson.put("unbreakable", player.getInventory().getItem(i).getItemMeta().isUnbreakable());
+            if (player.getInventory().getItem(i).getItemMeta().hasCustomModelData()) {
+                itemJson.put("customModelData", player.getInventory().getItem(i).getItemMeta().getCustomModelData());
+            }
+            itemJson.put("itemFlags", player.getInventory().getItem(i).getItemMeta().getItemFlags());
+            itemJson.put("itemMeta", player.getInventory().getItem(i).getItemMeta());
+            inventoryJson.put(String.valueOf(i), itemJson);
+        }
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", inventoryJson.toString());
+    }
 }
