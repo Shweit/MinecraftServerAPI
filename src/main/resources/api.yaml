@@ -345,3 +345,42 @@ paths:
           description: Player not found or Player is not online
         '500':
           description: Internal server error
+  /v1/players/{username}/inventory/{slot}:
+    get:
+      summary: Retrieve player inventory slot by username and slot number
+      description: >
+        This endpoint returns the item in a specific slot of a player's inventory based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+        - name: slot
+          in: path
+          description: The slot number of the item in the player's inventory
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Player inventory slot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    type: object
+                    description: Item in the specified slot
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
