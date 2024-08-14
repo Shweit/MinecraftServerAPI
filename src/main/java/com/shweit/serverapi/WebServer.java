@@ -1,11 +1,21 @@
 package com.shweit.serverapi;
 
+import com.shweit.serverapi.utils.Logger;
+import com.shweit.serverapi.utils.RouteDefinition;
 import fi.iki.elonen.NanoHTTPD;
+
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class WebServer extends NanoHTTPD {
     private final boolean authenticationEnabled;
     private final String authenticationKey;
+    private final List<RouteDefinition> routes = new ArrayList<>();
 
     public WebServer(int port, boolean authenticationEnabled, String authenticationKey) {
         super(port);
@@ -16,8 +26,12 @@ public class WebServer extends NanoHTTPD {
     @Override
     public Response serve(IHTTPSession session) {
         String uri = session.getUri();
+        NanoHTTPD.Method method = session.getMethod();
+        Map<String, String> params = new HashMap<>();
 
-        // Ausnahme für den Root-Pfad und statische Swagger-Dateien von der Authentifizierung
+        Logger.debug("Received request for: " + uri + " with method: " + method);
+
+        // Exception for the root path, swagger files and /api-docs from authentication
         if (!uri.equals("/") && !uri.startsWith("/swagger") && !uri.startsWith("/api-docs") && authenticationEnabled) {
             String authHeader = session.getHeaders().get("authorization");
             if (authHeader == null || !authHeader.equals(authenticationKey)) {
@@ -36,7 +50,7 @@ public class WebServer extends NanoHTTPD {
         }
 
         // Serve Swagger UI files on root path
-        if (uri.equalsIgnoreCase("/") || uri.startsWith("/")) {
+        if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger")) {
             if ("/".equals(uri)) {
                 uri = "/index.html"; // Redirect to the main Swagger UI page
             }
@@ -45,20 +59,41 @@ public class WebServer extends NanoHTTPD {
                 String mimeType = determineMimeType(uri);
                 return newChunkedResponse(Response.Status.OK, mimeType, resourceStream);
             } else {
+                Logger.debug("Resource not found: " + uri);
                 return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Not Found");
             }
         }
 
+        // Extract query parameters and add them to the params map
+        if (session.getQueryParameterString() != null) {
+            session.getParameters().forEach((key, value) -> params.put(key, value.get(0)));
+        }
+
+        for (RouteDefinition route : routes) {
+            if (route.matches(uri, method, params)) {
+                return route.getHandler().apply(params);
+            }
+        }
+
+        Logger.debug("No route found for: " + uri + " with method: " + method);
+
         // Default response
-        return newFixedLengthResponse("Hello, this is a response from the Minecraft Plugin WebServer!");
+        return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not Found");
     }
 
-    // Custom method to determine MIME type
+
+
+
+    // Method to determine MIME type
     private String determineMimeType(String uri) {
         if (uri.endsWith(".html")) return "text/html";
         if (uri.endsWith(".css")) return "text/css";
         if (uri.endsWith(".js")) return "application/javascript";
         if (uri.endsWith(".yaml")) return "application/yaml";
         return "text/plain";
+    }
+
+    public void addRoute(NanoHTTPD.Method method, String routePattern, Function<Map<String, String>, Response> handler) {
+        routes.add(new RouteDefinition(method, routePattern, handler));
     }
 }

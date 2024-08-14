@@ -9,20 +9,28 @@
 
 package com.shweit.serverapi;
 
+import com.shweit.serverapi.endpoints.RegisterEndpoints;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 public class MinecraftServerAPI extends JavaPlugin  {
 
     private static final int DEFAULT_PORT = 7000;
-    private NanoHTTPD server;
+    private WebServer server;
+    public static FileConfiguration config;
+    public static String pluginName = "MinecraftServerAPI";
+    private static MinecraftServerAPI instance;
 
     @Override
     public final void onEnable() {
         createConfig();
+
+        config = getConfig();
+        instance = this;
 
         boolean authEnabled = getConfig().getBoolean("authentication.enabled", true);
         String authKey = getConfig().getString("authentication.key", "CHANGE_ME");
@@ -38,8 +46,11 @@ public class MinecraftServerAPI extends JavaPlugin  {
         int port = getConfig().getInt("port", DEFAULT_PORT);
         server = new WebServer(port, authEnabled, authKey);
 
+        RegisterEndpoints registerEndpoints = new RegisterEndpoints(server);
+        registerEndpoints.registerEndpoints();
+
         try {
-            server.start();
+            server.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
             Logger.info("Web server started on port " + port);
         } catch (Exception e) {
             Logger.error("Failed to start web server: " + e.getMessage());
@@ -60,5 +71,9 @@ public class MinecraftServerAPI extends JavaPlugin  {
         if (!configFile.exists())  {
             saveResource("config.yml", false);
         }
+    }
+
+    public static MinecraftServerAPI getInstance() {
+        return instance;
     }
 }

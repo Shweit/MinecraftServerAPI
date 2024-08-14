@@ -9,5 +9,599 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
 paths:
-
+  /v1/players:
+    get:
+      summary: Retrieve the list of online players
+      description: >
+        This endpoint returns a list of all players who are currently online on the Minecraft server.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A JSON array of online players
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  onlinePlayers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the player
+                          example: "Steve"
+                        uuid:
+                          type: string
+                          description: The UUID of the player
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/banned-players:
+    get:
+      summary: Retrieve the list of banned players
+      description: >
+        This endpoint returns a list of all banned players.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A JSON array of banned players
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bannedPlayers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the player
+                          example: "Steve"
+                        uuid:
+                          type: string
+                          description: The UUID of the player
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/offline-players:
+    get:
+      summary: Retrieve the list of offline players
+      description: >
+        This endpoint returns a list of all players who are currently offline on the Minecraft server.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A JSON array of offline players
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offlinePlayers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the player
+                          example: "Steve"
+                        uuid:
+                          type: string
+                          description: The UUID of the player
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/players/{username}:
+    get:
+      summary: Retrieve player information by username
+      description: >
+        This endpoint returns information about a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the player
+                    example: "Steve"
+                  uuid:
+                    type: string
+                    description: The UUID of the player
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  firstPlayed:
+                    type: string
+                    description: The date and time the player first joined the server
+                    example: "2021-01-01T12:00:00Z"
+                  lastPlayed:
+                    type: string
+                    description: The date and time the player was last seen on the server
+                    example: "2021-01-02T12:00:00Z"
+                  isOnline:
+                    type: boolean
+                    description: Whether the player is currently online
+                    example: true
+                  isBanned:
+                    type: boolean
+                    description: Whether the player is banned
+                    example: false
+                  isWhitelisted:
+                    type: boolean
+                    description: Whether the player is whitelisted
+                    example: true
+                  isOp:
+                    type: boolean
+                    description: Whether the player is an operator
+                    example: false
+                  location:
+                    type: object
+                    description: The current location of the player
+                    properties:
+                      world:
+                        type: string
+                        description: The world the player is in
+                        example: "world"
+                      x:
+                        type: number
+                        format: double
+                        description: The X coordinate of the player
+                        example: 100.5
+                      y:
+                        type: number
+                        format: double
+                        description: The Y coordinate of the player
+                        example: 64.0
+                      z:
+                        type: number
+                        format: double
+                        description: The Z coordinate of the player
+                        example: -200.5
+                      yaw:
+                        type: number
+                        format: double
+                        description: The yaw of the player
+                        example: 0.0
+                      pitch:
+                        type: number
+                        format: double
+                        description: The pitch of the player
+                        example: 0.0
+                  lastDeathLocation:
+                    type: object
+                    description: The last known death location of the player
+                    properties:
+                      world:
+                        type: string
+                        description: The world the player died in
+                        example: "world_nether"
+                      x:
+                        type: number
+                        format: double
+                        description: The X coordinate of the death location
+                        example: 50.5
+                      y:
+                        type: number
+                        format: double
+                        description: The Y coordinate of the death location
+                        example: 70.0
+                      z:
+                        type: number
+                        format: double
+                        description: The Z coordinate of the death location
+                        example: -150.5
+                      yaw:
+                        type: number
+                        format: double
+                        description: The yaw of the death location
+                        example: 0.0
+                      pitch:
+                        type: number
+                        format: double
+                        description: The pitch of the death location
+                        example: 0.0
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found
+        '500':
+          description: Internal server error
+  /v1/players/{username}/stats:
+    get:
+      summary: Retrieve player statistics by username
+      description: >
+        This endpoint returns statistics about a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    type: object
+                    description: Player statistics
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found
+        '500':
+          description: Internal server error
+  /v1/players/{username}/advancements:
+    get:
+      summary: Retrieve player advancements by username
+      description: >
+        This endpoint returns advancements achieved by a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player advancements
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  advancements:
+                    type: object
+                    description: Player advancements
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+  /v1/players/{username}/inventory:
+    get:
+      summary: Retrieve player inventory by username
+      description: >
+        This endpoint returns the inventory of a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player inventory
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inventory:
+                    type: object
+                    description: Player inventory
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+  /v1/players/{username}/inventory/{slot}:
+    get:
+      summary: Retrieve player inventory slot by username and slot number
+      description: >
+        This endpoint returns the item in a specific slot of a player's inventory based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+        - name: slot
+          in: path
+          description: The slot number of the item in the player's inventory
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Player inventory slot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    type: object
+                    description: Item in the specified slot
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+  /v1/players/{username}/kick:
+    post:
+      summary: Kick a player by username
+      description: >
+        This endpoint kicks a player from the server based on their username. The player must be online.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+        - name: reason
+          in: query
+          description: The reason for kicking the player
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player kicked successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+  /v1/players/{username}/ban:
+    post:
+      summary: Ban a player by username
+      description: >
+        This endpoint bans a player from the server based on their username. The player must be online.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+        - name: reason
+          in: query
+          description: The reason for banning the player
+          required: false
+          schema:
+            type: string
+        - name: duration
+          in: query
+          description: The duration of the ban in seconds
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Player banned successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+  /v1/players/{username}/pardon:
+    post:
+      summary: Unban a player by username
+      description: >
+        This endpoint unbans a player from the server based on their username.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player unbanned successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found
+        '500':
+          description: Internal server error
+  /v1/players/{username}/location:
+    get:
+      summary: Retrieve player location by username
+      description: >
+        This endpoint returns the current location of a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player location
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  location:
+                    type: object
+                    description: Player location
+                    properties:
+                      world:
+                        type: string
+                        description: The world the player is in
+                        example: "world"
+                      x:
+                        type: number
+                        format: double
+                        description: The X coordinate of the player
+                        example: 100.5
+                      y:
+                        type: number
+                        format: double
+                        description: The Y coordinate of the player
+                        example: 64.0
+                      z:
+                        type: number
+                        format: double
+                        description: The Z coordinate of the player
+                        example: -200.5
+                      yaw:
+                        type: number
+                        format: double
+                        description: The yaw of the player
+                        example: 0.0
+                      pitch:
+                        type: number
+                        format: double
+                        description: The pitch of the player
+                        example: 0.0
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+    post:
+      summary: Teleport a player by username
+      description: >
+          This endpoint teleports a player to a specified location based on their username. The player must be online.
+      tags:
+          - Players
+      security:
+          - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+              type: string
+        - name: world
+          in: query
+          description: The world to teleport the player to
+          required: true
+          schema:
+              type: string
+        - name: x
+          in: query
+          description: The X coordinate to teleport the player to
+          required: true
+          schema:
+              type: number
+              format: double
+        - name: y
+          in: query
+          description: The Y coordinate to teleport the player to
+          required: true
+          schema:
+              type: number
+              format: double
+        - name: z
+          in: query
+          description: The Z coordinate to teleport the player to
+          required: true
+          schema:
+              type: number
+              format: double
+        - name: yaw
+          in: query
+          description: The yaw to set the player to
+          required: false
+          schema:
+              type: number
+              format: double
+        - name: pitch
+          in: query
+          description: The pitch to set the player to
+          required: false
+          schema:
+              type: number
+              format: double
+      responses:
+        '200':
+          description: Player teleported successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found or Player is not online
+        '500':
+          description: Internal server error
