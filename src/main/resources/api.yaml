@@ -605,3 +605,19 @@ paths:
           description: Player not found or Player is not online
         '500':
           description: Internal server error
+  /v1/ping:
+    get:
+      summary: Ping the server
+      description: >
+        This endpoint returns a simple response to indicate that the server is online and reachable.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Server is online
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error

@@ -2,6 +2,7 @@ package com.shweit.serverapi.endpoints;
 
 import com.shweit.serverapi.WebServer;
 import com.shweit.serverapi.endpoints.v1.PlayerAPI;
+import com.shweit.serverapi.endpoints.v1.ServerAPI;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.Bukkit;
@@ -10,10 +11,12 @@ public class RegisterEndpoints {
     private final WebServer server;
 
     private final PlayerAPI playerAPI;
+    private final ServerAPI serverAPI;
 
     public RegisterEndpoints(WebServer server) {
         this.server = server;
         this.playerAPI = new PlayerAPI();
+        this.serverAPI = new ServerAPI();
     }
 
     public void registerEndpoints() {
@@ -55,5 +58,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/location", playerAPI::setPlayerLocation);
         Logger.info("Registered POST /v1/players/{username}/location");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/ping", serverAPI::ping);
+        Logger.info("Registered GET /v1/ping");
     }
 }
