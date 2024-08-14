@@ -6,12 +6,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class PlayerAPI {
@@ -142,5 +145,41 @@ public class PlayerAPI {
         }
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", new JSONObject(stats).toString());
+    }
+
+    public NanoHTTPD.Response getPlayerAdvancements(Map<String, String> params) {
+        String username = params.get("username");
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+
+        if (offlinePlayer == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Spieler muss online sein, um Advancements abrufen zu können
+        Player player = offlinePlayer.getPlayer();
+        if (player == null || !player.isOnline()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        JSONObject advancementsJson = new JSONObject();
+
+        // Durch alle Advancements iterieren und den Fortschritt des Spielers abrufen
+        for (Iterator<Advancement> it = Bukkit.advancementIterator(); it.hasNext(); ) {
+            Advancement advancement = it.next();
+            AdvancementProgress progress = player.getAdvancementProgress(advancement);
+
+            JSONObject advancementJson = new JSONObject();
+            advancementJson.put("done", progress.isDone());
+
+            if (!progress.isDone()) {
+                advancementJson.put("criteriaRemaining", progress.getRemainingCriteria());
+            }
+
+            advancementJson.put("criteriaCompleted", progress.getAwardedCriteria());
+
+            advancementsJson.put(advancement.getKey().toString(), advancementJson);
+        }
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", advancementsJson.toString());
     }
 }

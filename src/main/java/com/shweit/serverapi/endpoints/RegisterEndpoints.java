@@ -31,5 +31,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/stats", playerAPI::getPlayerStats);
         Logger.info("Registered GET /v1/players/{username}/stats");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/advancements", playerAPI::getPlayerAdvancements);
+        Logger.info("Registered GET /v1/players/{username}/advancements");
     }
 }
