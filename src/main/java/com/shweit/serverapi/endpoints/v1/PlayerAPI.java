@@ -1,12 +1,10 @@
 package com.shweit.serverapi.endpoints.v1;
 
 import com.shweit.serverapi.MinecraftServerAPI;
+import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.EntityType;
@@ -14,10 +12,9 @@ import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.annotation.Target;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class PlayerAPI {
     public NanoHTTPD.Response getPlayers(Map<String, String> params) {
@@ -70,8 +67,15 @@ public class PlayerAPI {
 
     public NanoHTTPD.Response getPlayer(Map<String, String> params) {
         String username = params.get("username");
-        OfflinePlayer player = Bukkit.getOfflinePlayer(username);
-        if (player == null) {
+        UUID uuid = Helper.usernameToUUID(username);
+
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
         }
 
@@ -79,30 +83,30 @@ public class PlayerAPI {
         JSONObject locationJson = new JSONObject();
         JSONObject lastDeathLocationJson = new JSONObject();
 
-        locationJson.put("world", player.getLocation().getWorld().getName());
-        locationJson.put("x", player.getLocation().getX());
-        locationJson.put("y", player.getLocation().getY());
-        locationJson.put("z", player.getLocation().getZ());
-        locationJson.put("yaw", player.getLocation().getYaw());
-        locationJson.put("pitch", player.getLocation().getPitch());
+        locationJson.put("world", offlinePlayer.getLocation().getWorld().getName());
+        locationJson.put("x", offlinePlayer.getLocation().getX());
+        locationJson.put("y", offlinePlayer.getLocation().getY());
+        locationJson.put("z", offlinePlayer.getLocation().getZ());
+        locationJson.put("yaw", offlinePlayer.getLocation().getYaw());
+        locationJson.put("pitch", offlinePlayer.getLocation().getPitch());
 
-        if (player.getLastDeathLocation() != null) {
-            lastDeathLocationJson.put("world", player.getLastDeathLocation().getWorld().getName());
-            lastDeathLocationJson.put("x", player.getLastDeathLocation().getX());
-            lastDeathLocationJson.put("y", player.getLastDeathLocation().getY());
-            lastDeathLocationJson.put("z", player.getLastDeathLocation().getZ());
-            lastDeathLocationJson.put("yaw", player.getLastDeathLocation().getYaw());
-            lastDeathLocationJson.put("pitch", player.getLastDeathLocation().getPitch());
+        if (offlinePlayer.getLastDeathLocation() != null) {
+            lastDeathLocationJson.put("world", offlinePlayer.getLastDeathLocation().getWorld().getName());
+            lastDeathLocationJson.put("x", offlinePlayer.getLastDeathLocation().getX());
+            lastDeathLocationJson.put("y", offlinePlayer.getLastDeathLocation().getY());
+            lastDeathLocationJson.put("z", offlinePlayer.getLastDeathLocation().getZ());
+            lastDeathLocationJson.put("yaw", offlinePlayer.getLastDeathLocation().getYaw());
+            lastDeathLocationJson.put("pitch", offlinePlayer.getLastDeathLocation().getPitch());
         }
 
-        playerJson.put("name", player.getName());
-        playerJson.put("uuid", player.getUniqueId().toString());
-        playerJson.put("firstPlayed", player.getFirstPlayed());
-        playerJson.put("lastPlayed", player.getLastPlayed());
-        playerJson.put("isOnline", player.isOnline());
-        playerJson.put("isBanned", player.isBanned());
-        playerJson.put("isWhitelisted", player.isWhitelisted());
-        playerJson.put("isOp", player.isOp());
+        playerJson.put("name", offlinePlayer.getName());
+        playerJson.put("uuid", offlinePlayer.getUniqueId().toString());
+        playerJson.put("firstPlayed", offlinePlayer.getFirstPlayed());
+        playerJson.put("lastPlayed", offlinePlayer.getLastPlayed());
+        playerJson.put("isOnline", offlinePlayer.isOnline());
+        playerJson.put("isBanned", offlinePlayer.isBanned());
+        playerJson.put("isWhitelisted", offlinePlayer.isWhitelisted());
+        playerJson.put("isOp", offlinePlayer.isOp());
         playerJson.put("location", locationJson);
         playerJson.put("lastDeathLocation", lastDeathLocationJson);
 
@@ -111,8 +115,15 @@ public class PlayerAPI {
 
     public NanoHTTPD.Response getPlayerStats(Map<String, String> params) {
         String username = params.get("username");
-        OfflinePlayer player = Bukkit.getOfflinePlayer(username);
-        if (player == null) {
+        UUID uuid = Helper.usernameToUUID(username);
+
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
         }
 
@@ -120,18 +131,18 @@ public class PlayerAPI {
 
         for (Statistic stat : Statistic.values()) {
             if (!stat.isSubstatistic()) {
-                stats.put(stat.name(), player.getStatistic(stat));
+                stats.put(stat.name(), offlinePlayer.getStatistic(stat));
             }
         }
 
         for (Material material : Material.values()) {
             try {
                 if (material.isBlock()) {
-                    stats.put("MINE_BLOCK_" + material.name(), player.getStatistic(Statistic.MINE_BLOCK, material));
+                    stats.put("MINE_BLOCK_" + material.name(), offlinePlayer.getStatistic(Statistic.MINE_BLOCK, material));
                 }
-                stats.put("USE_ITEM_" + material.name(), player.getStatistic(Statistic.USE_ITEM, material));
-                stats.put("BREAK_ITEM_" + material.name(), player.getStatistic(Statistic.BREAK_ITEM, material));
-                stats.put("CRAFT_ITEM_" + material.name(), player.getStatistic(Statistic.CRAFT_ITEM, material));
+                stats.put("USE_ITEM_" + material.name(), offlinePlayer.getStatistic(Statistic.USE_ITEM, material));
+                stats.put("BREAK_ITEM_" + material.name(), offlinePlayer.getStatistic(Statistic.BREAK_ITEM, material));
+                stats.put("CRAFT_ITEM_" + material.name(), offlinePlayer.getStatistic(Statistic.CRAFT_ITEM, material));
             } catch (IllegalArgumentException e) {
                 Logger.warning("Failed to get statistic for material: " + material.name());
             }
@@ -139,8 +150,8 @@ public class PlayerAPI {
 
         for (EntityType entityType : EntityType.values()) {
             try {
-                stats.put("KILL_ENTITY_" + entityType.name(), player.getStatistic(Statistic.KILL_ENTITY, entityType));
-                stats.put("ENTITY_KILLED_BY_" + entityType.name(), player.getStatistic(Statistic.ENTITY_KILLED_BY, entityType));
+                stats.put("KILL_ENTITY_" + entityType.name(), offlinePlayer.getStatistic(Statistic.KILL_ENTITY, entityType));
+                stats.put("ENTITY_KILLED_BY_" + entityType.name(), offlinePlayer.getStatistic(Statistic.ENTITY_KILLED_BY, entityType));
             } catch (IllegalArgumentException e) {
                 Logger.warning("Failed to get statistic for entity type: " + entityType.name());
             }
@@ -151,9 +162,15 @@ public class PlayerAPI {
 
     public NanoHTTPD.Response getPlayerAdvancements(Map<String, String> params) {
         String username = params.get("username");
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        UUID uuid = Helper.usernameToUUID(username);
 
-        if (offlinePlayer == null) {
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
         }
 
@@ -187,13 +204,19 @@ public class PlayerAPI {
 
     public NanoHTTPD.Response getPlayerInventory(Map<String, String> params) {
         String username = params.get("username");
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        UUID uuid = Helper.usernameToUUID(username);
 
-        if (offlinePlayer == null) {
+        if (uuid == null) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
         }
 
-        // Spieler muss online sein, um Inventar abrufen zu können
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Player needs to be online to be able to get inventory
         Player player = offlinePlayer.getPlayer();
         if (player == null || !player.isOnline()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
@@ -230,9 +253,15 @@ public class PlayerAPI {
     public NanoHTTPD.Response getPlayerInventorySlot(Map<String, String> params) {
         String username = params.get("username");
         int i = Integer.parseInt(params.get("slot"));
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        UUID uuid = Helper.usernameToUUID(username);
 
-        if (offlinePlayer == null) {
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
         }
 
@@ -267,9 +296,15 @@ public class PlayerAPI {
 
     public NanoHTTPD.Response kickPlayer(Map<String, String> params) {
         String username = params.get("username");
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        UUID uuid = Helper.usernameToUUID(username);
 
-        if (offlinePlayer == null) {
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
         }
 
@@ -290,9 +325,15 @@ public class PlayerAPI {
 
     public NanoHTTPD.Response banPlayer(Map<String, String> params) {
         String username = params.get("username");
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        UUID uuid = Helper.usernameToUUID(username);
 
-        if (offlinePlayer == null) {
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
         }
 
@@ -302,6 +343,29 @@ public class PlayerAPI {
         Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
             offlinePlayer.ban(reason != null ? reason : "You have been banned from the server.", duration, null);
         });
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+    }
+
+    public NanoHTTPD.Response pardonPlayer(Map<String, String> params) {
+        String username = params.get("username");
+        UUID uuid = Helper.usernameToUUID(username);
+
+        if (uuid == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        if (offlinePlayer.isBanned()) {
+            Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
+                Bukkit.getBanList(BanList.Type.NAME).pardon(offlinePlayer.getName());
+            });
+        }
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }

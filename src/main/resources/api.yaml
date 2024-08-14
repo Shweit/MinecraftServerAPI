@@ -452,3 +452,28 @@ paths:
           description: Player not found or Player is not online
         '500':
           description: Internal server error
+  /v1/players/{username}/pardon:
+    post:
+      summary: Unban a player by username
+      description: >
+        This endpoint unbans a player from the server based on their username.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player unbanned successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found
+        '500':
+          description: Internal server error
