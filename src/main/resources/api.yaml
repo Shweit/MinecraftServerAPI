@@ -118,3 +118,131 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/players/{username}:
+    get:
+      summary: Retrieve player information by username
+      description: >
+        This endpoint returns information about a player based on their username. The player must be online or have been online at some point in the past.
+      tags:
+        - Players
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: username
+          in: path
+          description: The username of the player
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the player
+                    example: "Steve"
+                  uuid:
+                    type: string
+                    description: The UUID of the player
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  firstPlayed:
+                    type: string
+                    description: The date and time the player first joined the server
+                    example: "2021-01-01T12:00:00Z"
+                  lastPlayed:
+                    type: string
+                    description: The date and time the player was last seen on the server
+                    example: "2021-01-02T12:00:00Z"
+                  isOnline:
+                    type: boolean
+                    description: Whether the player is currently online
+                    example: true
+                  isBanned:
+                    type: boolean
+                    description: Whether the player is banned
+                    example: false
+                  isWhitelisted:
+                    type: boolean
+                    description: Whether the player is whitelisted
+                    example: true
+                  isOp:
+                    type: boolean
+                    description: Whether the player is an operator
+                    example: false
+                  location:
+                    type: object
+                    description: The current location of the player
+                    properties:
+                      world:
+                        type: string
+                        description: The world the player is in
+                        example: "world"
+                      x:
+                        type: number
+                        format: double
+                        description: The X coordinate of the player
+                        example: 100.5
+                      y:
+                        type: number
+                        format: double
+                        description: The Y coordinate of the player
+                        example: 64.0
+                      z:
+                        type: number
+                        format: double
+                        description: The Z coordinate of the player
+                        example: -200.5
+                      yaw:
+                        type: number
+                        format: double
+                        description: The yaw of the player
+                        example: 0.0
+                      pitch:
+                        type: number
+                        format: double
+                        description: The pitch of the player
+                        example: 0.0
+                  lastDeathLocation:
+                    type: object
+                    description: The last known death location of the player
+                    properties:
+                      world:
+                        type: string
+                        description: The world the player died in
+                        example: "world_nether"
+                      x:
+                        type: number
+                        format: double
+                        description: The X coordinate of the death location
+                        example: 50.5
+                      y:
+                        type: number
+                        format: double
+                        description: The Y coordinate of the death location
+                        example: 70.0
+                      z:
+                        type: number
+                        format: double
+                        description: The Z coordinate of the death location
+                        example: -150.5
+                      yaw:
+                        type: number
+                        format: double
+                        description: The yaw of the death location
+                        example: 0.0
+                      pitch:
+                        type: number
+                        format: double
+                        description: The pitch of the death location
+                        example: 0.0
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '404':
+          description: Player not found
+        '500':
+          description: Internal server error

@@ -3,6 +3,8 @@ package com.shweit.serverapi.endpoints;
 import com.shweit.serverapi.WebServer;
 import com.shweit.serverapi.endpoints.v1.PlayerAPI;
 import com.shweit.serverapi.utils.Logger;
+import fi.iki.elonen.NanoHTTPD;
+import org.bukkit.Bukkit;
 
 public class RegisterEndpoints {
     private final WebServer server;
@@ -15,13 +17,16 @@ public class RegisterEndpoints {
     }
 
     public void registerEndpoints() {
-        server.get("/v1/players", playerAPI::getPlayers);
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/players", playerAPI::getPlayers);
         Logger.info("Registered GET /v1/players");
 
-        server.get("/v1/banned-players", playerAPI::getBannedPlayers);
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/banned-players", playerAPI::getBannedPlayers);
         Logger.info("Registered GET /v1/banned-players");
 
-        server.get("/v1/offline-players", playerAPI::getOfflinePlayers);
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/offline-players", playerAPI::getOfflinePlayers);
         Logger.info("Registered GET /v1/offline-players");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}", playerAPI::getPlayer);
+        Logger.info("Registered GET /v1/players/{username}");
     }
 }

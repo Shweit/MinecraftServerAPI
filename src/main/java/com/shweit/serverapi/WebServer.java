@@ -1,17 +1,21 @@
 package com.shweit.serverapi;
 
 import com.shweit.serverapi.utils.Logger;
+import com.shweit.serverapi.utils.RouteDefinition;
 import fi.iki.elonen.NanoHTTPD;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class WebServer extends NanoHTTPD {
     private final boolean authenticationEnabled;
     private final String authenticationKey;
-    private final Map<String, Map<NanoHTTPD.Method, Supplier<Response>>> routes = new HashMap<>();
+    private final List<RouteDefinition> routes = new ArrayList<>();
 
     public WebServer(int port, boolean authenticationEnabled, String authenticationKey) {
         super(port);
@@ -23,6 +27,7 @@ public class WebServer extends NanoHTTPD {
     public Response serve(IHTTPSession session) {
         String uri = session.getUri();
         NanoHTTPD.Method method = session.getMethod();
+        Map<String, String> params = new HashMap<>();
 
         Logger.debug("Received request for: " + uri + " with method: " + method);
 
@@ -59,12 +64,9 @@ public class WebServer extends NanoHTTPD {
             }
         }
 
-        // Route handling using functional interfaces
-        Map<NanoHTTPD.Method, Supplier<Response>> methods = routes.get(uri);
-        if (methods != null) {
-            Logger.debug("Found route for: " + uri + " with method: " + method);
-            if (methods.containsKey(method)) {
-                return methods.get(method).get();
+        for (RouteDefinition route : routes) {
+            if (route.matches(uri, method, params)) {
+                return route.getHandler().apply(params);
             }
         }
 
@@ -86,24 +88,7 @@ public class WebServer extends NanoHTTPD {
         return "text/plain";
     }
 
-    // Public methods to register routes using functional interfaces
-    public void get(String url, Supplier<Response> handler) {
-        addRoute(url, NanoHTTPD.Method.GET, handler);
-    }
-
-    public void post(String url, Supplier<Response> handler) {
-        addRoute(url, NanoHTTPD.Method.POST, handler);
-    }
-
-    public void put(String url, Supplier<Response> handler) {
-        addRoute(url, NanoHTTPD.Method.PUT, handler);
-    }
-
-    public void delete(String url, Supplier<Response> handler) {
-        addRoute(url, NanoHTTPD.Method.DELETE, handler);
-    }
-
-    private void addRoute(String url, NanoHTTPD.Method httpMethod, Supplier<Response> handler) {
-        routes.computeIfAbsent(url, k -> new HashMap<>()).put(httpMethod, handler);
+    public void addRoute(NanoHTTPD.Method method, String routePattern, Function<Map<String, String>, Response> handler) {
+        routes.add(new RouteDefinition(method, routePattern, handler));
     }
 }
