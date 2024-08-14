@@ -13,6 +13,7 @@ import com.shweit.serverapi.endpoints.RegisterEndpoints;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
@@ -21,12 +22,15 @@ public class MinecraftServerAPI extends JavaPlugin  {
     private static final int DEFAULT_PORT = 7000;
     private WebServer server;
     public static FileConfiguration config;
+    public static String pluginName = "MinecraftServerAPI";
+    private static MinecraftServerAPI instance;
 
     @Override
     public final void onEnable() {
         createConfig();
 
         config = getConfig();
+        instance = this;
 
         boolean authEnabled = getConfig().getBoolean("authentication.enabled", true);
         String authKey = getConfig().getString("authentication.key", "CHANGE_ME");
@@ -67,5 +71,9 @@ public class MinecraftServerAPI extends JavaPlugin  {
         if (!configFile.exists())  {
             saveResource("config.yml", false);
         }
+    }
+
+    public static MinecraftServerAPI getInstance() {
+        return instance;
     }
 }

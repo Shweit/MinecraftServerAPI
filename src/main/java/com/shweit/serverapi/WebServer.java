@@ -31,7 +31,7 @@ public class WebServer extends NanoHTTPD {
 
         Logger.debug("Received request for: " + uri + " with method: " + method);
 
-        // Ausnahme für den Root-Pfad, Swagger-Dateien und /api-docs von der Authentifizierung
+        // Exception for the root path, swagger files and /api-docs from authentication
         if (!uri.equals("/") && !uri.startsWith("/swagger") && !uri.startsWith("/api-docs") && authenticationEnabled) {
             String authHeader = session.getHeaders().get("authorization");
             if (authHeader == null || !authHeader.equals(authenticationKey)) {
@@ -62,6 +62,11 @@ public class WebServer extends NanoHTTPD {
                 Logger.debug("Resource not found: " + uri);
                 return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Not Found");
             }
+        }
+
+        // Extract query parameters and add them to the params map
+        if (session.getQueryParameterString() != null) {
+            session.getParameters().forEach((key, value) -> params.put(key, value.get(0)));
         }
 
         for (RouteDefinition route : routes) {

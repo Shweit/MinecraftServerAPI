@@ -1,5 +1,6 @@
 package com.shweit.serverapi.endpoints.v1;
 
+import com.shweit.serverapi.MinecraftServerAPI;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.Bukkit;
@@ -261,5 +262,28 @@ public class PlayerAPI {
         itemJson.put("itemMeta", player.getInventory().getItem(i).getItemMeta());
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", itemJson.toString());
+    }
+
+    public NanoHTTPD.Response kickPlayer(Map<String, String> params) {
+        String username = params.get("username");
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+
+        if (offlinePlayer == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Player need to be online to be able to kick
+        Player player = offlinePlayer.getPlayer();
+        if (player == null || !player.isOnline()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        // Get reason from request
+        String reason = params.get("reason");
+        Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
+            player.kickPlayer(reason != null ? reason : "You have been kicked from the server.");
+        });
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 }

@@ -40,5 +40,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/inventory/{slot}", playerAPI::getPlayerInventorySlot);
         Logger.info("Registered GET /v1/players/{username}/inventory/{slot}");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/kick", playerAPI::kickPlayer);
+        Logger.info("Registered GET /v1/players/{username}/kick");
     }
 }
