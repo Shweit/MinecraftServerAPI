@@ -621,3 +621,53 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server:
+    get:
+      summary: Retrieve server information
+      description: >
+        This endpoint returns information about the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Server information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the server
+                    example: "My Minecraft Server"
+                  version:
+                    type: string
+                    description: The version of the server
+                    example: "1.17.1"
+                  motd:
+                    type: string
+                    description: The message of the day displayed in the server list
+                    example: "Welcome to My Server!"
+                  onlinePlayers:
+                    type: integer
+                    description: The number of players currently online
+                    example: 10
+                  maxPlayers:
+                    type: integer
+                    description: The maximum number of players that can be online
+                    example: 20
+                  uptime:
+                    type: string
+                    description: The duration the server has been running
+                    example: "1 day, 3 hours, 42 minutes"
+                  tps:
+                    type: number
+                    format: double
+                    description: The current TPS (ticks per second) of the server
+                    example: 19.8
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
