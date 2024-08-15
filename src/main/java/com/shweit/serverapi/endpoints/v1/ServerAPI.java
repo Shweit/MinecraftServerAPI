@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.*;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
 import java.util.Base64;
 import java.util.BitSet;
 import java.util.Map;
+import java.util.Properties;
 
 public class ServerAPI {
     public NanoHTTPD.Response ping(Map<String, String> params) {
@@ -150,6 +152,51 @@ public class ServerAPI {
         JSONObject uptimeJson = new JSONObject();
         uptimeJson.put("uptime", formatUpTime(runtimeBean.getUptime()));
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", uptimeJson.toString());
+    }
+
+    public NanoHTTPD.Response getServerProperties(Map<String, String> params) {
+        Properties properties = new Properties();
+        File propertiesFile = new File(Bukkit.getServer().getWorldContainer(), "server.properties");
+
+        try (InputStream input = new FileInputStream(propertiesFile)) {
+            properties.load(input);
+            JSONObject jsonResponse = new JSONObject();
+            for (String key : properties.stringPropertyNames()) {
+                jsonResponse.put(key, properties.getProperty(key));
+            }
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", jsonResponse.toString());
+        } catch (IOException e) {
+            Logger.error(e.getMessage());
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", "{\"error\":\"Could not load properties.\"}");
+        }
+    }
+
+    public NanoHTTPD.Response updateServerProperties(Map<String, String> params) {
+        String key = params.get("key");
+        String value = params.get("value");
+
+        if (key == null || value == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"Missing key or value.\"}");
+        }
+
+        Properties properties = new Properties();
+        File propertiesFile = new File(Bukkit.getServer().getWorldContainer(), "server.properties");
+
+        try (InputStream input = new FileInputStream(propertiesFile)) {
+            properties.load(input);
+        } catch (IOException e) {
+            Logger.error(e.getMessage());
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", "{\"error\":\"Could not load properties.\"}");
+        }
+
+        try (FileOutputStream output = new FileOutputStream(propertiesFile)) {
+            properties.setProperty(key, value);
+            properties.store(output, null);
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{\"message\":\"Property updated successfully.\"}");
+        } catch (IOException e) {
+            Logger.error(e.getMessage());
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", "{\"error\":\"Could not save properties.\"}");
+        }
     }
 
     private String formatSize(long size) {

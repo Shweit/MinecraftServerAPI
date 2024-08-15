@@ -891,3 +891,77 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/properties:
+    get:
+      summary: Retrieve all server properties
+      description: >
+        This endpoint returns a list of all server properties from the server's properties file.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: A list of server properties
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                example:
+                  max-players: "20"
+                  motd: "Welcome to our Minecraft server!"
+                  allow-nether: "true"
+                  difficulty: "normal"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+
+    post:
+      summary: Add or update a server property
+      description: >
+        This endpoint allows adding a new property or updating an existing one in the server's properties file.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: key
+          in: query
+          description: The property key to add or update
+          required: true
+          schema:
+            type: string
+        - name: value
+          in: query
+          description: The value to set for the property
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Property added or updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Property updated successfully."
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid property key or value."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
