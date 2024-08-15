@@ -1,5 +1,6 @@
 package com.shweit.serverapi.endpoints.v1;
 
+import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.Bukkit;
@@ -133,8 +134,15 @@ public class ServerAPI {
 
         // Uptime
         healthJson.put("uptime", formatUpTime(runtimeBean.getUptime()));
+        healthJson.put("tps", Helper.calculateTPS());
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", healthJson.toString());
+    }
+
+    public NanoHTTPD.Response tps(Map<String, String> params) {
+        JSONObject tpsJson = new JSONObject();
+        tpsJson.put("tps", Helper.calculateTPS());
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", tpsJson.toString());
     }
 
     private String formatSize(long size) {

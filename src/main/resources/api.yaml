@@ -831,6 +831,37 @@ paths:
                     type: string
                     description: The maximum amount of non-heap memory available to the JVM
                     example: "-1,00 B"
+                  tps:
+                    type: number
+                    format: double
+                    description: The current TPS (ticks per second) of the server
+                    example: 20.0
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/tps:
+    get:
+      summary: Retrieve the server's TPS (ticks per second)
+      description: >
+        This endpoint returns the current TPS (ticks per second) of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Server TPS
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tps:
+                    type: number
+                    format: double
+                    description: The current TPS of the server
+                    example: 20.0
         '401':
           description: Unauthorized access - invalid or missing authentication key
         '500':

@@ -28,4 +28,23 @@ public class Helper {
 
         return playerUUID;
     }
+
+    public static double calculateTPS() {
+        final int TICKS_SIZE = 600;
+        final double MAX_TPS = 20.0;
+
+        long[] ticks = new long[TICKS_SIZE];
+        int tickCount = 0;
+
+        ticks[tickCount % TICKS_SIZE] = System.currentTimeMillis();
+        tickCount++;
+
+        if (tickCount < 100) {
+            return MAX_TPS;
+        }
+        int target = (tickCount - 1 - 100) % TICKS_SIZE;
+        long elapsed = System.currentTimeMillis() - ticks[target];
+
+        return 100 / (elapsed / 1000.0);
+    }
 }
