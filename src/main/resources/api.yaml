@@ -866,3 +866,28 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/uptime:
+    get:
+      summary: Retrieve the server's uptime
+      description: >
+        This endpoint returns the uptime of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Server uptime
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uptime:
+                    type: string
+                    description: The server's uptime in days, hours, minutes, and seconds
+                    example: "0 days, 2 hours, 22 minutes, 11 seconds"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error

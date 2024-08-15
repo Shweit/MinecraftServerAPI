@@ -145,6 +145,13 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", tpsJson.toString());
     }
 
+    public NanoHTTPD.Response uptime(Map<String, String> params) {
+        RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
+        JSONObject uptimeJson = new JSONObject();
+        uptimeJson.put("uptime", formatUpTime(runtimeBean.getUptime()));
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", uptimeJson.toString());
+    }
+
     private String formatSize(long size) {
         String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
         int unitIndex = 0;

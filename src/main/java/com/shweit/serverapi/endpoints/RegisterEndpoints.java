@@ -70,5 +70,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/tps", serverAPI::tps);
         Logger.info("Registered GET /v1/server/tps");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/server/uptime", serverAPI::uptime);
+        Logger.info("Registered GET /v1/server/uptime");
     }
 }
