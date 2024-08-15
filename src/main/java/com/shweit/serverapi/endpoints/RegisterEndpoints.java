@@ -64,5 +64,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server", serverAPI::serverInfo);
         Logger.info("Registered GET /v1/server");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/server/health", serverAPI::getServerHealth);
+        Logger.info("Registered GET /v1/server/heath");
     }
 }
