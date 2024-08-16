@@ -7,6 +7,7 @@ import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
 
@@ -224,6 +225,19 @@ public class ServerAPI {
         jsonResponse.put("success", success.get());
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", jsonResponse.toString());
+    }
+
+    public NanoHTTPD.Response reboot(Map<String, String> params) {
+        NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{\"message\":\"Server is restarting.\"}");
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Bukkit.spigot().restart();
+            }
+        }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
+
+        return response;
     }
 
     private String formatSize(long size) {

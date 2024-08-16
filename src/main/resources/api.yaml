@@ -1006,3 +1006,20 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/reboot:
+    post:
+      summary: Reboot the server
+      description: >
+        This endpoint reboots the Minecraft serve
+        WARNING: You need to habe a `start.sh` script in the root directory of the server to start the server again.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server rebooted successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
