@@ -266,6 +266,18 @@ public class ServerAPI {
         return response;
     }
 
+    public NanoHTTPD.Response broadcast(Map<String, String> params) {
+        String message = params.get("message");
+
+        if (message == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"Invalid Message.\"}");
+        }
+
+        Bukkit.broadcastMessage(message);
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+    }
+
     private String formatSize(long size) {
         String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
         int unitIndex = 0;

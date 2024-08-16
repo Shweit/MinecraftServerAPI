@@ -91,5 +91,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/shutdown", serverAPI::shutdown);
         Logger.info("Registered POST /v1/server/shutdown");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/server/broadcast", serverAPI::broadcast);
+        Logger.info("Registered POST /v1/server/broadcast");
     }
 }

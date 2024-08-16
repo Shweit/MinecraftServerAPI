@@ -1055,3 +1055,36 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/broadcast:
+    post:
+      summary: Broadcast a message to all players
+      description: >
+        This endpoint broadcasts a message to all online players on the server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: message
+          in: query
+          description: The message to broadcast
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Message broadcasted successfully
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid message."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
