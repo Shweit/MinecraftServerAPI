@@ -228,12 +228,25 @@ public class ServerAPI {
     }
 
     public NanoHTTPD.Response reboot(Map<String, String> params) {
-        NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{\"message\":\"Server is restarting.\"}");
+        NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.spigot().restart();
+            }
+        }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
+
+        return response;
+    }
+
+    public NanoHTTPD.Response shutdown(Map<String, String> params) {
+        NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Bukkit.shutdown();
             }
         }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
 

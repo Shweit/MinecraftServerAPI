@@ -1023,3 +1023,19 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/shutdown:
+    post:
+      summary: Shutdown the server
+      description: >
+        This endpoint shuts down the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server shutdown successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
