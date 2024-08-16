@@ -1,27 +1,24 @@
 package com.shweit.serverapi.endpoints.v1;
 
+import com.shweit.serverapi.MinecraftServerAPI;
 import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
-import org.json.JSONArray;
+import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.management.*;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.Base64;
-import java.util.BitSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerAPI {
     public NanoHTTPD.Response ping(Map<String, String> params) {
@@ -197,6 +194,36 @@ public class ServerAPI {
             Logger.error(e.getMessage());
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", "{\"error\":\"Could not save properties.\"}");
         }
+    }
+
+    public NanoHTTPD.Response execCommand(Map<String, String> params) {
+        String command = params.get("command");
+
+        if (command == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"Invalid Command.\"}");
+        }
+
+        AtomicBoolean success = new AtomicBoolean(false);
+
+        BukkitTask t1 = Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
+            success.set(Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
+        });
+
+        while (Bukkit.getScheduler().isCurrentlyRunning(t1.getTaskId()) || Bukkit.getScheduler().isQueued(t1.getTaskId())) {
+            try {
+                Logger.debug("Waiting for command to finish...");
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Logger.error(e.getMessage());
+            }
+        }
+
+        // TODO: Catch command output and return it in the response
+
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("success", success.get());
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", jsonResponse.toString());
     }
 
     private String formatSize(long size) {

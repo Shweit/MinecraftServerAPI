@@ -79,5 +79,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/properties", serverAPI::updateServerProperties);
         Logger.info("Registered POST /v1/server/properties");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/server/exec", serverAPI::execCommand);
+        Logger.info("Registered POST /v1/server/exec");
     }
 }

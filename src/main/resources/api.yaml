@@ -24,7 +24,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: A JSON array of online players
@@ -58,7 +58,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: A JSON array of banned players
@@ -92,7 +92,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: A JSON array of offline players
@@ -126,7 +126,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -254,7 +254,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -287,7 +287,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -320,7 +320,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -353,7 +353,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -392,7 +392,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -423,7 +423,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -460,7 +460,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -485,7 +485,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -543,59 +543,59 @@ paths:
     post:
       summary: Teleport a player by username
       description: >
-          This endpoint teleports a player to a specified location based on their username. The player must be online.
+        This endpoint teleports a player to a specified location based on their username. The player must be online.
       tags:
-          - Players
+        - Players
       security:
-          - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
           description: The username of the player
           required: true
           schema:
-              type: string
+            type: string
         - name: world
           in: query
           description: The world to teleport the player to
           required: true
           schema:
-              type: string
+            type: string
         - name: x
           in: query
           description: The X coordinate to teleport the player to
           required: true
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: y
           in: query
           description: The Y coordinate to teleport the player to
           required: true
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: z
           in: query
           description: The Z coordinate to teleport the player to
           required: true
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: yaw
           in: query
           description: The yaw to set the player to
           required: false
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: pitch
           in: query
           description: The pitch to set the player to
           required: false
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
       responses:
         '200':
           description: Player teleported successfully
@@ -613,7 +613,7 @@ paths:
       tags:
         - Server
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: Server is online
@@ -629,7 +629,7 @@ paths:
       tags:
         - Server
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: Server information
@@ -742,7 +742,7 @@ paths:
       tags:
         - Server
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: Server is healthy
@@ -848,7 +848,7 @@ paths:
       tags:
         - Server
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: Server TPS
@@ -874,7 +874,7 @@ paths:
       tags:
         - Server
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: Server uptime
@@ -961,6 +961,47 @@ paths:
                   error:
                     type: string
                     example: "Invalid property key or value."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/exec:
+    post:
+      summary: Execute a command on the server
+      description: >
+        This endpoint allows executing a command on the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: command
+          in: query
+          description: The command to execute
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid command."
         '401':
           description: Unauthorized access - invalid or missing authentication key
         '500':
