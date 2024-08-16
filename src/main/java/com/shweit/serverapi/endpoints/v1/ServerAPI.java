@@ -13,7 +13,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.management.*;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
@@ -23,7 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ServerAPI {
+public final class ServerAPI {
     private final ChatListener chatListener;
     private final LogHandler logHandler;
 
@@ -35,11 +39,11 @@ public class ServerAPI {
         Logger.getLogger().addHandler(logHandler);
     }
 
-    public NanoHTTPD.Response ping(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response ping(final Map<String, String> ignoredParams) {
         return NanoHTTPD.newFixedLengthResponse("pong");
     }
 
-    public NanoHTTPD.Response serverInfo(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response serverInfo(final Map<String, String> ignoredParams) {
         JSONObject serverInfo = new JSONObject();
 
         serverInfo.put("name", Bukkit.getServer().getName());
@@ -89,7 +93,7 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", serverInfo.toString());
     }
 
-    public NanoHTTPD.Response getServerHealth(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response getServerHealth(final Map<String, String> ignoredParams) {
         OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
         MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
         ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
@@ -152,20 +156,20 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", healthJson.toString());
     }
 
-    public NanoHTTPD.Response tps(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response tps(final Map<String, String> ignoredParams) {
         JSONObject tpsJson = new JSONObject();
         tpsJson.put("tps", Helper.calculateTPS());
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", tpsJson.toString());
     }
 
-    public NanoHTTPD.Response uptime(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response uptime(final Map<String, String> ignoredParams) {
         RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
         JSONObject uptimeJson = new JSONObject();
         uptimeJson.put("uptime", formatUpTime(runtimeBean.getUptime()));
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", uptimeJson.toString());
     }
 
-    public NanoHTTPD.Response getServerProperties(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response getServerProperties(final Map<String, String> ignoredParams) {
         Properties properties = new Properties();
         File propertiesFile = new File(Bukkit.getServer().getWorldContainer(), "server.properties");
 
@@ -182,7 +186,7 @@ public class ServerAPI {
         }
     }
 
-    public NanoHTTPD.Response updateServerProperties(Map<String, String> params) {
+    public NanoHTTPD.Response updateServerProperties(final Map<String, String> params) {
         String key = params.get("key");
         String value = params.get("value");
 
@@ -210,7 +214,7 @@ public class ServerAPI {
         }
     }
 
-    public NanoHTTPD.Response execCommand(Map<String, String> params) {
+    public NanoHTTPD.Response execCommand(final Map<String, String> params) {
         String command = params.get("command");
 
         if (command == null) {
@@ -226,7 +230,8 @@ public class ServerAPI {
         while (Bukkit.getScheduler().isCurrentlyRunning(t1.getTaskId()) || Bukkit.getScheduler().isQueued(t1.getTaskId())) {
             try {
                 Logger.debug("Waiting for command to finish...");
-                Thread.sleep(100);
+                final int sleepTime = 100;
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 Logger.error(e.getMessage());
             }
@@ -240,46 +245,49 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", jsonResponse.toString());
     }
 
-    public NanoHTTPD.Response reload(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response reload(final Map<String, String> ignoredParams) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
+        final long delay = 20L;
         new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.reload();
             }
-        }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
+        }.runTaskLater(MinecraftServerAPI.getInstance(), delay);
 
         return response;
     }
 
-    public NanoHTTPD.Response reboot(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response reboot(final Map<String, String> ignoredParams) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
+        final long delay = 20L;
         new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.spigot().restart();
             }
-        }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
+        }.runTaskLater(MinecraftServerAPI.getInstance(), delay);
 
         return response;
     }
 
-    public NanoHTTPD.Response shutdown(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response shutdown(final Map<String, String> ignoredParams) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
+        final long delay = 20L;
         new BukkitRunnable() {
             @Override
             public void run() {
                 Bukkit.shutdown();
             }
-        }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
+        }.runTaskLater(MinecraftServerAPI.getInstance(), delay);
 
         return response;
     }
 
-    public NanoHTTPD.Response broadcast(Map<String, String> params) {
+    public NanoHTTPD.Response broadcast(final Map<String, String> params) {
         String message = params.get("message");
 
         if (message == null) {
@@ -291,20 +299,20 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response getChat(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response getChat(final Map<String, String> ignoredParams) {
         JSONObject chatJson = new JSONObject();
         chatJson.put("messages", chatListener.getMessages());
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", chatJson.toString());
     }
 
-    public NanoHTTPD.Response getLog(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response getLog(final Map<String, String> ignoredParams) {
         JSONObject logJson = new JSONObject();
         logJson.put("log", logHandler.getLog());
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", logJson.toString());
     }
 
-    private String formatSize(long size) {
-        String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+    private String formatSize(final long size) {
+        String[] units = new String[] {"B", "KB", "MB", "GB", "TB"};
         int unitIndex = 0;
         double sizeD = size;
 
@@ -316,7 +324,7 @@ public class ServerAPI {
         return String.format("%.2f %s", sizeD, units[unitIndex]);
     }
 
-    private String formatUpTime(long uptime) {
+    private String formatUpTime(final long uptime) {
         long uptimeSeconds = uptime / 1000;
         long uptimeMinutes = uptimeSeconds / 60;
         long uptimeHours = uptimeMinutes / 60;

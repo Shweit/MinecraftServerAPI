@@ -15,9 +15,9 @@ import org.json.JSONObject;
 import java.time.Duration;
 import java.util.*;
 
-public class PlayerAPI {
+public final class PlayerAPI {
 
-    public NanoHTTPD.Response getPlayers(Map<String, String> params) {
+    public NanoHTTPD.Response getPlayers(final Map<String, String> ignoredParams) {
         JSONArray playersArray = new JSONArray();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -33,7 +33,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", responseJson.toString());
     }
 
-    public NanoHTTPD.Response getBannedPlayers(Map<String, String> params) {
+    public NanoHTTPD.Response getBannedPlayers(final Map<String, String> ignoredParams) {
         JSONArray bannedPlayersArray = new JSONArray();
 
         for (OfflinePlayer player : Bukkit.getBannedPlayers()) {
@@ -49,7 +49,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", responseJson.toString());
     }
 
-    public NanoHTTPD.Response getOfflinePlayers(Map<String, String> params) {
+    public NanoHTTPD.Response getOfflinePlayers(final Map<String, String> ignoredParams) {
         JSONArray offlinePlayersArray = new JSONArray();
 
         for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
@@ -65,7 +65,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", responseJson.toString());
     }
 
-    public NanoHTTPD.Response getPlayer(Map<String, String> params) {
+    public NanoHTTPD.Response getPlayer(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -113,7 +113,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", playerJson.toString());
     }
 
-    public NanoHTTPD.Response getPlayerStats(Map<String, String> params) {
+    public NanoHTTPD.Response getPlayerStats(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -160,7 +160,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", new JSONObject(stats).toString());
     }
 
-    public NanoHTTPD.Response getPlayerAdvancements(Map<String, String> params) {
+    public NanoHTTPD.Response getPlayerAdvancements(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -183,7 +183,7 @@ public class PlayerAPI {
         JSONObject advancementsJson = new JSONObject();
 
         // Durch alle Advancements iterieren und den Fortschritt des Spielers abrufen
-        for (Iterator<Advancement> it = Bukkit.advancementIterator(); it.hasNext(); ) {
+        for (Iterator<Advancement> it = Bukkit.advancementIterator(); it.hasNext();) {
             Advancement advancement = it.next();
             AdvancementProgress progress = player.getAdvancementProgress(advancement);
 
@@ -202,7 +202,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", advancementsJson.toString());
     }
 
-    public NanoHTTPD.Response getPlayerInventory(Map<String, String> params) {
+    public NanoHTTPD.Response getPlayerInventory(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -250,7 +250,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", inventoryJson.toString());
     }
 
-    public NanoHTTPD.Response getPlayerInventorySlot(Map<String, String> params) {
+    public NanoHTTPD.Response getPlayerInventorySlot(final Map<String, String> params) {
         String username = params.get("username");
         int i = Integer.parseInt(params.get("slot"));
         UUID uuid = Helper.usernameToUUID(username);
@@ -294,7 +294,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", itemJson.toString());
     }
 
-    public NanoHTTPD.Response kickPlayer(Map<String, String> params) {
+    public NanoHTTPD.Response kickPlayer(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -323,7 +323,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response banPlayer(Map<String, String> params) {
+    public NanoHTTPD.Response banPlayer(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -347,7 +347,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response pardonPlayer(Map<String, String> params) {
+    public NanoHTTPD.Response pardonPlayer(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -370,7 +370,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response getPlayerLocation(Map<String, String> params) {
+    public NanoHTTPD.Response getPlayerLocation(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 
@@ -396,7 +396,7 @@ public class PlayerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", locationJson.toString());
     }
 
-    public NanoHTTPD.Response setPlayerLocation(Map<String, String> params) {
+    public NanoHTTPD.Response setPlayerLocation(final Map<String, String> params) {
         String username = params.get("username");
         UUID uuid = Helper.usernameToUUID(username);
 

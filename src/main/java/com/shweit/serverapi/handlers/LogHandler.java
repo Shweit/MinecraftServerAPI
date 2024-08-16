@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-public class LogHandler extends Handler {
+public final class LogHandler extends Handler {
     private final List<HashMap<String, String>> log = new ArrayList<>();
 
     @Override
-    public void publish(LogRecord record) {
+    public void publish(final LogRecord record) {
         HashMap<String, String> logRecord = new HashMap<>();
         logRecord.put("level", record.getLevel().getName());
         logRecord.put("message", record.getMessage());

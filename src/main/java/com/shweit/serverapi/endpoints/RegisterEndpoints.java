@@ -6,14 +6,14 @@ import com.shweit.serverapi.endpoints.v1.ServerAPI;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 
-public class RegisterEndpoints {
+public final class RegisterEndpoints {
     private final WebServer server;
 
     private final PlayerAPI playerAPI;
     private final ServerAPI serverAPI;
 
-    public RegisterEndpoints(WebServer server) {
-        this.server = server;
+    public RegisterEndpoints(final WebServer webServer) {
+        this.server = webServer;
         this.playerAPI = new PlayerAPI();
         this.serverAPI = new ServerAPI();
     }
