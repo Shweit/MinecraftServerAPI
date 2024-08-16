@@ -1,6 +1,7 @@
 package com.shweit.serverapi.endpoints.v1;
 
 import com.shweit.serverapi.MinecraftServerAPI;
+import com.shweit.serverapi.listeners.ChatListener;
 import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
@@ -22,6 +23,13 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerAPI {
+    private final ChatListener chatListener;
+
+    public ServerAPI() {
+        chatListener = new ChatListener();
+        Bukkit.getPluginManager().registerEvents(chatListener, MinecraftServerAPI.getInstance());
+    }
+
     public NanoHTTPD.Response ping(Map<String, String> params) {
         return NanoHTTPD.newFixedLengthResponse("pong");
     }
@@ -264,6 +272,12 @@ public class ServerAPI {
         }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
 
         return response;
+    }
+
+    public NanoHTTPD.Response getChat(Map<String, String> params) {
+        JSONObject chatJson = new JSONObject();
+        chatJson.put("messages", chatListener.getMessages());
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", chatJson.toString());
     }
 
     public NanoHTTPD.Response broadcast(Map<String, String> params) {

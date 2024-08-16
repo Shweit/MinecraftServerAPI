@@ -94,5 +94,8 @@ public class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/broadcast", serverAPI::broadcast);
         Logger.info("Registered POST /v1/server/broadcast");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/server/chat", serverAPI::getChat);
+        Logger.info("Registered GET /v1/server/chat");
     }
 }

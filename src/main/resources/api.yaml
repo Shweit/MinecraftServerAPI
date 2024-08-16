@@ -1088,3 +1088,42 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/chat:
+    get:
+      summary: Retrieve the server chat
+      description: >
+        This endpoint returns the chat history of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server chat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chat:
+                    type: array
+                    description: The chat history of the server
+                    items:
+                      type: object
+                      properties:
+                        sender:
+                          type: string
+                          description: The sender of the message
+                          example: "Notch"
+                        message:
+                          type: string
+                          description: The message sent
+                          example: "Hello, world!"
+                        time:
+                          type: string
+                          description: The time the message was sent
+                          example: "2022-01-01T12:00:00Z"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
