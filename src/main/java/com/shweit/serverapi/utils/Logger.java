@@ -27,4 +27,8 @@ public class Logger {
             Bukkit.getLogger().log(Level.INFO, "[DEBUG] " + PREFIX + message);
         }
     }
+
+    public static java.util.logging.Logger getLogger() {
+        return Bukkit.getLogger();
+    }
 }

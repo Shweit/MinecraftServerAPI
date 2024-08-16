@@ -1127,3 +1127,42 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/log:
+    get:
+      summary: Retrieve the server log
+      description: >
+        This endpoint returns the log of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server log
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log:
+                    type: array
+                    description: The log of the server
+                    items:
+                      type: object
+                      properties:
+                        level:
+                          type: string
+                          description: The log level
+                          example: "INFO"
+                        message:
+                          type: string
+                          description: The log message
+                          example: "Server started."
+                        time:
+                          type: string
+                          description: The time the log message was generated
+                          example: "2022-01-01T12:00:00Z"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error

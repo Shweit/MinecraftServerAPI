@@ -15,8 +15,8 @@ public class ChatListener implements Listener {
         message.put("player", event.getPlayer().getName());
         message.put("message", event.getMessage());
 
-        String realTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
-        message.put("time", realTime);
+        String readableTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new Date());
+        message.put("time", readableTime);
         messages.add(message);
     }
 

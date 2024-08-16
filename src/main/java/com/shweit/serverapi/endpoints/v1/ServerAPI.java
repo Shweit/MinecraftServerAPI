@@ -1,6 +1,7 @@
 package com.shweit.serverapi.endpoints.v1;
 
 import com.shweit.serverapi.MinecraftServerAPI;
+import com.shweit.serverapi.handlers.LogHandler;
 import com.shweit.serverapi.listeners.ChatListener;
 import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
@@ -24,10 +25,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServerAPI {
     private final ChatListener chatListener;
+    private final LogHandler logHandler;
 
     public ServerAPI() {
         chatListener = new ChatListener();
         Bukkit.getPluginManager().registerEvents(chatListener, MinecraftServerAPI.getInstance());
+
+        logHandler = new LogHandler();
+        Logger.getLogger().addHandler(logHandler);
     }
 
     public NanoHTTPD.Response ping(Map<String, String> params) {
@@ -274,12 +279,6 @@ public class ServerAPI {
         return response;
     }
 
-    public NanoHTTPD.Response getChat(Map<String, String> params) {
-        JSONObject chatJson = new JSONObject();
-        chatJson.put("messages", chatListener.getMessages());
-        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", chatJson.toString());
-    }
-
     public NanoHTTPD.Response broadcast(Map<String, String> params) {
         String message = params.get("message");
 
@@ -290,6 +289,18 @@ public class ServerAPI {
         Bukkit.broadcastMessage(message);
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+    }
+
+    public NanoHTTPD.Response getChat(Map<String, String> params) {
+        JSONObject chatJson = new JSONObject();
+        chatJson.put("messages", chatListener.getMessages());
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", chatJson.toString());
+    }
+
+    public NanoHTTPD.Response getLog(Map<String, String> params) {
+        JSONObject logJson = new JSONObject();
+        logJson.put("log", logHandler.getLog());
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", logJson.toString());
     }
 
     private String formatSize(long size) {
