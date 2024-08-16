@@ -24,7 +24,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: A JSON array of online players
@@ -58,7 +58,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: A JSON array of banned players
@@ -92,7 +92,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       responses:
         '200':
           description: A JSON array of offline players
@@ -126,7 +126,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -254,7 +254,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -287,7 +287,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -320,7 +320,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -353,7 +353,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -392,7 +392,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -423,7 +423,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -460,7 +460,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -485,7 +485,7 @@ paths:
       tags:
         - Players
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
@@ -543,59 +543,59 @@ paths:
     post:
       summary: Teleport a player by username
       description: >
-          This endpoint teleports a player to a specified location based on their username. The player must be online.
+        This endpoint teleports a player to a specified location based on their username. The player must be online.
       tags:
-          - Players
+        - Players
       security:
-          - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       parameters:
         - name: username
           in: path
           description: The username of the player
           required: true
           schema:
-              type: string
+            type: string
         - name: world
           in: query
           description: The world to teleport the player to
           required: true
           schema:
-              type: string
+            type: string
         - name: x
           in: query
           description: The X coordinate to teleport the player to
           required: true
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: y
           in: query
           description: The Y coordinate to teleport the player to
           required: true
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: z
           in: query
           description: The Z coordinate to teleport the player to
           required: true
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: yaw
           in: query
           description: The yaw to set the player to
           required: false
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
         - name: pitch
           in: query
           description: The pitch to set the player to
           required: false
           schema:
-              type: number
-              format: double
+            type: number
+            format: double
       responses:
         '200':
           description: Player teleported successfully
@@ -603,5 +603,566 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '404':
           description: Player not found or Player is not online
+        '500':
+          description: Internal server error
+  /v1/ping:
+    get:
+      summary: Ping the server
+      description: >
+        This endpoint returns a simple response to indicate that the server is online and reachable.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server is online
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server:
+    get:
+      summary: Retrieve server information
+      description: >
+        This endpoint returns information about the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  motd:
+                    type: string
+                    description: The message of the day displayed in the server list
+                    example: "A Minecraft Server"
+                  worldType:
+                    type: string
+                    description: The type of the world
+                    example: "minecraft:normal"
+                  maxPlayers:
+                    type: integer
+                    description: The maximum number of players that can be online
+                    example: 20
+                  worlds:
+                    type: object
+                    description: A list of worlds and their types
+                    additionalProperties:
+                      type: string
+                    example:
+                      world: "NORMAL"
+                      world_the_end: "THE_END"
+                      world_nether: "NETHER"
+                  allowEnd:
+                    type: boolean
+                    description: Indicates if the End dimension is allowed
+                    example: true
+                  generateStructures:
+                    type: boolean
+                    description: Indicates if structures are generated in the world
+                    example: true
+                  hardcore:
+                    type: boolean
+                    description: Indicates if the server is in hardcore mode
+                    example: false
+                  plugins:
+                    type: object
+                    description: A list of plugins and their versions
+                    additionalProperties:
+                      type: string
+                    example:
+                      MinecraftServerAPI: "1.0"
+                  ip:
+                    type: string
+                    description: The IP address the server is running on
+                    example: ""
+                  allowNether:
+                    type: boolean
+                    description: Indicates if the Nether dimension is allowed
+                    example: true
+                  icon:
+                    type: string
+                    description: The base64 encoded server icon
+                    example: "data:image/png;base64,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"
+                  version:
+                    type: string
+                    description: The server software version
+                    example: "1.21-50-20889d0 (MC: 1.21)"
+                  bukkitVersion:
+                    type: string
+                    description: The Bukkit API version
+                    example: "1.21-R0.1-SNAPSHOT"
+                  onlinePlayers:
+                    type: integer
+                    description: The number of online players
+                    example: 0
+                  defaultGameMode:
+                    type: string
+                    description: The default game mode of the server
+                    example: "SURVIVAL"
+                  port:
+                    type: integer
+                    description: The port the server is running on
+                    example: 25565
+                  spawnRadius:
+                    type: integer
+                    description: The spawn protection radius in blocks
+                    example: 16
+                  name:
+                    type: string
+                    description: The name of the server software
+                    example: "Paper"
+                  allowFlight:
+                    type: boolean
+                    description: Indicates if flight is allowed
+                    example: false
+                  simulationDistance:
+                    type: integer
+                    description: The simulation distance in chunks
+                    example: 10
+                  whitelisted:
+                    type: boolean
+                    description: Indicates if the server has whitelisting enabled
+                    example: true
+                  viewDistance:
+                    type: integer
+                    description: The view distance in chunks
+                    example: 10
+  /v1/server/health:
+    get:
+      summary: Check the health of the server
+      description: >
+        This endpoint returns the health status of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usedMemory:
+                    type: string
+                    description: The amount of memory currently used by the server
+                    example: "597,32 MB"
+                  availableProcessors:
+                    type: integer
+                    description: The number of available processors
+                    example: 10
+                  threadCount:
+                    type: integer
+                    description: The current number of active threads
+                    example: 25
+                  totalStartedThreadCount:
+                    type: integer
+                    description: The total number of threads started by the JVM
+                    example: 102
+                  uptime:
+                    type: string
+                    description: The server's uptime in days, hours, minutes, and seconds
+                    example: "0 days, 2 hours, 22 minutes, 11 seconds"
+                  jvmNonHeapMemoryUsed:
+                    type: string
+                    description: The amount of non-heap memory used by the JVM
+                    example: "186,02 MB"
+                  totalMemory:
+                    type: string
+                    description: The total memory allocated to the JVM
+                    example: "3,00 GB"
+                  systemLoadAverage:
+                    type: number
+                    format: double
+                    description: The system load average
+                    example: 2.35595703125
+                  deadlockedThreads:
+                    type: boolean
+                    description: Indicates if there are any deadlocked threads
+                    example: false
+                  jvmHeapMemoryUsed:
+                    type: string
+                    description: The amount of heap memory used by the JVM
+                    example: "595,32 MB"
+                  diskUsage:
+                    type: object
+                    description: Disk usage information for each mount point
+                    additionalProperties:
+                      type: object
+                      properties:
+                        total:
+                          type: string
+                          description: The total disk space
+                          example: "926,35 GB"
+                        available:
+                          type: string
+                          description: The available disk space
+                          example: "553,23 GB"
+                        used:
+                          type: string
+                          description: The used disk space
+                          example: "373,12 GB"
+                    example:
+                      "/dev/disk3s6":
+                        total: "926,35 GB"
+                        available: "553,23 GB"
+                        used: "373,12 GB"
+                  jvmHeapMemoryMax:
+                    type: string
+                    description: The maximum amount of heap memory available to the JVM
+                    example: "3,00 GB"
+                  peakThreadCount:
+                    type: integer
+                    description: The peak thread count since the JVM started
+                    example: 34
+                  freeMemory:
+                    type: string
+                    description: The amount of free memory available to the JVM
+                    example: "2,42 GB"
+                  jvmNonHeapMemoryMax:
+                    type: string
+                    description: The maximum amount of non-heap memory available to the JVM
+                    example: "-1,00 B"
+                  tps:
+                    type: number
+                    format: double
+                    description: The current TPS (ticks per second) of the server
+                    example: 20.0
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/tps:
+    get:
+      summary: Retrieve the server's TPS (ticks per second)
+      description: >
+        This endpoint returns the current TPS (ticks per second) of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server TPS
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tps:
+                    type: number
+                    format: double
+                    description: The current TPS of the server
+                    example: 20.0
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/uptime:
+    get:
+      summary: Retrieve the server's uptime
+      description: >
+        This endpoint returns the uptime of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server uptime
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uptime:
+                    type: string
+                    description: The server's uptime in days, hours, minutes, and seconds
+                    example: "0 days, 2 hours, 22 minutes, 11 seconds"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/properties:
+    get:
+      summary: Retrieve all server properties
+      description: >
+        This endpoint returns a list of all server properties from the server's properties file.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: A list of server properties
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                example:
+                  max-players: "20"
+                  motd: "Welcome to our Minecraft server!"
+                  allow-nether: "true"
+                  difficulty: "normal"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+
+    post:
+      summary: Add or update a server property
+      description: >
+        This endpoint allows adding a new property or updating an existing one in the server's properties file.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: key
+          in: query
+          description: The property key to add or update
+          required: true
+          schema:
+            type: string
+        - name: value
+          in: query
+          description: The value to set for the property
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Property added or updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Property updated successfully."
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid property key or value."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/exec:
+    post:
+      summary: Execute a command on the server
+      description: >
+        This endpoint allows executing a command on the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: command
+          in: query
+          description: The command to execute
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Command executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid command."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/reload:
+    post:
+      summary: Reload the server
+      description: >
+        This endpoint reloads the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server reloaded successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/reboot:
+    post:
+      summary: Reboot the server
+      description: >
+        This endpoint reboots the Minecraft serve
+        WARNING: You need to habe a `start.sh` script in the root directory of the server to start the server again.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server rebooted successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/shutdown:
+    post:
+      summary: Shutdown the server
+      description: >
+        This endpoint shuts down the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server shutdown successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/broadcast:
+    post:
+      summary: Broadcast a message to all players
+      description: >
+        This endpoint broadcasts a message to all online players on the server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: message
+          in: query
+          description: The message to broadcast
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Message broadcasted successfully
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid message."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/chat:
+    get:
+      summary: Retrieve the server chat
+      description: >
+        This endpoint returns the chat history of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server chat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chat:
+                    type: array
+                    description: The chat history of the server
+                    items:
+                      type: object
+                      properties:
+                        sender:
+                          type: string
+                          description: The sender of the message
+                          example: "Notch"
+                        message:
+                          type: string
+                          description: The message sent
+                          example: "Hello, world!"
+                        time:
+                          type: string
+                          description: The time the message was sent
+                          example: "2022-01-01T12:00:00Z"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/server/log:
+    get:
+      summary: Retrieve the server log
+      description: >
+        This endpoint returns the log of the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server log
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log:
+                    type: array
+                    description: The log of the server
+                    items:
+                      type: object
+                      properties:
+                        level:
+                          type: string
+                          description: The log level
+                          example: "INFO"
+                        message:
+                          type: string
+                          description: The log message
+                          example: "Server started."
+                        time:
+                          type: string
+                          description: The time the log message was generated
+                          example: "2022-01-01T12:00:00Z"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error

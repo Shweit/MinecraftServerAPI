@@ -33,8 +33,10 @@ public class WebServer extends NanoHTTPD {
 
         // Exception for the root path, swagger files and /api-docs from authentication
         if (!uri.equals("/") && !uri.startsWith("/swagger") && !uri.startsWith("/api-docs") && authenticationEnabled) {
+            Logger.debug("Checking authentication for: " + uri);
             String authHeader = session.getHeaders().get("authorization");
             if (authHeader == null || !authHeader.equals(authenticationKey)) {
+                Logger.debug("Unauthorized request for: " + uri);
                 return newFixedLengthResponse(Response.Status.UNAUTHORIZED, MIME_PLAINTEXT, "Unauthorized");
             }
         }
