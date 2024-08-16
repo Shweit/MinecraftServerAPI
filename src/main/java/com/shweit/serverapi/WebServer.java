@@ -10,21 +10,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class WebServer extends NanoHTTPD {
-    private final boolean authenticationEnabled;
-    private final String authenticationKey;
+public final class WebServer extends NanoHTTPD {
+    private final boolean isAuthenticated;
+    private final String authKey;
     private final List<RouteDefinition> routes = new ArrayList<>();
 
-    public WebServer(int port, boolean authenticationEnabled, String authenticationKey) {
+    public WebServer(final int port, final boolean authenticationEnabled, final String authenticationKey) {
         super(port);
-        this.authenticationEnabled = authenticationEnabled;
-        this.authenticationKey = authenticationKey;
+        this.isAuthenticated = authenticationEnabled;
+        this.authKey = authenticationKey;
     }
 
     @Override
-    public Response serve(IHTTPSession session) {
+    public Response serve(final IHTTPSession session) {
         String uri = session.getUri();
         NanoHTTPD.Method method = session.getMethod();
         Map<String, String> params = new HashMap<>();
@@ -32,10 +31,10 @@ public class WebServer extends NanoHTTPD {
         Logger.debug("Received request for: " + uri + " with method: " + method);
 
         // Exception for the root path, swagger files and /api-docs from authentication
-        if (!uri.equals("/") && !uri.startsWith("/swagger") && !uri.startsWith("/api-docs") && authenticationEnabled) {
+        if (!uri.equals("/") && !uri.startsWith("/swagger") && !uri.startsWith("/api-docs") && isAuthenticated) {
             Logger.debug("Checking authentication for: " + uri);
             String authHeader = session.getHeaders().get("authorization");
-            if (authHeader == null || !authHeader.equals(authenticationKey)) {
+            if (authHeader == null || !authHeader.equals(authKey)) {
                 Logger.debug("Unauthorized request for: " + uri);
                 return newFixedLengthResponse(Response.Status.UNAUTHORIZED, MIME_PLAINTEXT, "Unauthorized");
             }
@@ -83,11 +82,8 @@ public class WebServer extends NanoHTTPD {
         return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not Found");
     }
 
-
-
-
     // Method to determine MIME type
-    private String determineMimeType(String uri) {
+    private String determineMimeType(final String uri) {
         if (uri.endsWith(".html")) return "text/html";
         if (uri.endsWith(".css")) return "text/css";
         if (uri.endsWith(".js")) return "application/javascript";
@@ -95,7 +91,7 @@ public class WebServer extends NanoHTTPD {
         return "text/plain";
     }
 
-    public void addRoute(NanoHTTPD.Method method, String routePattern, Function<Map<String, String>, Response> handler) {
+    public void addRoute(final NanoHTTPD.Method method, final String routePattern, final Function<Map<String, String>, Response> handler) {
         routes.add(new RouteDefinition(method, routePattern, handler));
     }
 }

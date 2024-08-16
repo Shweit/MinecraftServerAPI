@@ -5,15 +5,15 @@ import fi.iki.elonen.NanoHTTPD;
 import java.util.Map;
 import java.util.function.Function;
 
-public class RouteDefinition {
+public final class RouteDefinition {
     private final String routePattern;
     private final NanoHTTPD.Method httpMethod;
     private final Function<Map<String, String>, NanoHTTPD.Response> handler;
 
-    public RouteDefinition(NanoHTTPD.Method httpMethod, String routePattern, Function<Map<String, String>, NanoHTTPD.Response> handler) {
-        this.routePattern = routePattern;
-        this.httpMethod = httpMethod;
-        this.handler = handler;
+    public RouteDefinition(final NanoHTTPD.Method method, final String pattern, final Function<Map<String, String>, NanoHTTPD.Response> routeHandler) {
+        this.routePattern = pattern;
+        this.httpMethod = method;
+        this.handler = routeHandler;
     }
 
     public String getRoutePattern() {
@@ -28,7 +28,7 @@ public class RouteDefinition {
         return handler;
     }
 
-    public boolean matches(String uri, NanoHTTPD.Method method, Map<String, String> params) {
+    public boolean matches(final String uri, final NanoHTTPD.Method method, final Map<String, String> params) {
         if (!this.httpMethod.equals(method)) {
             return false;
         }

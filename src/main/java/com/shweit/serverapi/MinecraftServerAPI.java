@@ -13,7 +13,6 @@ import com.shweit.serverapi.endpoints.RegisterEndpoints;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 

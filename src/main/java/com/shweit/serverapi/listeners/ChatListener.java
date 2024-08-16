@@ -6,11 +6,11 @@ import org.bukkit.event.Listener;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class ChatListener implements Listener {
+public final class ChatListener implements Listener {
     private final List<HashMap<String, String>> messages = new ArrayList<>();
 
     @EventHandler
-    public void onPlayerChat(org.bukkit.event.player.AsyncPlayerChatEvent event) {
+    public void onPlayerChat(final org.bukkit.event.player.AsyncPlayerChatEvent event) {
         HashMap<String, String> message = new HashMap<>();
         message.put("player", event.getPlayer().getName());
         message.put("message", event.getMessage());

@@ -8,14 +8,19 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.UUID;
 
-public class Helper {
-    public static UUID usernameToUUID(String username) {
+public final class Helper {
+
+    private Helper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
+    public static UUID usernameToUUID(final String username) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.mojang.com/users/profiles/minecraft/" + username))
                 .build();
         HttpResponse<String> response;
 
-        UUID playerUUID = null;
+        UUID playerUUID;
 
         try {
             response = java.net.http.HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
@@ -30,19 +35,19 @@ public class Helper {
     }
 
     public static double calculateTPS() {
-        final int TICKS_SIZE = 600;
-        final double MAX_TPS = 20.0;
+        final int ticksSize = 600;
+        final double maxTps = 20.0;
 
-        long[] ticks = new long[TICKS_SIZE];
+        long[] ticks = new long[ticksSize];
         int tickCount = 0;
 
-        ticks[tickCount % TICKS_SIZE] = System.currentTimeMillis();
+        ticks[tickCount % ticksSize] = System.currentTimeMillis();
         tickCount++;
 
         if (tickCount < 100) {
-            return MAX_TPS;
+            return maxTps;
         }
-        int target = (tickCount - 1 - 100) % TICKS_SIZE;
+        int target = (tickCount - 1 - 100) % ticksSize;
         long elapsed = System.currentTimeMillis() - ticks[target];
 
         return 100 / (elapsed / 1000.0);
