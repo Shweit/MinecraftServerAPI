@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.time.Duration;
 import java.util.*;
 
-public class PlayerAPI {
+public final class PlayerAPI {
 
     public NanoHTTPD.Response getPlayers(final Map<String, String> ignoredParams) {
         JSONArray playersArray = new JSONArray();
