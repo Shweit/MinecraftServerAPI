@@ -5,7 +5,6 @@ import com.shweit.serverapi.endpoints.v1.PlayerAPI;
 import com.shweit.serverapi.endpoints.v1.ServerAPI;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
-import org.bukkit.Bukkit;
 
 public class RegisterEndpoints {
     private final WebServer server;

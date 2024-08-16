@@ -35,11 +35,11 @@ public class ServerAPI {
         Logger.getLogger().addHandler(logHandler);
     }
 
-    public NanoHTTPD.Response ping(Map<String, String> params) {
+    public NanoHTTPD.Response ping(Map<String, String> ignoredParams) {
         return NanoHTTPD.newFixedLengthResponse("pong");
     }
 
-    public NanoHTTPD.Response serverInfo(Map<String, String> params) {
+    public NanoHTTPD.Response serverInfo(Map<String, String> ignoredParams) {
         JSONObject serverInfo = new JSONObject();
 
         serverInfo.put("name", Bukkit.getServer().getName());
@@ -89,7 +89,7 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", serverInfo.toString());
     }
 
-    public NanoHTTPD.Response getServerHealth(Map<String, String> params) {
+    public NanoHTTPD.Response getServerHealth(Map<String, String> ignoredParams) {
         OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
         MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
         ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
@@ -152,20 +152,20 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", healthJson.toString());
     }
 
-    public NanoHTTPD.Response tps(Map<String, String> params) {
+    public NanoHTTPD.Response tps(Map<String, String> ignoredParams) {
         JSONObject tpsJson = new JSONObject();
         tpsJson.put("tps", Helper.calculateTPS());
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", tpsJson.toString());
     }
 
-    public NanoHTTPD.Response uptime(Map<String, String> params) {
+    public NanoHTTPD.Response uptime(Map<String, String> ignoredParams) {
         RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
         JSONObject uptimeJson = new JSONObject();
         uptimeJson.put("uptime", formatUpTime(runtimeBean.getUptime()));
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", uptimeJson.toString());
     }
 
-    public NanoHTTPD.Response getServerProperties(Map<String, String> params) {
+    public NanoHTTPD.Response getServerProperties(Map<String, String> ignoredParams) {
         Properties properties = new Properties();
         File propertiesFile = new File(Bukkit.getServer().getWorldContainer(), "server.properties");
 
@@ -240,7 +240,7 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", jsonResponse.toString());
     }
 
-    public NanoHTTPD.Response reload(Map<String, String> params) {
+    public NanoHTTPD.Response reload(Map<String, String> ignoredParams) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
         new BukkitRunnable() {
@@ -253,7 +253,7 @@ public class ServerAPI {
         return response;
     }
 
-    public NanoHTTPD.Response reboot(Map<String, String> params) {
+    public NanoHTTPD.Response reboot(Map<String, String> ignoredParams) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
         new BukkitRunnable() {
@@ -266,7 +266,7 @@ public class ServerAPI {
         return response;
     }
 
-    public NanoHTTPD.Response shutdown(Map<String, String> params) {
+    public NanoHTTPD.Response shutdown(Map<String, String> ignoredParams) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
         new BukkitRunnable() {
@@ -291,13 +291,13 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response getChat(Map<String, String> params) {
+    public NanoHTTPD.Response getChat(Map<String, String> ignoredParams) {
         JSONObject chatJson = new JSONObject();
         chatJson.put("messages", chatListener.getMessages());
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", chatJson.toString());
     }
 
-    public NanoHTTPD.Response getLog(Map<String, String> params) {
+    public NanoHTTPD.Response getLog(Map<String, String> ignoredParams) {
         JSONObject logJson = new JSONObject();
         logJson.put("log", logHandler.getLog());
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", logJson.toString());
