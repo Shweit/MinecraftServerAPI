@@ -83,6 +83,9 @@ public class RegisterEndpoints {
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/exec", serverAPI::execCommand);
         Logger.info("Registered POST /v1/server/exec");
 
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/server/reboot", serverAPI::reload);
+        Logger.info("Registered POST /v1/server/reload");
+
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/reboot", serverAPI::reboot);
         Logger.info("Registered POST /v1/server/reboot");
 

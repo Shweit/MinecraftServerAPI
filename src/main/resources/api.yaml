@@ -1006,6 +1006,22 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/server/reload:
+    post:
+      summary: Reload the server
+      description: >
+        This endpoint reloads the Minecraft server.
+      tags:
+        - Server
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server reloaded successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
   /v1/server/reboot:
     post:
       summary: Reboot the server

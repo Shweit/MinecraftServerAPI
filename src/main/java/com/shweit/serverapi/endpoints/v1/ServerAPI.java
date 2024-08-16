@@ -227,6 +227,19 @@ public class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", jsonResponse.toString());
     }
 
+    public NanoHTTPD.Response reload(Map<String, String> params) {
+        NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Bukkit.reload();
+            }
+        }.runTaskLater(MinecraftServerAPI.getInstance(), 20L);
+
+        return response;
+    }
+
     public NanoHTTPD.Response reboot(Map<String, String> params) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
 
