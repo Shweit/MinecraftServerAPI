@@ -3,6 +3,7 @@ package com.shweit.serverapi.endpoints;
 import com.shweit.serverapi.WebServer;
 import com.shweit.serverapi.endpoints.v1.PlayerAPI;
 import com.shweit.serverapi.endpoints.v1.ServerAPI;
+import com.shweit.serverapi.endpoints.v1.WhitelistAPI;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -11,11 +12,13 @@ public final class RegisterEndpoints {
 
     private final PlayerAPI playerAPI;
     private final ServerAPI serverAPI;
+    private final WhitelistAPI whitelistAPI;
 
     public RegisterEndpoints(final WebServer webServer) {
         this.server = webServer;
         this.playerAPI = new PlayerAPI();
         this.serverAPI = new ServerAPI();
+        this.whitelistAPI = new WhitelistAPI();
     }
 
     public void registerEndpoints() {
@@ -99,5 +102,14 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/log", serverAPI::getLog);
         Logger.info("Registered GET /v1/server/log");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/whitelist", whitelistAPI::getWhitelist);
+        Logger.info("Registered GET /v1/whitelist");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/whitelist", whitelistAPI::postWhitelist);
+        Logger.info("Registered POST /v1/whitelist");
+
+        server.addRoute(NanoHTTPD.Method.DELETE, "/v1/whitelist", whitelistAPI::deleteWhitelist);
+        Logger.info("Registered DELETE /v1/whitelist");
     }
 }
