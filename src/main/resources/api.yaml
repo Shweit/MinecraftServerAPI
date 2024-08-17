@@ -1187,6 +1187,8 @@ paths:
                   description: The player's name associated with the UUID.
                 example:
                   "4f82e47c-7d4d-4607-9b19-29e3e23946a9": "Shweit"
+        '400':
+          description: Whitelist not enabled
         '401':
           description: Unauthorized access - invalid or missing authentication key
         '500':
@@ -1251,6 +1253,29 @@ paths:
                   error:
                     type: string
                     example: "Invalid username."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/whitelist/activate:
+    post:
+      summary: Activate the whitelist
+      description: >
+        This endpoint activates the whitelist of the Minecraft server.
+      tags:
+        - Whitelist
+      parameters:
+        - name: kickPlayers
+          in: query
+          description: Indicates if players not on the whitelist should be kicked
+          required: false
+          schema:
+            type: boolean
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Whitelist activated successfully
         '401':
           description: Unauthorized access - invalid or missing authentication key
         '500':
