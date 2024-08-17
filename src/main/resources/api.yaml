@@ -1280,3 +1280,19 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/whitelist/deactivate:
+    post:
+      summary: Deactivate the whitelist
+      description: >
+        This endpoint deactivates the whitelist of the Minecraft server.
+      tags:
+        - Whitelist
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Whitelist deactivated successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error

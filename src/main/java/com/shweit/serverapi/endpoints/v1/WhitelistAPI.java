@@ -82,4 +82,9 @@ public class WhitelistAPI {
         }
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
+
+    public NanoHTTPD.Response deactivateWhitelist(Map<String, String> ignoredParams) {
+        Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> Bukkit.setWhitelist(false));
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+    }
 }

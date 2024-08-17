@@ -114,5 +114,8 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/whitelist/activate", whitelistAPI::activateWhitelist);
         Logger.info("Registered POST /v1/whitelist/activate");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/whitelist/deactivate", whitelistAPI::deactivateWhitelist);
+        Logger.info("Registered POST /v1/whitelist/deactivate");
     }
 }
