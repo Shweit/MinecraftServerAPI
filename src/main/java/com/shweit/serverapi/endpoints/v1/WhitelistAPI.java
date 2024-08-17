@@ -14,8 +14,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class WhitelistAPI {
-    public NanoHTTPD.Response getWhitelist(Map<String, String> ignoredParams) {
+public final class WhitelistAPI {
+    public NanoHTTPD.Response getWhitelist(final Map<String, String> ignoredParams) {
         if (!Bukkit.hasWhitelist()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
         }
@@ -30,7 +30,7 @@ public class WhitelistAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", whitelistJson.toString());
     }
 
-    public NanoHTTPD.Response postWhitelist(Map<String, String> params) {
+    public NanoHTTPD.Response postWhitelist(final Map<String, String> params) {
         String playerName = params.get("username");
         if (playerName == null) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{error: 'username parameter is required'}");
@@ -50,7 +50,7 @@ public class WhitelistAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response deleteWhitelist(Map<String, String> params) {
+    public NanoHTTPD.Response deleteWhitelist(final Map<String, String> params) {
         String playerName = params.get("username");
         if (playerName == null) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{error: 'username parameter is required'}");
@@ -70,7 +70,7 @@ public class WhitelistAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response activateWhitelist(Map<String, String> params) {
+    public NanoHTTPD.Response activateWhitelist(final Map<String, String> params) {
         Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> Bukkit.setWhitelist(true));
 
         if (Objects.equals(params.get("kickPlayers"), "true")) {
@@ -83,7 +83,7 @@ public class WhitelistAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response deactivateWhitelist(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response deactivateWhitelist(final Map<String, String> ignoredParams) {
         Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> Bukkit.setWhitelist(false));
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
