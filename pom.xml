@@ -81,18 +81,6 @@
       <version>4.0.0</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.7.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.7.0</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -138,7 +126,6 @@
         <version>3.4.0</version>
         <configuration>
           <configLocation>checks.xml</configLocation>
-          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>

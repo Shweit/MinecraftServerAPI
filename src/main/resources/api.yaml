@@ -1166,3 +1166,133 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/whitelist:
+    get:
+      summary: Retrieve the whitelist
+      description: >
+        This endpoint returns the whitelist of the Minecraft server.
+      tags:
+        - Whitelist
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Server whitelist
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: The player's name associated with the UUID.
+                example:
+                  "4f82e47c-7d4d-4607-9b19-29e3e23946a9": "Shweit"
+        '400':
+          description: Whitelist not enabled
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+    post:
+      summary: Add a player to the whitelist
+      description: >
+        This endpoint adds a player to the whitelist of the Minecraft server.
+      tags:
+        - Whitelist
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: username
+          in: query
+          description: The username of the player to add to the whitelist
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player added to whitelist successfully
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid username."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+    delete:
+      summary: Remove a player from the whitelist
+      description: >
+        This endpoint removes a player from the whitelist of the Minecraft server.
+      tags:
+        - Whitelist
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: username
+          in: query
+          description: The username of the player to remove from the whitelist
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Player removed from whitelist successfully
+        '400':
+          description: Bad request - missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid username."
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/whitelist/activate:
+    post:
+      summary: Activate the whitelist
+      description: >
+        This endpoint activates the whitelist of the Minecraft server.
+      tags:
+        - Whitelist
+      parameters:
+        - name: kickPlayers
+          in: query
+          description: Indicates if players not on the whitelist should be kicked
+          required: false
+          schema:
+            type: boolean
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Whitelist activated successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+  /v1/whitelist/deactivate:
+    post:
+      summary: Deactivate the whitelist
+      description: >
+        This endpoint deactivates the whitelist of the Minecraft server.
+      tags:
+        - Whitelist
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: Whitelist deactivated successfully
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
