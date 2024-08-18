@@ -30,8 +30,14 @@ public final class WebServer extends NanoHTTPD {
 
         Logger.debug("Received request for: " + uri + " with method: " + method);
 
+        // Define Map of allowed origins
+        List<String> allowedPaths = List.of(
+                "/", "/swagger", "/api-docs", "/favicon", "/index.css", "/searchPlugin.js"
+        );
+        boolean isAllowedPath = allowedPaths.stream().anyMatch(uri::startsWith);
+
         // Exception for the root path, swagger files and /api-docs from authentication
-        if (!uri.equals("/") && !uri.startsWith("/swagger") && !uri.startsWith("/api-docs") && isAuthenticated) {
+        if (!isAllowedPath && isAuthenticated) {
             Logger.debug("Checking authentication for: " + uri);
             String authHeader = session.getHeaders().get("authorization");
             if (authHeader == null || !authHeader.equals(authKey)) {
@@ -51,7 +57,7 @@ public final class WebServer extends NanoHTTPD {
         }
 
         // Serve Swagger UI files on root path
-        if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger")) {
+        if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger") || isAllowedPath) {
             if ("/".equals(uri)) {
                 uri = "/index.html"; // Redirect to the main Swagger UI page
             }
