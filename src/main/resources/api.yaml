@@ -1432,3 +1432,81 @@ paths:
               description: Unauthorized access - invalid or missing authentication key
             '500':
               description: Internal server error
+  /v1/plugins/{plugin}:
+    get:
+      summary: Retrieve information about a specific plugin
+      description: >
+        This endpoint returns information about a specific plugin installed on the Minecraft server.
+      tags:
+        - Plugins
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: plugin
+          in: path
+          description: The name of the plugin
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Plugin information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the plugin.
+                    example: "Essentials"
+                  version:
+                    type: string
+                    description: The version of the plugin.
+                    example: "2.18.2"
+                  description:
+                    type: string
+                    description: A description of the plugin.
+                    example: "Essentials is the quintessential Minecraft plugin, adding over 100 commands to assist with server administration, gameplay, and other tasks."
+                  authors:
+                    type: array
+                    description: The list of authors of the plugin.
+                    items:
+                      type: string
+                    example: [ "md_5", "Drtshock" ]
+                  website:
+                    type: string
+                    description: The website of the plugin.
+                    example: "https://essentialsx.net/"
+                  contributors:
+                    type: array
+                    description: The list of contributors to the plugin.
+                    items:
+                      type: string
+                    example: [ "A contributor", "Another contributor" ]
+                  dependencies:
+                    type: array
+                    description: The list of hard dependencies required by the plugin.
+                    items:
+                      type: string
+                    example: [ "Vault", "WorldEdit" ]
+                  soft-dependencies:
+                    type: array
+                    description: The list of optional dependencies used by the plugin.
+                    items:
+                      type: string
+                    example: [ "PlaceholderAPI", "Multiverse-Core" ]
+                  load-order:
+                    type: string
+                    description: The load order of the plugin.
+                    example: "STARTUP"
+                  enabled:
+                    type: boolean
+                    description: Whether the plugin is currently enabled.
+                    example: true
+        '400':
+          description: Bad request - missing or invalid parameters
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error

@@ -17,8 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-public class PluginAPI {
-    public NanoHTTPD.Response getPlugins(Map<String, String> ignoredParams) {
+public final class PluginAPI {
+    public NanoHTTPD.Response getPlugins(final Map<String, String> ignoredParams) {
         Plugin[] plugins = Bukkit.getPluginManager().getPlugins();
 
         JSONObject response = new JSONObject();
@@ -29,7 +29,33 @@ public class PluginAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 
-    public NanoHTTPD.Response postPlugin(Map<String, String> params) {
+    public NanoHTTPD.Response getPlugin(final Map<String, String> params) {
+        String pluginName = params.get("name");
+        if (pluginName == null || pluginName.isEmpty()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
+        }
+
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        if (plugin == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        JSONObject response = new JSONObject();
+        response.put("name", plugin.getName());
+        response.put("version", plugin.getDescription().getVersion());
+        response.put("description", plugin.getDescription().getDescription());
+        response.put("authors", plugin.getDescription().getAuthors());
+        response.put("website", plugin.getDescription().getWebsite());
+        response.put("contributors", plugin.getDescription().getContributors());
+        response.put("dependencies", plugin.getDescription().getDepend());
+        response.put("soft-dependencies", plugin.getDescription().getSoftDepend());
+        response.put("load-order", plugin.getDescription().getLoad());
+        response.put("enabled", plugin.isEnabled());
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
+    }
+
+    public NanoHTTPD.Response postPlugin(final Map<String, String> params) {
         String pluginUrl = params.get("url");
         if (pluginUrl == null || pluginUrl.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"Missing plugin URL.\"}");
@@ -83,7 +109,7 @@ public class PluginAPI {
         }
     }
 
-    public NanoHTTPD.Response deletePlugin(Map<String, String> params) {
+    public NanoHTTPD.Response deletePlugin(final Map<String, String> params) {
         String pluginName = params.get("name");
         if (pluginName == null || pluginName.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
@@ -135,7 +161,7 @@ public class PluginAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response activatePlugin(Map<String, String> params) {
+    public NanoHTTPD.Response activatePlugin(final Map<String, String> params) {
         String pluginName = params.get("name");
         if (pluginName == null || pluginName.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
@@ -158,7 +184,7 @@ public class PluginAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    public NanoHTTPD.Response deactivatePlugin(Map<String, String> params) {
+    public NanoHTTPD.Response deactivatePlugin(final Map<String, String> params) {
         String pluginName = params.get("name");
         if (pluginName == null || pluginName.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
@@ -181,13 +207,13 @@ public class PluginAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
-    private File findPluginJar(String pluginName) {
+    private File findPluginJar(final String pluginName) {
         File pluginDir = new File("plugins");
         File[] files = pluginDir.listFiles((dir, name) -> name.toLowerCase().startsWith(pluginName.toLowerCase()) && name.endsWith(".jar"));
         return files != null && files.length > 0 ? files[0] : null;
     }
 
-    private void deleteDirectory(File directory) throws IOException {
+    private void deleteDirectory(final File directory) throws IOException {
         if (directory.isDirectory()) {
             for (File file : directory.listFiles()) {
                 if (file.isDirectory()) {
