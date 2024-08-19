@@ -1510,3 +1510,172 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/worlds:
+    get:
+      summary: Retrieve a list of worlds
+      description: >
+        This endpoint returns a list of worlds on the Minecraft server.
+      tags:
+        - Worlds
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: List of worlds
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: The type of the world
+                example:
+                  "world": "NORMAL"
+                  "world_the_end": "THE_END"
+                  "world_nether": "NETHER"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new world
+      description: >
+        This endpoint creates a new world on the Minecraft server.
+      tags:
+        - Worlds
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - in: query
+          name: worldName
+          required: true
+          schema:
+            type: string
+          description: The name of the world to be created.
+          example: "MyNewWorld"
+        - in: query
+          name: environment
+          required: true
+          schema:
+            type: string
+            enum:
+              - NORMAL
+              - NETHER
+              - THE_END
+          description: The environment type of the world.
+          example: "NORMAL"
+        - in: query
+          name: seed
+          required: false
+          schema:
+            type: string
+          description: The seed for the world generation. Can be a number or a string.
+          example: "123456789"
+        - in: query
+          name: worldType
+          required: true
+          schema:
+            type: string
+            enum:
+              - NORMAL
+              - FLAT
+              - LARGE_BIOMES
+              - AMPLIFIED
+              - CUSTOMIZED
+          description: The type of the world.
+          example: "NORMAL"
+        - in: query
+          name: difficulty
+          required: true
+          schema:
+            type: string
+            enum:
+              - PEACEFUL
+              - EASY
+              - NORMAL
+              - HARD
+          description: The difficulty level of the world.
+          example: "NORMAL"
+        - in: query
+          name: allowAnimals
+          required: false
+          schema:
+            type: boolean
+          description: Whether animals are allowed to spawn in the world.
+          example: true
+        - in: query
+          name: allowMonsters
+          required: false
+          schema:
+            type: boolean
+          description: Whether monsters are allowed to spawn in the world.
+          example: true
+        - in: query
+          name: pvp
+          required: false
+          schema:
+            type: boolean
+          description: Whether PvP (Player vs Player) is enabled in the world.
+          example: true
+        - in: query
+          name: generateStructures
+          required: false
+          schema:
+            type: boolean
+          description: Whether to generate structures such as villages, temples, etc.
+          example: true
+        - in: query
+          name: spawnX
+          required: false
+          schema:
+            type: integer
+          description: The X coordinate for the world's spawn point.
+          example: 0
+        - in: query
+          name: spawnY
+          required: false
+          schema:
+            type: integer
+          description: The Y coordinate for the world's spawn point.
+          example: 64
+        - in: query
+          name: spawnZ
+          required: false
+          schema:
+            type: integer
+          description: The Z coordinate for the world's spawn point.
+          example: 0
+      responses:
+        '200':
+          description: World created successfully
+        '400':
+          description: Bad request - missing or invalid parameters
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+    delete:
+        summary: Delete a world
+        description: >
+            This endpoint deletes a world on the Minecraft server.
+        tags:
+            - Worlds
+        security:
+            - ApiKeyAuth: [ ]
+        parameters:
+            - in: query
+              name: worldName
+              required: true
+              schema:
+                  type: string
+              description: The name of the world to be deleted.
+              example: "MyNewWorld"
+        responses:
+            '200':
+              description: World deleted successfully
+            '400':
+              description: Bad request - missing or invalid parameters
+            '401':
+              description: Unauthorized access - invalid or missing authentication key
+            '500':
+              description: Internal server error

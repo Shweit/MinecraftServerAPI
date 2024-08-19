@@ -17,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import static com.shweit.serverapi.utils.Helper.deleteDirectory;
+
 public final class PluginAPI {
     public NanoHTTPD.Response getPlugins(final Map<String, String> ignoredParams) {
         Plugin[] plugins = Bukkit.getPluginManager().getPlugins();
@@ -211,18 +213,5 @@ public final class PluginAPI {
         File pluginDir = new File("plugins");
         File[] files = pluginDir.listFiles((dir, name) -> name.toLowerCase().startsWith(pluginName.toLowerCase()) && name.endsWith(".jar"));
         return files != null && files.length > 0 ? files[0] : null;
-    }
-
-    private void deleteDirectory(final File directory) throws IOException {
-        if (directory.isDirectory()) {
-            for (File file : directory.listFiles()) {
-                if (file.isDirectory()) {
-                    deleteDirectory(file);
-                } else {
-                    Files.deleteIfExists(file.toPath());
-                }
-            }
-            Files.deleteIfExists(directory.toPath());
-        }
     }
 }

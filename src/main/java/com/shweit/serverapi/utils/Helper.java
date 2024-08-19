@@ -3,9 +3,12 @@ package com.shweit.serverapi.utils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
 import java.util.UUID;
 
 public final class Helper {
@@ -51,5 +54,18 @@ public final class Helper {
         long elapsed = System.currentTimeMillis() - ticks[target];
 
         return 100 / (elapsed / 1000.0);
+    }
+
+    public static void deleteDirectory(final File directory) throws IOException {
+        if (directory.isDirectory()) {
+            for (File file : directory.listFiles()) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file);
+                } else {
+                    Files.deleteIfExists(file.toPath());
+                }
+            }
+            Files.deleteIfExists(directory.toPath());
+        }
     }
 }
