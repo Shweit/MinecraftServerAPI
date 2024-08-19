@@ -5,11 +5,9 @@ import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.*;
-import org.bukkit.generator.ChunkGenerator;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,8 +16,8 @@ public final class WorldAPI {
     public NanoHTTPD.Response getWorlds(final Map<String, String> ignoredParams) {
         JSONObject response = new JSONObject();
 
-        List<World> world = Bukkit.getWorlds();
-        world.forEach(w -> {
+        List<World> worlds = Bukkit.getWorlds();
+        worlds.forEach(w -> {
             JSONObject worldObject = new JSONObject();
             worldObject.put("name", w.getName());
             worldObject.put("environment", w.getEnvironment().name());
@@ -50,8 +48,12 @@ public final class WorldAPI {
             worldObject.put("worldBorder", w.getWorldBorder().getSize());
             worldObject.put("worldType", w.getWorldType().name());
             worldObject.put("generator", w.getGenerator());
-            worldObject.put("gameRule", w.getGameRuleValue("doDaylightCycle"));
-            worldObject.put("gameRule", w.getGameRuleValue("doMobSpawning"));
+
+            JSONObject gameRules = new JSONObject();
+            for (String gameRule : w.getGameRules()) {
+                gameRules.put(gameRule, w.getGameRuleValue(gameRule));
+            }
+            worldObject.put("gameRules", gameRules);
 
             response.put(w.getName(), worldObject);
         });
@@ -134,6 +136,9 @@ public final class WorldAPI {
 
     public NanoHTTPD.Response deleteWorld(Map<String, String> params) {
         String worldName = params.get("worldName");
+        if (worldName == null || worldName.isEmpty()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
+        }
 
         AtomicBoolean success = new AtomicBoolean(true);
         JSONObject error = new JSONObject();
@@ -163,5 +168,61 @@ public final class WorldAPI {
         }
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", error.toString());
+    }
+
+    public NanoHTTPD.Response getWorld(Map<String, String> params) {
+        String worldName = params.get("worldName");
+        Logger.debug("Getting world: " + worldName);
+        if (worldName == null) {
+            Logger.debug("No world name provided");
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
+        }
+
+        JSONObject response = new JSONObject();
+
+        World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+        JSONObject worldObject = new JSONObject();
+        worldObject.put("name", world.getName());
+        worldObject.put("environment", world.getEnvironment().name());
+        worldObject.put("seed", world.getSeed());
+        worldObject.put("time", world.getTime());
+        worldObject.put("fullTime", world.getFullTime());
+        worldObject.put("difficulty", world.getDifficulty().name());
+        worldObject.put("weatherDuration", world.getWeatherDuration());
+        worldObject.put("thunderDuration", world.getThunderDuration());
+        worldObject.put("allowAnimals", world.getAllowAnimals());
+        worldObject.put("allowMonsters", world.getAllowMonsters());
+        worldObject.put("maxHeight", world.getMaxHeight());
+        worldObject.put("seaLevel", world.getSeaLevel());
+        worldObject.put("generateStructures", world.canGenerateStructures());
+        worldObject.put("pvp", world.getPVP());
+        worldObject.put("keepSpawnInMemory", world.getKeepSpawnInMemory());
+        worldObject.put("ambientSpawnLimit", world.getAmbientSpawnLimit());
+        worldObject.put("animalSpawnLimit", world.getAnimalSpawnLimit());
+        worldObject.put("monsterSpawnLimit", world.getMonsterSpawnLimit());
+        worldObject.put("waterAnimalSpawnLimit", world.getWaterAnimalSpawnLimit());
+        worldObject.put("waterAmbientSpawnLimit", world.getWaterAmbientSpawnLimit());
+        worldObject.put("lightningDuration", world.getWeatherDuration());
+        worldObject.put("ticksPerAnimalSpawns", world.getTicksPerAnimalSpawns());
+        worldObject.put("ticksPerMonsterSpawns", world.getTicksPerMonsterSpawns());
+        worldObject.put("ticksPerWaterSpawns", world.getTicksPerWaterSpawns());
+        worldObject.put("ticksPerAmbientSpawns", world.getTicksPerAmbientSpawns());
+        worldObject.put("ticksPerWaterAmbientSpawns", world.getTicksPerWaterAmbientSpawns());
+        worldObject.put("worldBorder", world.getWorldBorder().getSize());
+        worldObject.put("worldType", world.getWorldType().name());
+        worldObject.put("generator", world.getGenerator());
+
+        JSONObject gameRules = new JSONObject();
+        for (String gameRule : world.getGameRules()) {
+            gameRules.put(gameRule, world.getGameRuleValue(gameRule));
+        }
+        worldObject.put("gameRules", gameRules);
+
+        response.put(world.getName(), worldObject);
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 }
