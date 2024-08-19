@@ -1,10 +1,7 @@
 package com.shweit.serverapi.endpoints;
 
 import com.shweit.serverapi.WebServer;
-import com.shweit.serverapi.endpoints.v1.PlayerAPI;
-import com.shweit.serverapi.endpoints.v1.PluginAPI;
-import com.shweit.serverapi.endpoints.v1.ServerAPI;
-import com.shweit.serverapi.endpoints.v1.WhitelistAPI;
+import com.shweit.serverapi.endpoints.v1.*;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -15,6 +12,7 @@ public final class RegisterEndpoints {
     private final ServerAPI serverAPI;
     private final WhitelistAPI whitelistAPI;
     private final PluginAPI pluginAPI;
+    private final WorldAPI worldAPI;
 
     public RegisterEndpoints(final WebServer webServer) {
         this.server = webServer;
@@ -22,6 +20,7 @@ public final class RegisterEndpoints {
         this.serverAPI = new ServerAPI();
         this.whitelistAPI = new WhitelistAPI();
         this.pluginAPI = new PluginAPI();
+        this.worldAPI = new WorldAPI();
     }
 
     public void registerEndpoints() {
@@ -138,5 +137,20 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/plugins/{name}", pluginAPI::getPlugin);
         Logger.info("Registered GET /v1/plugins/{name}");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/worlds", worldAPI::getWorlds);
+        Logger.info("Registered GET /v1/worlds");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/worlds", worldAPI::createWorld);
+        Logger.info("Registered POST /v1/worlds");
+
+        server.addRoute(NanoHTTPD.Method.DELETE, "/v1/worlds", worldAPI::deleteWorld);
+        Logger.info("Registered DELETE /v1/worlds");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/worlds/{world}", worldAPI::getWorld);
+        Logger.info("Registered GET /v1/worlds/{world}");
+
+        server.addRoute(NanoHTTPD.Method.PUT, "/v1/worlds/{world}", worldAPI::updateWorld);
+        Logger.info("Registered PUT /v1/worlds/{world}");
     }
 }

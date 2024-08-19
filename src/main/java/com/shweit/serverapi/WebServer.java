@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 public final class WebServer extends NanoHTTPD {
@@ -32,17 +33,31 @@ public final class WebServer extends NanoHTTPD {
 
         // Define Map of allowed origins
         List<String> allowedPaths = List.of(
-                "/", "/swagger", "/api-docs", "/favicon", "/index.css", "/searchPlugin.js"
+                "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css",
+                "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js", "/favicon-32x32.png",
+                "/swagger-ui.css.map", "/favicon-16x16.png"
         );
-        boolean isAllowedPath = allowedPaths.stream().anyMatch(uri::startsWith);
+
+        // Check if the path is allowed
+        AtomicBoolean isAllowedPath = new AtomicBoolean(false);
+        String finalUri = uri;
+        allowedPaths.forEach(path -> {
+            if (finalUri.equals(path) || finalUri.startsWith("/swagger")) {
+                isAllowedPath.set(true);
+            }
+        });
 
         // Exception for the root path, swagger files and /api-docs from authentication
-        if (!isAllowedPath && isAuthenticated) {
-            Logger.debug("Checking authentication for: " + uri);
-            String authHeader = session.getHeaders().get("authorization");
-            if (authHeader == null || !authHeader.equals(authKey)) {
-                Logger.debug("Unauthorized request for: " + uri);
-                return newFixedLengthResponse(Response.Status.UNAUTHORIZED, MIME_PLAINTEXT, "Unauthorized");
+        if (isAuthenticated) {
+            if (isAllowedPath.get()) {
+                Logger.debug("Allowed path: " + uri);
+            } else {
+                Logger.debug("Checking authentication for: " + uri);
+                String authHeader = session.getHeaders().get("authorization");
+                if (authHeader == null || !authHeader.equals(authKey)) {
+                    Logger.debug("Unauthorized request for: " + uri);
+                    return newFixedLengthResponse(Response.Status.UNAUTHORIZED, MIME_PLAINTEXT, "Unauthorized");
+                }
             }
         }
 
@@ -57,7 +72,7 @@ public final class WebServer extends NanoHTTPD {
         }
 
         // Serve Swagger UI files on root path
-        if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger") || isAllowedPath) {
+        if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger") || isAllowedPath.get()) {
             if ("/".equals(uri)) {
                 uri = "/index.html"; // Redirect to the main Swagger UI page
             }
