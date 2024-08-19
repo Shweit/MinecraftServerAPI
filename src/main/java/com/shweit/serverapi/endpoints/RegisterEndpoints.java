@@ -129,5 +129,8 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.DELETE, "/v1/plugins", pluginAPI::deletePlugin);
         Logger.info("Registered DELETE /v1/plugins");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/plugins/activate", pluginAPI::activatePlugin);
+        Logger.info("Registered POST /v1/plugins/activate");
     }
 }

@@ -61,7 +61,7 @@ public final class WebServer extends NanoHTTPD {
                 return newChunkedResponse(Response.Status.OK, mimeType, resourceStream);
             } else {
                 Logger.debug("Resource not found: " + uri);
-                return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Not Found");
+                return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Route not Found");
             }
         }
 

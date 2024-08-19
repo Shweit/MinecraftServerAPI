@@ -1382,3 +1382,28 @@ paths:
               description: Unauthorized access - invalid or missing authentication key
             '500':
               description: Internal server error
+  /v1/plugins/activate:
+    post:
+        summary: Activate a plugin
+        description: >
+            This endpoint activates a plugin on the Minecraft server.
+        tags:
+            - Plugins
+        security:
+            - ApiKeyAuth: [ ]
+        parameters:
+            - name: name
+              in: query
+              description: The name of the plugin to activate
+              required: true
+              schema:
+                  type: string
+        responses:
+            '200':
+              description: Plugin activated successfully
+            '400':
+              description: Bad request - missing or invalid parameters
+            '401':
+              description: Unauthorized access - invalid or missing authentication key
+            '500':
+              description: Internal server error
