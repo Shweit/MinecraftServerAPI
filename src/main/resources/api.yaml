@@ -1587,7 +1587,7 @@ paths:
         - ApiKeyAuth: []
       parameters:
         - in: query
-          name: worldName
+          name: world
           required: true
           schema:
             type: string
@@ -1704,7 +1704,7 @@ paths:
         - ApiKeyAuth: []
       parameters:
         - in: query
-          name: worldName
+          name: world
           required: true
           schema:
             type: string
@@ -1719,7 +1719,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  "/v1/worlds/{world}":
+  /v1/worlds/{world}:
     get:
       summary: Retrieve information about a specific world
       description: >
@@ -1731,7 +1731,7 @@ paths:
         - ApiKeyAuth: []
       parameters:
         - in: path
-          name: worldName
+          name: world
           description: The name of the world
           required: true
           schema:
@@ -1883,6 +1883,83 @@ paths:
                     example:
                       doDaylightCycle: "true"
                       keepInventory: "false"
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "500":
+          description: Internal server error
+    put:
+      summary: Update a world
+      description: |
+        This endpoint updates the settings of a world on the Minecraft server.
+      tags:
+        - Worlds
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: world
+          required: true
+          schema:
+              type: string
+          description: The name of the world to update.
+        - in: query
+          name: difficulty
+          schema:
+            type: string
+            enum:
+              - PEACEFUL
+              - EASY
+              - NORMAL
+              - HARD
+          required: true
+          description: The difficulty level of the world.
+        - in: query
+          name: animalCap
+          schema:
+            type: integer
+          required: false
+          description: The maximum number of animals that can spawn in the world.
+        - in: query
+          name: monsterCap
+          schema:
+            type: integer
+          required: false
+          description: The maximum number of monsters that can spawn in the world.
+        - in: query
+          name: pvp
+          schema:
+            type: boolean
+          required: false
+          description: Whether PvP (Player vs Player) is enabled in the world.
+        - in: query
+          name: hardcore
+          schema:
+            type: boolean
+          required: false
+          description: Whether the world is in hardcore mode.
+        - in: query
+          name: spawnX
+          schema:
+            type: integer
+          required: false
+          description: The X coordinate for the world's spawn location.
+        - in: query
+          name: spawnY
+          schema:
+            type: integer
+          required: false
+          description: The Y coordinate for the world's spawn location.
+        - in: query
+          name: spawnZ
+          schema:
+            type: integer
+          required: false
+          description: The Z coordinate for the world's spawn location.
+      responses:
+        '200':
+          description: World updated successfully
         "400":
           description: Bad request - missing or invalid parameters
         "401":

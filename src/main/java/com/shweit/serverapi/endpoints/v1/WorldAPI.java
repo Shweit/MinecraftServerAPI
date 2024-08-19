@@ -5,6 +5,7 @@ import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.*;
+import org.bukkit.entity.SpawnCategory;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -61,13 +62,14 @@ public final class WorldAPI {
     }
 
     public NanoHTTPD.Response createWorld(Map<String, String> params) {
-        String worldName = params.get("worldName");
+        String worldName = params.get("world");
         String environment = params.get("environment");
         String seed = params.get("seed");
         String worldType = params.get("worldType");
         String difficulty = params.get("difficulty");
-        String allowAnimals = params.get("allowAnimals");
-        String allowMonsters = params.get("allowMonsters");
+        String animalCap = params.get("animalCap");
+        String monsterCap = params.get("monsterCap");
+        String hardcore = params.get("hardcore");
         String pvp = params.get("pvp");
         String generateStructures = params.get("generateStructures");
         String spawnX = params.get("spawnX");
@@ -105,8 +107,12 @@ public final class WorldAPI {
                 }
 
                 // Set whether animals and monsters are allowed
-                world.setAnimalSpawnLimit(Boolean.parseBoolean(allowAnimals) ? 70 : 0); // 70 is the default limit
-                world.setMonsterSpawnLimit(Boolean.parseBoolean(allowMonsters) ? 70 : 0); // 70 is the default limit
+                if (animalCap != null && !animalCap.isEmpty()) {
+                    world.setSpawnLimit(SpawnCategory.ANIMAL, Integer.parseInt(animalCap));
+                }
+                if (monsterCap != null && !monsterCap.isEmpty()) {
+                    world.setSpawnLimit(SpawnCategory.MONSTER, Integer.parseInt(monsterCap));
+                }
 
                 // Set PvP
                 world.setPVP(Boolean.parseBoolean(pvp));
@@ -118,6 +124,11 @@ public final class WorldAPI {
                     int z = Integer.parseInt(spawnZ);
                     Location spawnLocation = new Location(world, x, y, z);
                     world.setSpawnLocation(spawnLocation);
+                }
+
+                // Set whether the world is hardcore
+                if (Boolean.parseBoolean(hardcore)) {
+                    world.setHardcore(true);
                 }
             } catch (Exception e) {
                 success.set(false);
@@ -135,7 +146,7 @@ public final class WorldAPI {
     }
 
     public NanoHTTPD.Response deleteWorld(Map<String, String> params) {
-        String worldName = params.get("worldName");
+        String worldName = params.get("world");
         if (worldName == null || worldName.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
         }
@@ -171,10 +182,8 @@ public final class WorldAPI {
     }
 
     public NanoHTTPD.Response getWorld(Map<String, String> params) {
-        String worldName = params.get("worldName");
-        Logger.debug("Getting world: " + worldName);
+        String worldName = params.get("world");
         if (worldName == null) {
-            Logger.debug("No world name provided");
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
         }
 
@@ -224,5 +233,78 @@ public final class WorldAPI {
         response.put(world.getName(), worldObject);
 
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
+    }
+
+    public NanoHTTPD.Response updateWorld(Map<String, String> params) {
+        String worldName = params.get("world");
+        if (worldName == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
+        }
+
+        World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        String difficulty = params.get("difficulty");
+        String animalCap = params.get("animalCap");
+        String monsterCap = params.get("monsterCap");
+        String pvp = params.get("pvp");
+        String hardcore = params.get("hardcore");
+        String spawnX = params.get("spawnX");
+        String spawnY = params.get("spawnY");
+        String spawnZ = params.get("spawnZ");
+
+        AtomicBoolean success = new AtomicBoolean(true);
+        JSONObject error = new JSONObject();
+
+        Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
+            try {
+                // Set difficulty if provided
+                if (difficulty != null && !difficulty.isEmpty()) {
+                    world.setDifficulty(Difficulty.valueOf(difficulty.toUpperCase()));
+                }
+
+                // Set whether animals and monsters are allowed
+                if (animalCap != null && !animalCap.isEmpty()) {
+                    world.setSpawnLimit(SpawnCategory.ANIMAL, Integer.parseInt(animalCap));
+                }
+                if (monsterCap != null && !monsterCap.isEmpty()) {
+                    world.setSpawnLimit(SpawnCategory.MONSTER, Integer.parseInt(monsterCap));
+                }
+
+                // Set PvP
+                if (pvp != null && !pvp.isEmpty()) {
+                    world.setPVP(Boolean.parseBoolean(pvp));
+                }
+
+                // Set spawn location if provided
+                if (spawnX != null && spawnY != null && spawnZ != null) {
+                    int x = Integer.parseInt(spawnX);
+                    int y = Integer.parseInt(spawnY);
+                    int z = Integer.parseInt(spawnZ);
+                    Location spawnLocation = new Location(world, x, y, z);
+                    world.setSpawnLocation(spawnLocation);
+                }
+
+                // Set whether the world is hardcore
+                if (hardcore != null && !hardcore.isEmpty()) {
+                    world.setHardcore(Boolean.parseBoolean(hardcore));
+                }
+
+                world.save();
+            } catch (Exception e) {
+                success.set(false);
+                Logger.error("Error updating world: " + e.getMessage());
+                e.getStackTrace();
+                error.put("error", e.getMessage());
+            }
+        });
+
+        if (success.get()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+        }
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", error.toString());
     }
 }

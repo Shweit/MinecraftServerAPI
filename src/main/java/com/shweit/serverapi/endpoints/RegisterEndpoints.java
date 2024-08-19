@@ -147,7 +147,10 @@ public final class RegisterEndpoints {
         server.addRoute(NanoHTTPD.Method.DELETE, "/v1/worlds", worldAPI::deleteWorld);
         Logger.info("Registered DELETE /v1/worlds");
 
-        server.addRoute(NanoHTTPD.Method.GET, "/v1/worlds/{worldName}", worldAPI::getWorld);
-        Logger.info("Registered GET /v1/worlds/{worldName}");
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/worlds/{world}", worldAPI::getWorld);
+        Logger.info("Registered GET /v1/worlds/{world}");
+
+        server.addRoute(NanoHTTPD.Method.PUT, "/v1/worlds/{world}", worldAPI::updateWorld);
+        Logger.info("Registered PUT /v1/worlds/{world}");
     }
 }
