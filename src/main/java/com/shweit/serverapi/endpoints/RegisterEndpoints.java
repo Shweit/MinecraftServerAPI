@@ -132,5 +132,8 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/plugins/activate", pluginAPI::activatePlugin);
         Logger.info("Registered POST /v1/plugins/activate");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/plugins/deactivate", pluginAPI::deactivatePlugin);
+        Logger.info("Registered POST /v1/plugins/deactivate");
     }
 }

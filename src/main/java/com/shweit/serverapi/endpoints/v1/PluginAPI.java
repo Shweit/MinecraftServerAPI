@@ -158,6 +158,29 @@ public class PluginAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
     }
 
+    public NanoHTTPD.Response deactivatePlugin(Map<String, String> params) {
+        String pluginName = params.get("name");
+        if (pluginName == null || pluginName.isEmpty()) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
+        }
+
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        if (plugin == null) {
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_FOUND, "application/json", "{}");
+        }
+
+        try {
+            if (plugin.isEnabled()) {
+                Bukkit.getPluginManager().disablePlugin(plugin);
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage());
+            return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", "{}");
+        }
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
+    }
+
     private File findPluginJar(String pluginName) {
         File pluginDir = new File("plugins");
         File[] files = pluginDir.listFiles((dir, name) -> name.toLowerCase().startsWith(pluginName.toLowerCase()) && name.endsWith(".jar"));
