@@ -1296,3 +1296,89 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         '500':
           description: Internal server error
+  /v1/plugins:
+    get:
+      summary: Retrieve a list of plugins
+      description: >
+        This endpoint returns a list of plugins installed on the Minecraft server.
+      tags:
+        - Plugins
+      security:
+        - ApiKeyAuth: [ ]
+      responses:
+        '200':
+          description: List of plugins
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: The version of the plugin
+                example:
+                  "Essentials": "2.18.2"
+                  "WorldEdit": "7.2.0"
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+    post:
+      summary: Install a plugin
+      description: >
+        This endpoint installs a plugin on the Minecraft server.
+      tags:
+        - Plugins
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - name: url
+          in: query
+          description: The URL of the plugin to install
+          required: true
+          schema:
+            type: string
+        - name: reload
+          in: query
+          description: Indicates if the server should be reloaded after installing the plugin
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Plugin installed successfully
+        '400':
+          description: Bad request - missing or invalid parameters
+        '401':
+          description: Unauthorized access - invalid or missing authentication key
+        '500':
+          description: Internal server error
+    delete:
+        summary: Uninstall a plugin
+        description: >
+            This endpoint uninstalls a plugin on the Minecraft server. WARNING: This will not remove the jar file from the plugin, it will remove the plugin folder and disable the plugin.
+        tags:
+            - Plugins
+        security:
+            - ApiKeyAuth: [ ]
+        parameters:
+            - name: name
+              in: query
+              description: The name of the plugin to uninstall
+              required: true
+              schema:
+                  type: string
+            - name: reload
+              in: query
+              description: Indicates if the server should be reloaded after uninstalling the plugin
+              required: false
+              schema:
+                  type: boolean
+        responses:
+            '200':
+              description: Plugin uninstalled successfully
+            '400':
+              description: Bad request - missing or invalid parameters
+            '401':
+              description: Unauthorized access - invalid or missing authentication key
+            '500':
+              description: Internal server error

@@ -2,6 +2,7 @@ package com.shweit.serverapi.endpoints;
 
 import com.shweit.serverapi.WebServer;
 import com.shweit.serverapi.endpoints.v1.PlayerAPI;
+import com.shweit.serverapi.endpoints.v1.PluginAPI;
 import com.shweit.serverapi.endpoints.v1.ServerAPI;
 import com.shweit.serverapi.endpoints.v1.WhitelistAPI;
 import com.shweit.serverapi.utils.Logger;
@@ -13,12 +14,14 @@ public final class RegisterEndpoints {
     private final PlayerAPI playerAPI;
     private final ServerAPI serverAPI;
     private final WhitelistAPI whitelistAPI;
+    private final PluginAPI pluginAPI;
 
     public RegisterEndpoints(final WebServer webServer) {
         this.server = webServer;
         this.playerAPI = new PlayerAPI();
         this.serverAPI = new ServerAPI();
         this.whitelistAPI = new WhitelistAPI();
+        this.pluginAPI = new PluginAPI();
     }
 
     public void registerEndpoints() {
@@ -117,5 +120,14 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/whitelist/deactivate", whitelistAPI::deactivateWhitelist);
         Logger.info("Registered POST /v1/whitelist/deactivate");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/plugins", pluginAPI::getPlugins);
+        Logger.info("Registered GET /v1/plugins");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/plugins", pluginAPI::postPlugin);
+        Logger.info("Registered POST /v1/plugins");
+
+        server.addRoute(NanoHTTPD.Method.DELETE, "/v1/plugins", pluginAPI::deletePlugin);
+        Logger.info("Registered DELETE /v1/plugins");
     }
 }
