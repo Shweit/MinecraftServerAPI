@@ -33,7 +33,9 @@ public final class WebServer extends NanoHTTPD {
 
         // Define Map of allowed origins
         List<String> allowedPaths = List.of(
-                "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css", "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js", "/favicon-32x32.png", "/swagger-ui.css.map", "/favicon-16x16.png"
+                "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css",
+                "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js", "/favicon-32x32.png",
+                "/swagger-ui.css.map", "/favicon-16x16.png"
         );
 
         // Check if the path is allowed

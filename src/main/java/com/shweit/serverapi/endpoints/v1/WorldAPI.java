@@ -61,7 +61,7 @@ public final class WorldAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 
-    public NanoHTTPD.Response createWorld(Map<String, String> params) {
+    public NanoHTTPD.Response createWorld(final Map<String, String> params) {
         String worldName = params.get("world");
         String environment = params.get("environment");
         String seed = params.get("seed");
@@ -145,7 +145,7 @@ public final class WorldAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", error.toString());
     }
 
-    public NanoHTTPD.Response deleteWorld(Map<String, String> params) {
+    public NanoHTTPD.Response deleteWorld(final Map<String, String> params) {
         String worldName = params.get("world");
         if (worldName == null || worldName.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
@@ -181,7 +181,7 @@ public final class WorldAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", error.toString());
     }
 
-    public NanoHTTPD.Response getWorld(Map<String, String> params) {
+    public NanoHTTPD.Response getWorld(final Map<String, String> params) {
         String worldName = params.get("world");
         if (worldName == null) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
@@ -235,7 +235,7 @@ public final class WorldAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 
-    public NanoHTTPD.Response updateWorld(Map<String, String> params) {
+    public NanoHTTPD.Response updateWorld(final Map<String, String> params) {
         String worldName = params.get("world");
         if (worldName == null) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{}");
