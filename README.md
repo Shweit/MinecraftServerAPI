@@ -7,7 +7,7 @@ This project allows server administrators to automate tasks, gather
 information, and manage the server more efficiently.
 
 ## Prerequisites
-- **Java:** JDK 21
+- **Java:** JDK 20
 - **Maven:** Make sure Maven is installed on your system. 
   You can download it from [here](https://maven.apache.org/download.cgi).
 - **Minecraft Server:** Make sure you have a Paper or Spigot Minecraft server running on your machine.

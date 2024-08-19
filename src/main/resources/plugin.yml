@@ -1,7 +1,10 @@
 name: MinecraftServerAPI
 version: 1.0
-description: A plugin that allows you to interact with your Minecraft server using a REST API.
+description: MinecraftServerAPI is a powerful and flexible plugin for Minecraft servers, providing RESTful APIs to interact with the server programmatically. This project allows server administrators to automate tasks, gather information, and manage the server more efficiently.
+website: https://github.com/Shweit/MinecraftServerAPI
 author: Shweit
+contributors:
+  - Shweit
 api-version: 1.21
 softdepend:
   - Maintenance
