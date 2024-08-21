@@ -25,6 +25,6 @@ webhooks:
   server_chat: true
 
 # Here you can list an extra set of Files or Directories which should be saved by the Backup-System.
-# Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config.yml", "server.properties"]
+# Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config", "server.properties", "banned-ips.json", "banned-players.json", "ops.json", "whitelist.json"]
 # e.g.: ["plugins/MyPlugin/config.yml", "plugins/MyPlugin/data/"]
 backup_files: []

@@ -13,6 +13,7 @@ public final class RegisterEndpoints {
     private final WhitelistAPI whitelistAPI;
     private final PluginAPI pluginAPI;
     private final WorldAPI worldAPI;
+    private final BackupAPI backupAPI;
 
     public RegisterEndpoints(final WebServer webServer) {
         this.server = webServer;
@@ -21,6 +22,7 @@ public final class RegisterEndpoints {
         this.whitelistAPI = new WhitelistAPI();
         this.pluginAPI = new PluginAPI();
         this.worldAPI = new WorldAPI();
+        this.backupAPI = new BackupAPI();
     }
 
     public void registerEndpoints() {
@@ -152,5 +154,23 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.PUT, "/v1/worlds/{world}", worldAPI::updateWorld);
         Logger.info("Registered PUT /v1/worlds/{world}");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/backups", backupAPI::getBackups);
+        Logger.info("Registered GET /v1/backups");
+
+        server.addRoute(NanoHTTPD.Method.POST, "/v1/backups", backupAPI::createBackup);
+        Logger.info("Registered POST /v1/backups");
+
+        server.addRoute(NanoHTTPD.Method.DELETE, "/v1/backups", backupAPI::deleteBackup);
+        Logger.info("Registered DELETE /v1/backups");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/backups/status", backupAPI::getStatus);
+        Logger.info("Registered GET /v1/backups/status");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/backups/{name}", backupAPI::getBackup);
+        Logger.info("Registered GET /v1/backups/{name}");
+
+        server.addRoute(NanoHTTPD.Method.GET, "/v1/backups/{name}/download", backupAPI::downloadBackup);
+        Logger.info("Registered GET /v1/backups/{name}/download");
     }
 }

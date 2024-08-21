@@ -1966,3 +1966,210 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
+  /v1/backups:
+    get:
+      summary: Retrieve a list of backups
+      description: |
+        This endpoint returns a list of backups on the Minecraft server.
+      tags:
+        - Backups
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: List of backups
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: The date and time the backup was created.
+                example:
+                  backup1:
+                    name: backup1
+                    size: 1.2 GB
+                    lastModified: 2022-01-01T12:00:00Z
+                    status: completed
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "500":
+          description: Internal server error
+    post:
+      summary: Create a backup
+      description: |
+        This endpoint creates a backup of the Minecraft server.
+      tags:
+        - Backups
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+              type: string
+          description: The name of the backup to be created.
+          example: backup1
+      responses:
+        "200":
+          description: Backup created successfully
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "500":
+          description: Internal server error
+    delete:
+      summary: Delete a backup
+      description: |
+        This endpoint deletes a backup on the Minecraft server.
+      tags:
+        - Backups
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The name of the backup to be deleted.
+          example: backup1
+      responses:
+        "200":
+          description: Backup deleted successfully
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "500":
+          description: Internal server error
+  /v1/backups/status:
+    get:
+      summary: Retrieve the status of the latest backup
+      description: |
+        This endpoint returns the status of the latest backup on the
+        Minecraft server.
+      tags:
+        - Backups
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: threadId
+          required: true
+          schema:
+            type: integer
+          description: The ID of the thread that created the backup
+          example: 123
+      responses:
+        "200":
+          description: Thread status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the thread
+                    example: BackupThread-backup2-126
+                  state:
+                    type: string
+                    description: The state of the thread
+                    example: TERMINATED
+                  priority:
+                    type: string
+                    description: The priority of the thread
+                    example: NORM
+                  daemon:
+                    type: boolean
+                    description: Whether the thread is a daemon thread
+                    example: false
+                  alive:
+                    type: boolean
+                    description: Whether the thread is alive
+                    example: false
+                  interrupted:
+                    type: boolean
+                    description: Whether the thread is interrupted
+                    example: false
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "500":
+          description: Internal server error
+  /v1/backups/{name}:
+    get:
+      summary: Retrieve information about a specific backup
+      description: >
+        This endpoint returns information about a specific backup on the
+        Minecraft server.
+      tags:
+        - Backups
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The name of the backup
+          example: backup1
+      responses:
+        "200":
+          description: Backup information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The name of the backup.
+                    example: backup1
+                  size:
+                    type: string
+                    description: The size of the backup.
+                    example: 1.2 GB
+                  lastModified:
+                    type: string
+                    description: The date and time the backup was last modified.
+                    example: 2022-01-01T12:00:00Z
+                  status:
+                    type: string
+                    description: The status of the backup.
+                    example: completed
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "500":
+          description: Internal server error
+  /v1/backups/{name}/download:
+    get:
+      summary: Download a backup
+      description: |
+        This endpoint allows downloading a backup from the Minecraft server.
+      tags:
+        - Backups
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The name of the backup to download
+          example: backup1
+      responses:
+        "200":
+          description: Backup downloaded successfully
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "500":
+          description: Internal server error
