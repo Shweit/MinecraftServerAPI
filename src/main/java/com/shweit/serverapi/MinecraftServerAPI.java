@@ -87,7 +87,7 @@ public class MinecraftServerAPI extends JavaPlugin  {
         getServer().getPluginManager().registerEvents(new PlayerLoginListener(), this);
     }
 
-    public static void setBlockNewConnections(boolean block, String message) {
+    public static void setBlockNewConnections(final boolean block, final String message) {
         blockNewConnections = block;
         if (block) {
             blockNewConnectionsMessage = message;

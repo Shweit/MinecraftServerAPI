@@ -6,21 +6,16 @@ import com.shweit.serverapi.MinecraftServerAPI;
 import com.shweit.serverapi.utils.Helper;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.*;
 import java.util.*;
 import java.util.zip.ZipOutputStream;
-import java.nio.file.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class BackupAPI {
-    public static List<String> FILES_TO_BACKUP = List.of(
+public final class BackupAPI {
+    public static List<String> filesToBackup = List.of(
         "world",
         "world_nether",
         "world_the_end",
@@ -33,13 +28,7 @@ public class BackupAPI {
         "whitelist.json"
     );
 
-    public static final List<String> DO_NOT_DELETE = List.of(
-        "logs",
-        "backups",
-        "eula.txt"
-    );
-
-    public NanoHTTPD.Response getBackups(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response getBackups(final Map<String, String> ignoredParams) {
         // Get zipped Archived inside the /backups folder in the plugin directory
         File backupFolder = new File("backups");
 
@@ -74,7 +63,7 @@ public class BackupAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 
-    public NanoHTTPD.Response createBackup(Map<String, String> params) {
+    public NanoHTTPD.Response createBackup(final Map<String, String> params) {
         String name = params.get("name");
         if (name == null || name.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\": \"Name is required\"}");
@@ -95,22 +84,22 @@ public class BackupAPI {
         List<String> backupFiles = config.getStringList("backup_files");
 
         // Merge FILES_TO_BACKUP with backup_files
-        List<String> filesToBackup = new ArrayList<>(FILES_TO_BACKUP);
+        List<String> filesToBackupList = new ArrayList<>(BackupAPI.filesToBackup);
         for (String file : backupFiles) {
-            if (!filesToBackup.contains(file)) {
-                filesToBackup.add(file);
+            if (!filesToBackupList.contains(file)) {
+                filesToBackupList.add(file);
             }
         }
 
         // Exclude the backups folder from being included in the backup
-        filesToBackup.remove(backupFolder.getAbsolutePath());
+        filesToBackupList.remove(backupFolder.getAbsolutePath());
 
         // Create a new thread to create the backup
         Thread backupThread = new Thread(() -> {
             try (FileOutputStream fos = new FileOutputStream(backupFile);
                  ZipOutputStream zos = new ZipOutputStream(fos)) {
 
-                for (String filePath : filesToBackup) {
+                for (String filePath : filesToBackupList) {
                     File fileToZip = new File(filePath);
                     if (fileToZip.exists()) {
                         zipFile(fileToZip, fileToZip.getName(), zos, backupFolder.getAbsolutePath());
@@ -139,7 +128,7 @@ public class BackupAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 
-    private void zipFile(File fileToZip, String fileName, ZipOutputStream zos, String backupFolderPath) throws IOException {
+    private void zipFile(final File fileToZip, final String fileName, final ZipOutputStream zos, final String backupFolderPath) throws IOException {
         if (fileToZip.isHidden()) {
             return;
         }
@@ -171,7 +160,7 @@ public class BackupAPI {
         }
     }
 
-    public NanoHTTPD.Response deleteBackup(Map<String, String> params) {
+    public NanoHTTPD.Response deleteBackup(final Map<String, String> params) {
         String name = params.get("name");
         if (name == null || name.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\": \"Name is required\"}");
@@ -190,7 +179,7 @@ public class BackupAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{\"message\": \"Backup deleted successfully\"}");
     }
 
-    public NanoHTTPD.Response getStatus(Map<String, String> params) {
+    public NanoHTTPD.Response getStatus(final Map<String, String> params) {
         int threadId = Integer.parseInt(params.get("threadId"));
 
         if (threadId == 0) {
@@ -217,7 +206,7 @@ public class BackupAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 
-    public NanoHTTPD.Response getBackup(Map<String, String> params) {
+    public NanoHTTPD.Response getBackup(final Map<String, String> params) {
         String name = params.get("name");
         if (name == null || name.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\": \"Name is required\"}");
@@ -250,7 +239,7 @@ public class BackupAPI {
         }
     }
 
-    private void addEntryToTree(JsonObject root, ZipEntry entry) {
+    private void addEntryToTree(final JsonObject root, final ZipEntry entry) {
         String[] pathParts = entry.getName().split("/");
         JsonObject currentDir = root;
 
@@ -273,7 +262,7 @@ public class BackupAPI {
         }
     }
 
-    public NanoHTTPD.Response downloadBackup(Map<String, String> params) {
+    public NanoHTTPD.Response downloadBackup(final Map<String, String> params) {
         String name = params.get("name");
         if (name == null || name.isEmpty()) {
             return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\": \"Name is required\"}");

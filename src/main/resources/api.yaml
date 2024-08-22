@@ -2133,14 +2133,14 @@ paths:
                     type: string
                     description: The size of the backup.
                     example: 1.2 GB
-                  lastModified:
+                  created:
                     type: string
                     description: The date and time the backup was last modified.
                     example: 2022-01-01T12:00:00Z
-                  status:
-                    type: string
-                    description: The status of the backup.
-                    example: completed
+                  files:
+                    type: object
+                    description: A list of files in the backup.
+                    example: {}
         "400":
           description: Bad request - missing or invalid parameters
         "401":

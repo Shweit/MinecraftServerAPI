@@ -5,9 +5,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-public class PlayerLoginListener implements Listener {
+public final class PlayerLoginListener implements Listener {
     @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    public void onPlayerLogin(final PlayerLoginEvent event) {
         if (MinecraftServerAPI.isBlockNewConnections()) {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, MinecraftServerAPI.getBlockNewConnectionsMessage());
         }
