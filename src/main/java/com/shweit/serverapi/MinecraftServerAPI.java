@@ -12,12 +12,14 @@ package com.shweit.serverapi;
 import com.shweit.serverapi.endpoints.RegisterEndpoints;
 import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.shweit.serverapi.listeners.PlayerLoginListener;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class MinecraftServerAPI extends JavaPlugin  {
 
@@ -29,6 +31,10 @@ public class MinecraftServerAPI extends JavaPlugin  {
 
     private static boolean blockNewConnections = false;
     private static String blockNewConnectionsMessage;
+
+    public static boolean isPluginInstalled(String pluginName) {
+        return Bukkit.getPluginManager().isPluginEnabled(pluginName);
+    }
 
     @Override
     public final void onEnable() {

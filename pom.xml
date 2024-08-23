@@ -59,6 +59,12 @@
       <version>2.2.12</version>
     </dependency>
     <dependency>
+      <groupId>eu.kennytv.maintenance</groupId>
+      <artifactId>maintenance-api</artifactId>
+      <version>4.2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20230227</version>
