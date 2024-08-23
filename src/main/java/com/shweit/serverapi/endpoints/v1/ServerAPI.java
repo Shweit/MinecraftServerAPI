@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.shweit.serverapi.utils.Helper.formatSize;
+
 public final class ServerAPI {
     private final ChatListener chatListener;
     private final LogHandler logHandler;
@@ -309,19 +311,6 @@ public final class ServerAPI {
         JSONObject logJson = new JSONObject();
         logJson.put("log", logHandler.getLog());
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", logJson.toString());
-    }
-
-    private String formatSize(final long size) {
-        String[] units = new String[] {"B", "KB", "MB", "GB", "TB"};
-        int unitIndex = 0;
-        double sizeD = size;
-
-        while (sizeD >= 1024 && unitIndex < units.length - 1) {
-            sizeD /= 1024;
-            unitIndex++;
-        }
-
-        return String.format("%.2f %s", sizeD, units[unitIndex]);
     }
 
     private String formatUpTime(final long uptime) {

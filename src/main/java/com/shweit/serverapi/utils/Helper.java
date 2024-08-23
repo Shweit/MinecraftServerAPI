@@ -68,4 +68,21 @@ public final class Helper {
             Files.deleteIfExists(directory.toPath());
         }
     }
+
+    public static String formatSize(final long size) {
+        String[] units = new String[] {"B", "KB", "MB", "GB", "TB"};
+        int unitIndex = 0;
+        double sizeD = size;
+
+        while (sizeD >= 1024 && unitIndex < units.length - 1) {
+            sizeD /= 1024;
+            unitIndex++;
+        }
+
+        return String.format("%.2f %s", sizeD, units[unitIndex]);
+    }
+
+    public static String dateConverter(final long timestamp) {
+        return new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new java.util.Date(timestamp));
+    }
 }

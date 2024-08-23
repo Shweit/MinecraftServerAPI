@@ -14,6 +14,9 @@ import com.shweit.serverapi.utils.Logger;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.shweit.serverapi.listeners.PlayerLoginListener;
+
 import java.io.File;
 
 public class MinecraftServerAPI extends JavaPlugin  {
@@ -24,8 +27,12 @@ public class MinecraftServerAPI extends JavaPlugin  {
     public static String pluginName = "MinecraftServerAPI";
     private static MinecraftServerAPI instance;
 
+    private static boolean blockNewConnections = false;
+    private static String blockNewConnectionsMessage;
+
     @Override
     public final void onEnable() {
+        registerEvents();
         createConfig();
 
         config = getConfig();
@@ -74,5 +81,24 @@ public class MinecraftServerAPI extends JavaPlugin  {
 
     public static MinecraftServerAPI getInstance() {
         return instance;
+    }
+
+    private void registerEvents() {
+        getServer().getPluginManager().registerEvents(new PlayerLoginListener(), this);
+    }
+
+    public static void setBlockNewConnections(final boolean block, final String message) {
+        blockNewConnections = block;
+        if (block) {
+            blockNewConnectionsMessage = message;
+        }
+    }
+
+    public static boolean isBlockNewConnections() {
+        return blockNewConnections;
+    }
+
+    public static String getBlockNewConnectionsMessage() {
+        return blockNewConnectionsMessage;
     }
 }
