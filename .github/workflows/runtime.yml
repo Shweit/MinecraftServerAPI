@@ -1,4 +1,4 @@
-name: Build with Maven and Do Runtime Test
+name: Runtime Tests
 
 on:
   workflow_dispatch:
@@ -10,51 +10,25 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 16
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - name: Maven Build
-        run: mvn clean package
-
-      - name: Upload the artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifact-${{ github.event.number }}
-          path: 'target/MinecraftServerAPI*.jar'
-
-  runtime-test:
-    name: Plugin Runtime Test
-    needs: [build]
-    runs-on: ubuntu-latest
+  test:
     strategy:
       matrix:
-        include:
-          - mcVersion: '1.16.5'
-            javaVersion: '16'
-          - mcVersion: '1.17.1'
-            javaVersion: '17'
-          - mcVersion: '1.18.2'
-            javaVersion: '18'
-          - mcVersion: '1.19.4'
-            javaVersion: '19'
-          - mcVersion: '1.20.1'
-            javaVersion: '20'
-          - mcVersion: '1.21'
-            javaVersion: '21'
-
+        runtime: [ 'paper', 'spigot', 'craftbukkit' ]
+        version: [ '1.17', '1.18', '1.19', '1.20', '1.21' ]
+    # ...
     steps:
-      - uses: FN-FAL113/minecraft-plugin-runtime-test@v1.1.2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
-          server-version: ${{ matrix.mcVersion }}
-          java-version: ${{ matrix.javaVersion }}
-          artifact-name: artifact-${{ github.event.number }}
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Build with Maven
+        run: mvn clean install
+      - uses: gmitch215/TestMC@v2
+        with:
+          path: 'target/MinecraftServerAPI*.jar'
+          runtime: ${{ matrix.runtime }}
+          version: ${{ matrix.version }}
+          time: 120
+          commands: |
+            version
