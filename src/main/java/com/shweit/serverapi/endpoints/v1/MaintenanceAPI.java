@@ -11,8 +11,8 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.UUID;
 
-public class MaintenanceAPI {
-    public final static Maintenance maintenancePlugin = MaintenanceProvider.get();
+public final class MaintenanceAPI {
+    public final Maintenance maintenancePlugin = MaintenanceProvider.get();
 
     public NanoHTTPD.Response getMaintenanceStatus(final Map<String, String> ignoredParams) {
         if (maintenancePlugin.isMaintenance()) {
@@ -26,7 +26,7 @@ public class MaintenanceAPI {
         }
     }
 
-    public NanoHTTPD.Response enableMaintenance(Map<String, String> params) {
+    public NanoHTTPD.Response enableMaintenance(final Map<String, String> params) {
         try {
             JSONObject response = new JSONObject();
             if (params.get("startTimer") != null) {
@@ -58,7 +58,7 @@ public class MaintenanceAPI {
         }
     }
 
-    public NanoHTTPD.Response disableMaintenance(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response disableMaintenance(final Map<String, String> ignoredParams) {
         try {
             JSONObject response = new JSONObject();
             Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
@@ -74,7 +74,7 @@ public class MaintenanceAPI {
         }
     }
 
-    public NanoHTTPD.Response getMaintenanceWhitelist(Map<String, String> ignoredParams) {
+    public NanoHTTPD.Response getMaintenanceWhitelist(final Map<String, String> ignoredParams) {
         JSONObject response = new JSONObject();
 
         for (Map.Entry<UUID, String> entry : maintenancePlugin.getSettings().getWhitelistedPlayers().entrySet()) {
@@ -84,7 +84,7 @@ public class MaintenanceAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", response.toString());
     }
 
-    public NanoHTTPD.Response addPlayerToMaintenanceWhitelist(Map<String, String> params) {
+    public NanoHTTPD.Response addPlayerToMaintenanceWhitelist(final Map<String, String> params) {
         try {
             if (!params.containsKey("name")) {
                 JSONObject response = new JSONObject();
@@ -114,7 +114,7 @@ public class MaintenanceAPI {
         }
     }
 
-    public NanoHTTPD.Response removePlayerFromMaintenanceWhitelist(Map<String, String> params) {
+    public NanoHTTPD.Response removePlayerFromMaintenanceWhitelist(final Map<String, String> params) {
         try {
             if (!params.containsKey("name")) {
                 JSONObject response = new JSONObject();

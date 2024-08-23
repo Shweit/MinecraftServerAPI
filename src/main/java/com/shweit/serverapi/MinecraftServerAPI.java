@@ -19,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.shweit.serverapi.listeners.PlayerLoginListener;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class MinecraftServerAPI extends JavaPlugin  {
 
@@ -32,8 +31,8 @@ public class MinecraftServerAPI extends JavaPlugin  {
     private static boolean blockNewConnections = false;
     private static String blockNewConnectionsMessage;
 
-    public static boolean isPluginInstalled(String pluginName) {
-        return Bukkit.getPluginManager().isPluginEnabled(pluginName);
+    public static boolean isPluginInstalled(final String string) {
+        return Bukkit.getPluginManager().isPluginEnabled(string);
     }
 
     @Override
