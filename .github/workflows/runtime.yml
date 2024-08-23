@@ -11,11 +11,12 @@ on:
 
 jobs:
   test:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         runtime: [ 'paper', 'spigot', 'craftbukkit' ]
         version: [ '1.17', '1.18', '1.19', '1.20', '1.21' ]
-    # ...
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
