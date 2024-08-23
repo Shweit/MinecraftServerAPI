@@ -2173,3 +2173,184 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
+  /v1/maintenance:
+    description: |
+      The maintenance endpoints allow setting the maintenance status of the
+      Minecraft server. You need to have the [Maintenance Plugin](https://www.spigotmc.org/resources/maintenance-bungee-and-spigot-support.40699/) installed on your server to use these endpoints.
+    get:
+      summary: Retrieve the maintenance status
+      description: |
+        This endpoint returns the maintenance status of the Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Maintenance status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The maintenance status of the server
+                    example: enabled
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "500":
+          description: Internal server error
+    post:
+      summary: Set the maintenance status
+      description: |
+        This endpoint sets the maintenance status of the Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: startTimer
+          required: false
+          schema:
+            type: integer
+          description: The time in minutes until the server will be set to maintenance mode
+        - in: query
+          name: endTimer
+          required: false
+          schema:
+            type: integer
+          description: The time in minutes until the server will be set to online mode
+      responses:
+        "200":
+          description: Maintenance status set successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The maintenance status of the server
+                    example: enabled
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "500":
+          description: Internal server error
+    delete:
+      summary: Remove the maintenance status
+      description: |
+        This endpoint removes the maintenance status of the Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Maintenance status removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The maintenance status of the server
+                    example: disabled
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "500":
+          description: Internal server error
+  /v1/maintenance/whitelist:
+    get:
+      summary: Retrieve the maintenance whitelist
+      description: |
+        This endpoint returns the maintenance whitelist of the Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Maintenance whitelist
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: The player's name associated with the UUID.
+                example:
+                  4f82e47c-7d4d-4607-9b19-29e3e23946a9: Shweit
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "500":
+          description: Internal server error
+    post:
+      summary: Add a player to the maintenance whitelist
+      description: |
+        This endpoint adds a player to the maintenance whitelist of the Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The username of the player to add to the maintenance whitelist
+      responses:
+        "200":
+          description: Player added to maintenance whitelist successfully
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "409":
+          description: Player already in maintenance whitelist
+        "500":
+          description: Internal server error
+    delete:
+      summary: Remove a player from the maintenance whitelist
+      description: >
+        This endpoint removes a player from the maintenance whitelist of the
+        Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The username of the player to remove from the maintenance whitelist
+      responses:
+        "200":
+          description: Player removed from maintenance whitelist successfully
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "409":
+          description: Player not in maintenance whitelist
+        "500":
+          description: Internal server error

@@ -4,7 +4,7 @@ description: A plugin that allows you to interact with your Minecraft server usi
 author: Shweit
 api-version: 1.21
 softdepend:
-  - Geyser
-  - Floodgate
   - Maintenance
+
+
 main: com.shweit.serverapi.MinecraftServerAPI

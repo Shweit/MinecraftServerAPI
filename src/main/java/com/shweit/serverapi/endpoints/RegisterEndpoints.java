@@ -1,5 +1,6 @@
 package com.shweit.serverapi.endpoints;
 
+import com.shweit.serverapi.MinecraftServerAPI;
 import com.shweit.serverapi.WebServer;
 import com.shweit.serverapi.endpoints.v1.*;
 import com.shweit.serverapi.utils.Logger;
@@ -14,15 +15,18 @@ public final class RegisterEndpoints {
     private final PluginAPI pluginAPI;
     private final WorldAPI worldAPI;
     private final BackupAPI backupAPI;
+    private final MaintenanceAPI maintenanceAPI;
 
     public RegisterEndpoints(final WebServer webServer) {
         this.server = webServer;
+
         this.playerAPI = new PlayerAPI();
         this.serverAPI = new ServerAPI();
         this.whitelistAPI = new WhitelistAPI();
         this.pluginAPI = new PluginAPI();
         this.worldAPI = new WorldAPI();
         this.backupAPI = new BackupAPI();
+        this.maintenanceAPI = new MaintenanceAPI();
     }
 
     public void registerEndpoints() {
@@ -172,5 +176,25 @@ public final class RegisterEndpoints {
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/backups/{name}/download", backupAPI::downloadBackup);
         Logger.info("Registered GET /v1/backups/{name}/download");
+
+        if (MinecraftServerAPI.isPluginInstalled("Maintenance")) {
+            server.addRoute(NanoHTTPD.Method.GET, "/v1/maintenance", maintenanceAPI::getMaintenanceStatus);
+            Logger.info("Registered GET /v1/maintenance");
+
+            server.addRoute(NanoHTTPD.Method.POST, "/v1/maintenance", maintenanceAPI::enableMaintenance);
+            Logger.info("Registered POST /v1/maintenance");
+
+            server.addRoute(NanoHTTPD.Method.DELETE, "/v1/maintenance", maintenanceAPI::disableMaintenance);
+            Logger.info("Registered DELETE /v1/maintenance");
+
+            server.addRoute(NanoHTTPD.Method.GET, "/v1/maintenance/whitelist", maintenanceAPI::getMaintenanceWhitelist);
+            Logger.info("Registered GET /v1/maintenance/whitelist");
+
+            server.addRoute(NanoHTTPD.Method.POST, "/v1/maintenance/whitelist", maintenanceAPI::addPlayerToMaintenanceWhitelist);
+            Logger.info("Registered POST /v1/maintenance/whitelist");
+
+            server.addRoute(NanoHTTPD.Method.DELETE, "/v1/maintenance/whitelist", maintenanceAPI::removePlayerFromMaintenanceWhitelist);
+            Logger.info("Registered DELETE /v1/maintenance/whitelist");
+        }
     }
 }
