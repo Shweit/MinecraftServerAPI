@@ -186,6 +186,15 @@ public final class RegisterEndpoints {
 
             server.addRoute(NanoHTTPD.Method.DELETE, "/v1/maintenance", maintenanceAPI::disableMaintenance);
             Logger.info("Registered DELETE /v1/maintenance");
+
+            server.addRoute(NanoHTTPD.Method.GET, "/v1/maintenance/whitelist", maintenanceAPI::getMaintenanceWhitelist);
+            Logger.info("Registered GET /v1/maintenance/whitelist");
+
+            server.addRoute(NanoHTTPD.Method.POST, "/v1/maintenance/whitelist", maintenanceAPI::addPlayerToMaintenanceWhitelist);
+            Logger.info("Registered POST /v1/maintenance/whitelist");
+
+            server.addRoute(NanoHTTPD.Method.DELETE, "/v1/maintenance/whitelist", maintenanceAPI::removePlayerFromMaintenanceWhitelist);
+            Logger.info("Registered DELETE /v1/maintenance/whitelist");
         }
     }
 }

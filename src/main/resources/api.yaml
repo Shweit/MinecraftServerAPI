@@ -2270,3 +2270,87 @@ paths:
           description: Maintenance plugin not found
         "500":
           description: Internal server error
+  /v1/maintenance/whitelist:
+    get:
+      summary: Retrieve the maintenance whitelist
+      description: |
+        This endpoint returns the maintenance whitelist of the Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Maintenance whitelist
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  description: The player's name associated with the UUID.
+                example:
+                  4f82e47c-7d4d-4607-9b19-29e3e23946a9: Shweit
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "500":
+          description: Internal server error
+    post:
+      summary: Add a player to the maintenance whitelist
+      description: |
+        This endpoint adds a player to the maintenance whitelist of the Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The username of the player to add to the maintenance whitelist
+      responses:
+        "200":
+          description: Player added to maintenance whitelist successfully
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "409":
+          description: Player already in maintenance whitelist
+        "500":
+          description: Internal server error
+    delete:
+      summary: Remove a player from the maintenance whitelist
+      description: >
+        This endpoint removes a player from the maintenance whitelist of the
+        Minecraft server.
+      tags:
+        - Maintenance
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+          description: The username of the player to remove from the maintenance whitelist
+      responses:
+        "200":
+          description: Player removed from maintenance whitelist successfully
+        "400":
+          description: Bad request - missing or invalid parameters
+        "401":
+          description: Unauthorized access - invalid or missing authentication key
+        "404":
+          description: Maintenance plugin not found
+        "409":
+          description: Player not in maintenance whitelist
+        "500":
+          description: Internal server error
