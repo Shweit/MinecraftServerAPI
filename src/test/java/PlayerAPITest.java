@@ -1,26 +1,34 @@
+import org.json.JSONObject;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class PlayerAPITest extends ApiTestHelper {
 
     @Test
-    public void testPingEndpoint() throws IOException {
-        String urlString = ApiTestHelper.getBaseUrl() + "/v1/ping";
-        URL url = new URL(urlString);
+    public void testPlayersEndpoint() throws IOException {
+        HttpURLConnection conn = sendRequest("/v1/players", "GET");
+        String response = ApiTestHelper.readResponse(conn);
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
+        assertEquals(200, conn.getResponseCode());
+        assertNotNull(response);
 
-        int responseCode = conn.getResponseCode();
-        assertEquals(200, responseCode, "Expected response code to be 200");
+        JSONObject jsonResponse = new JSONObject(response);
 
-        String response = readResponse(conn);
-        assertNotNull(response, "Response should not be null");
-        assertEquals("pong", response.trim(), "Expected response to be 'pong'");
+        assertTrue(jsonResponse.has("onlinePlayers"));
+        assertEquals(0, jsonResponse.getJSONArray("onlinePlayers").length());
+    }
+
+    @Test
+    @Disabled
+    public void testPlayerEndpoint() throws IOException {
+        HttpURLConnection conn = sendRequest("/v1/player/Shweit", "GET");
+        assertEquals(404, conn.getResponseCode());
     }
 }

@@ -7,10 +7,13 @@ This project allows server administrators to automate tasks, gather
 information, and manage the server more efficiently.
 
 ## Prerequisites
-- **Java:** JDK 20
+- **Java:** JDK 20 or higher is required to build and run the project.
 - **Maven:** Make sure Maven is installed on your system. 
-  You can download it from [here](https://maven.apache.org/download.cgi).
+  You can download it [here](https://maven.apache.org/download.cgi).
 - **Minecraft Server:** Make sure you have a Paper or Spigot Minecraft server running on your machine.
+- **Docker:** The Test Environment is set up using Docker. 
+  Make sure you have Docker installed on your system. 
+  You can download it [here](https://www.docker.com/products/docker-desktop).
 
 ## Installation
 ### Cloning the Repository
