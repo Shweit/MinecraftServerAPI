@@ -1,0 +1,21 @@
+<configuration>
+
+    <!-- Console Appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Set the root log level to INFO -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <!-- Set the log level for Testcontainers to WARN -->
+    <logger name="org.testcontainers" level="WARN" />
+
+    <!-- Set the log level for Docker Java to WARN -->
+    <logger name="com.github.dockerjava" level="WARN" />
+
+</configuration>
