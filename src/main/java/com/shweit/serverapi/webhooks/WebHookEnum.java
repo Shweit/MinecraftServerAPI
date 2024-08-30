@@ -7,7 +7,8 @@ public enum WebHookEnum {
     SERVER_START("server_start", "Triggered when the server starts"),
     SERVER_STOP("server_stop", "Triggered when the server stops"),
     PLUGIN_DISABLE("plugin_disable", "Triggered when a plugin is disabled"),
-    PLUGIN_ENABLE("plugin_enable", "Triggered when a plugin is enabled"),;
+    PLUGIN_ENABLE("plugin_enable", "Triggered when a plugin is enabled"),
+    BLOCK_BREAK("block_break", "Triggered when a block is broken"),;
 
     public final String label;
     public final String description;

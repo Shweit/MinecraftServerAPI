@@ -30,6 +30,7 @@ webhooks:
   server_stop: true
   plugin_disable: true
   plugin_enable: true
+  block_break: true
 
 # Here you can list an extra set of Files or Directories which should be saved by the Backup-System.
 # Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config", "server.properties", "banned-ips.json", "banned-players.json", "ops.json", "whitelist.json"]
