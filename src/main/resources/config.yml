@@ -25,8 +25,11 @@ webhooks:
 
   # Here is a list of all available Webhooks.
   # You can enable or disable them here.
-  # Or via the command /mcapi webhook <webhook> <true/false>
+  # Or via the command /mcapi webhooks <disable/enable> <webhook>
   server_start: true
+  server_stop: true
+  plugin_disable: true
+  plugin_enable: true
 
 # Here you can list an extra set of Files or Directories which should be saved by the Backup-System.
 # Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config", "server.properties", "banned-ips.json", "banned-players.json", "ops.json", "whitelist.json"]

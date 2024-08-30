@@ -1,6 +1,8 @@
 package com.shweit.serverapi.webhooks;
 
 import com.shweit.serverapi.utils.Logger;
+import com.shweit.serverapi.webhooks.server.PluginDisable;
+import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.json.JSONObject;
@@ -26,6 +28,15 @@ public class RegisterWebHooks {
         // Register all webhooks
         new ServerStart().register();
         Logger.debug("Registered server_start WebHook");
+
+        // ServerStop is not registered because it is triggered when the plugin gets disabled
+        Logger.debug("Registered server_stop WebHook");
+
+        new PluginDisable().register();
+        Logger.debug("Registered plugin_disable WebHook");
+
+        new PluginEnable().register();
+        Logger.debug("Registered plugin_enable WebHook");
     }
 
     public static void sendToAllUrls(JSONObject jsonObject) {

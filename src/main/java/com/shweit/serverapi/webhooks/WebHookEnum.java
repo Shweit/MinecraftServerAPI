@@ -3,6 +3,8 @@ package com.shweit.serverapi.webhooks;
 public enum WebHookEnum {
     SERVER_START("server_start", "Triggered when the server starts"),
     SERVER_STOP("server_stop", "Triggered when the server stops"),
+    PLUGIN_DISABLE("plugin_disable", "Triggered when a plugin is disabled"),
+    PLUGIN_ENABLE("plugin_enable", "Triggered when a plugin is enabled"),
     ;
 
     public final String label;
