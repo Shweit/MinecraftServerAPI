@@ -12,7 +12,8 @@ public enum WebHookEnum {
     BLOCK_PLACE("block_place", "Triggered when a block is placed"),
     BLOCK_BURN("block_burn", "Triggered when a block is burned"),
     BLOCK_REDSTONE("block_redstone", "Triggered when a block is powered by redstone or a redstone current changes"),
-    NOTE_PLAY("note_play", "Triggered when a note block plays a note"),;
+    NOTE_PLAY("note_play", "Triggered when a note block plays a note"),
+    SIGN_CHANGE("sign_change", "Triggered when a sign is changed"),;
 
     public final String label;
     public final String description;

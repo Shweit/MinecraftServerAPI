@@ -53,6 +53,9 @@ public final class RegisterWebHooks {
 
         new NotePlay().register();
         Logger.debug("Registered note_play WebHook");
+
+        new SignChange().register();
+        Logger.debug("Registered sign_change WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {

@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.json.JSONObject;
 
-public class BlockRedstone implements WebHook, Listener {
+public final class BlockRedstone implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.BLOCK_REDSTONE.label;
 
