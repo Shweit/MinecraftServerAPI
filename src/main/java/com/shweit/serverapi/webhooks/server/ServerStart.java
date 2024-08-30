@@ -25,7 +25,16 @@ public class ServerStart implements WebHook, Listener {
     public void onServerLoad(ServerLoadEvent event) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
-        jsonObject.put("message", "Server has started");
+
+        String message;
+        if (event.getType() == ServerLoadEvent.LoadType.STARTUP) {
+            message = "Server has started";
+        } else {
+            message = "Server has reloaded";
+        }
+
+        jsonObject.put("message", message);
+        jsonObject.put("load_type", event.getType().name());
 
         RegisterWebHooks.sendToAllUrls(jsonObject);
     }

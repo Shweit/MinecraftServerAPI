@@ -13,6 +13,7 @@ import com.shweit.serverapi.commands.RegisterCommands;
 import com.shweit.serverapi.endpoints.RegisterEndpoints;
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.RegisterWebHooks;
+import com.shweit.serverapi.webhooks.server.ServerStop;
 import fi.iki.elonen.NanoHTTPD;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -76,6 +77,8 @@ public class MinecraftServerAPI extends JavaPlugin  {
 
     @Override
     public final void onDisable() {
+        new ServerStop().register();
+
         if (server != null) {
             server.stop();
             Logger.info("Web server stopped.");
