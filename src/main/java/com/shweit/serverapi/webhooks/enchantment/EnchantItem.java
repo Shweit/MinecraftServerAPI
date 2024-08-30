@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.json.JSONObject;
 
-public class EnchantItem implements WebHook, Listener {
+public final class EnchantItem implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.ENCHANT_ITEM.label;
 
