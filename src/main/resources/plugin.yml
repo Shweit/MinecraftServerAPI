@@ -10,29 +10,9 @@ softdepend:
 main: com.shweit.serverapi.MinecraftServerAPI
 
 commands:
-  mcapi:
-    description: Main command for the MinecraftServerAPI plugin.
-    usage: /mcapi <command> [args]
+  webhooks:
+    description: Command to manage the Webhooks.
+    usage: /webhooks <command> [args]
+    permission: mcapi.webhooks
     aliases:
-      - mcsapi
-    permission: mcapi.use
-    permission-message: You do not have permission to use this command.
-    children:
-      webhooks:
-        description: Manage the webhooks of the MinecraftServerAPI plugin.
-        usage: /mcapi webhook <command>
-        permission: mcapi.webhhok
-        permission-message: You do not have permission to use this command.
-        children:
-          list:
-            description: List all available webhooks.
-            usage: /mcapi webhook list
-            permission: mcapi.webhook.list
-          enable:
-            description: Enable a webhook.
-            usage: /mcapi webhook enable <webhook>
-            permission: mcapi.webhook.toggle
-          disable:
-            description: Disable a webhook.
-            usage: /mcapi webhook disable <webhook>
-            permission: mcapi.webhook.toggle
+      - wh

@@ -1,19 +1,20 @@
 package com.shweit.serverapi.commands;
 
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public interface SubCommand {
-    void execute(CommandSender sender, String[] args);
+public abstract class SubCommand {
 
-    String getPermission();
 
-    String getDescription();
+    public abstract String getName();
 
-    String getUsage();
+    public abstract String getDescription();
 
-    String getName();
+    public abstract String getSyntax();
 
-    List<SubCommand> getSubCommands();  // Fügt Sub-Kommandos hinzu
+    public abstract void perform(CommandSender commandSender, Command command, String label, String[] args);
+
+    public abstract List<String> getSubcommandArguments(CommandSender commandSender, Command command, String label, String[] args);
 }

@@ -1,5 +1,9 @@
 package com.shweit.serverapi.webhooks;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum WebHookEnum {
     SERVER_START("server_start", "Triggered when the server starts"),
     SERVER_STOP("server_stop", "Triggered when the server stops"),
@@ -41,5 +45,9 @@ public enum WebHookEnum {
             hooks.append(hook.label.toLowerCase());
         }
         return hooks.toString();
+    }
+
+    public static List<String> getValidHookList() {
+        return Stream.of(values()).map(hook -> hook.label.toLowerCase()).toList();
     }
 }
