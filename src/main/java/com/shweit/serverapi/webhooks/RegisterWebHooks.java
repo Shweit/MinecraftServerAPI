@@ -2,6 +2,7 @@ package com.shweit.serverapi.webhooks;
 
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.block.BlockBreak;
+import com.shweit.serverapi.webhooks.block.BlockPlace;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -41,6 +42,9 @@ public final class RegisterWebHooks {
 
         new BlockBreak().register();
         Logger.debug("Registered block_break WebHook");
+
+        new BlockPlace().register();
+        Logger.debug("Registered block_place WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
