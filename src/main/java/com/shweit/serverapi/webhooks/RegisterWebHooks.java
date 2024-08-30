@@ -1,6 +1,7 @@
 package com.shweit.serverapi.webhooks;
 
 import com.shweit.serverapi.utils.Logger;
+import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -37,6 +38,24 @@ public final class RegisterWebHooks {
 
         new PluginEnable().register();
         Logger.debug("Registered plugin_enable WebHook");
+
+        new BlockBreak().register();
+        Logger.debug("Registered block_break WebHook");
+
+        new BlockPlace().register();
+        Logger.debug("Registered block_place WebHook");
+
+        new BlockBurn().register();
+        Logger.debug("Registered block_burn WebHook");
+
+        new BlockRedstone().register();
+        Logger.debug("Registered block_redstone WebHook");
+
+        new NotePlay().register();
+        Logger.debug("Registered note_play WebHook");
+
+        new SignChange().register();
+        Logger.debug("Registered sign_change WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
