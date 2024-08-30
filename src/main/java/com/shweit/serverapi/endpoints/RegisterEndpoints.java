@@ -31,170 +31,170 @@ public final class RegisterEndpoints {
 
     public void registerEndpoints() {
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players", playerAPI::getPlayers);
-        Logger.info("Registered GET /v1/players");
+        Logger.debug("Registered GET /v1/players");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/banned-players", playerAPI::getBannedPlayers);
-        Logger.info("Registered GET /v1/banned-players");
+        Logger.debug("Registered GET /v1/banned-players");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/offline-players", playerAPI::getOfflinePlayers);
-        Logger.info("Registered GET /v1/offline-players");
+        Logger.debug("Registered GET /v1/offline-players");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}", playerAPI::getPlayer);
-        Logger.info("Registered GET /v1/players/{username}");
+        Logger.debug("Registered GET /v1/players/{username}");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/stats", playerAPI::getPlayerStats);
-        Logger.info("Registered GET /v1/players/{username}/stats");
+        Logger.debug("Registered GET /v1/players/{username}/stats");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/advancements", playerAPI::getPlayerAdvancements);
-        Logger.info("Registered GET /v1/players/{username}/advancements");
+        Logger.debug("Registered GET /v1/players/{username}/advancements");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/inventory", playerAPI::getPlayerInventory);
-        Logger.info("Registered GET /v1/players/{username}/inventory");
+        Logger.debug("Registered GET /v1/players/{username}/inventory");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/inventory/{slot}", playerAPI::getPlayerInventorySlot);
-        Logger.info("Registered GET /v1/players/{username}/inventory/{slot}");
+        Logger.debug("Registered GET /v1/players/{username}/inventory/{slot}");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/kick", playerAPI::kickPlayer);
-        Logger.info("Registered POST /v1/players/{username}/kick");
+        Logger.debug("Registered POST /v1/players/{username}/kick");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/ban", playerAPI::banPlayer);
-        Logger.info("Registered POST /v1/players/{username}/ban");
+        Logger.debug("Registered POST /v1/players/{username}/ban");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/pardon", playerAPI::pardonPlayer);
-        Logger.info("Registered POST /v1/players/{username}/pardon");
+        Logger.debug("Registered POST /v1/players/{username}/pardon");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/players/{username}/location", playerAPI::getPlayerLocation);
-        Logger.info("Registered GET /v1/players/{username}/location");
+        Logger.debug("Registered GET /v1/players/{username}/location");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/players/{username}/location", playerAPI::setPlayerLocation);
-        Logger.info("Registered POST /v1/players/{username}/location");
+        Logger.debug("Registered POST /v1/players/{username}/location");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/ping", serverAPI::ping);
-        Logger.info("Registered GET /v1/ping");
+        Logger.debug("Registered GET /v1/ping");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server", serverAPI::serverInfo);
-        Logger.info("Registered GET /v1/server");
+        Logger.debug("Registered GET /v1/server");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/health", serverAPI::getServerHealth);
-        Logger.info("Registered GET /v1/server/heath");
+        Logger.debug("Registered GET /v1/server/heath");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/tps", serverAPI::tps);
-        Logger.info("Registered GET /v1/server/tps");
+        Logger.debug("Registered GET /v1/server/tps");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/uptime", serverAPI::uptime);
-        Logger.info("Registered GET /v1/server/uptime");
+        Logger.debug("Registered GET /v1/server/uptime");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/properties", serverAPI::getServerProperties);
-        Logger.info("Registered GET /v1/server/properties");
+        Logger.debug("Registered GET /v1/server/properties");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/properties", serverAPI::updateServerProperties);
-        Logger.info("Registered POST /v1/server/properties");
+        Logger.debug("Registered POST /v1/server/properties");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/exec", serverAPI::execCommand);
-        Logger.info("Registered POST /v1/server/exec");
+        Logger.debug("Registered POST /v1/server/exec");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/reboot", serverAPI::reload);
-        Logger.info("Registered POST /v1/server/reload");
+        Logger.debug("Registered POST /v1/server/reload");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/reboot", serverAPI::reboot);
-        Logger.info("Registered POST /v1/server/reboot");
+        Logger.debug("Registered POST /v1/server/reboot");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/shutdown", serverAPI::shutdown);
-        Logger.info("Registered POST /v1/server/shutdown");
+        Logger.debug("Registered POST /v1/server/shutdown");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/server/broadcast", serverAPI::broadcast);
-        Logger.info("Registered POST /v1/server/broadcast");
+        Logger.debug("Registered POST /v1/server/broadcast");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/chat", serverAPI::getChat);
-        Logger.info("Registered GET /v1/server/chat");
+        Logger.debug("Registered GET /v1/server/chat");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/server/log", serverAPI::getLog);
-        Logger.info("Registered GET /v1/server/log");
+        Logger.debug("Registered GET /v1/server/log");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/whitelist", whitelistAPI::getWhitelist);
-        Logger.info("Registered GET /v1/whitelist");
+        Logger.debug("Registered GET /v1/whitelist");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/whitelist", whitelistAPI::postWhitelist);
-        Logger.info("Registered POST /v1/whitelist");
+        Logger.debug("Registered POST /v1/whitelist");
 
         server.addRoute(NanoHTTPD.Method.DELETE, "/v1/whitelist", whitelistAPI::deleteWhitelist);
-        Logger.info("Registered DELETE /v1/whitelist");
+        Logger.debug("Registered DELETE /v1/whitelist");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/whitelist/activate", whitelistAPI::activateWhitelist);
-        Logger.info("Registered POST /v1/whitelist/activate");
+        Logger.debug("Registered POST /v1/whitelist/activate");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/whitelist/deactivate", whitelistAPI::deactivateWhitelist);
-        Logger.info("Registered POST /v1/whitelist/deactivate");
+        Logger.debug("Registered POST /v1/whitelist/deactivate");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/plugins", pluginAPI::getPlugins);
-        Logger.info("Registered GET /v1/plugins");
+        Logger.debug("Registered GET /v1/plugins");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/plugins", pluginAPI::postPlugin);
-        Logger.info("Registered POST /v1/plugins");
+        Logger.debug("Registered POST /v1/plugins");
 
         server.addRoute(NanoHTTPD.Method.DELETE, "/v1/plugins", pluginAPI::deletePlugin);
-        Logger.info("Registered DELETE /v1/plugins");
+        Logger.debug("Registered DELETE /v1/plugins");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/plugins/activate", pluginAPI::activatePlugin);
-        Logger.info("Registered POST /v1/plugins/activate");
+        Logger.debug("Registered POST /v1/plugins/activate");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/plugins/deactivate", pluginAPI::deactivatePlugin);
-        Logger.info("Registered POST /v1/plugins/deactivate");
+        Logger.debug("Registered POST /v1/plugins/deactivate");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/plugins/{name}", pluginAPI::getPlugin);
-        Logger.info("Registered GET /v1/plugins/{name}");
+        Logger.debug("Registered GET /v1/plugins/{name}");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/worlds", worldAPI::getWorlds);
-        Logger.info("Registered GET /v1/worlds");
+        Logger.debug("Registered GET /v1/worlds");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/worlds", worldAPI::createWorld);
-        Logger.info("Registered POST /v1/worlds");
+        Logger.debug("Registered POST /v1/worlds");
 
         server.addRoute(NanoHTTPD.Method.DELETE, "/v1/worlds", worldAPI::deleteWorld);
-        Logger.info("Registered DELETE /v1/worlds");
+        Logger.debug("Registered DELETE /v1/worlds");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/worlds/{world}", worldAPI::getWorld);
-        Logger.info("Registered GET /v1/worlds/{world}");
+        Logger.debug("Registered GET /v1/worlds/{world}");
 
         server.addRoute(NanoHTTPD.Method.PUT, "/v1/worlds/{world}", worldAPI::updateWorld);
-        Logger.info("Registered PUT /v1/worlds/{world}");
+        Logger.debug("Registered PUT /v1/worlds/{world}");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/backups", backupAPI::getBackups);
-        Logger.info("Registered GET /v1/backups");
+        Logger.debug("Registered GET /v1/backups");
 
         server.addRoute(NanoHTTPD.Method.POST, "/v1/backups", backupAPI::createBackup);
-        Logger.info("Registered POST /v1/backups");
+        Logger.debug("Registered POST /v1/backups");
 
         server.addRoute(NanoHTTPD.Method.DELETE, "/v1/backups", backupAPI::deleteBackup);
-        Logger.info("Registered DELETE /v1/backups");
+        Logger.debug("Registered DELETE /v1/backups");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/backups/status", backupAPI::getStatus);
-        Logger.info("Registered GET /v1/backups/status");
+        Logger.debug("Registered GET /v1/backups/status");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/backups/{name}", backupAPI::getBackup);
-        Logger.info("Registered GET /v1/backups/{name}");
+        Logger.debug("Registered GET /v1/backups/{name}");
 
         server.addRoute(NanoHTTPD.Method.GET, "/v1/backups/{name}/download", backupAPI::downloadBackup);
-        Logger.info("Registered GET /v1/backups/{name}/download");
+        Logger.debug("Registered GET /v1/backups/{name}/download");
 
         if (MinecraftServerAPI.isPluginInstalled("Maintenance")) {
             server.addRoute(NanoHTTPD.Method.GET, "/v1/maintenance", maintenanceAPI::getMaintenanceStatus);
-            Logger.info("Registered GET /v1/maintenance");
+            Logger.debug("Registered GET /v1/maintenance");
 
             server.addRoute(NanoHTTPD.Method.POST, "/v1/maintenance", maintenanceAPI::enableMaintenance);
-            Logger.info("Registered POST /v1/maintenance");
+            Logger.debug("Registered POST /v1/maintenance");
 
             server.addRoute(NanoHTTPD.Method.DELETE, "/v1/maintenance", maintenanceAPI::disableMaintenance);
-            Logger.info("Registered DELETE /v1/maintenance");
+            Logger.debug("Registered DELETE /v1/maintenance");
 
             server.addRoute(NanoHTTPD.Method.GET, "/v1/maintenance/whitelist", maintenanceAPI::getMaintenanceWhitelist);
-            Logger.info("Registered GET /v1/maintenance/whitelist");
+            Logger.debug("Registered GET /v1/maintenance/whitelist");
 
             server.addRoute(NanoHTTPD.Method.POST, "/v1/maintenance/whitelist", maintenanceAPI::addPlayerToMaintenanceWhitelist);
-            Logger.info("Registered POST /v1/maintenance/whitelist");
+            Logger.debug("Registered POST /v1/maintenance/whitelist");
 
             server.addRoute(NanoHTTPD.Method.DELETE, "/v1/maintenance/whitelist", maintenanceAPI::removePlayerFromMaintenanceWhitelist);
-            Logger.info("Registered DELETE /v1/maintenance/whitelist");
+            Logger.debug("Registered DELETE /v1/maintenance/whitelist");
         }
     }
 }

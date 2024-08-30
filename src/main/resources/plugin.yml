@@ -8,3 +8,11 @@ softdepend:
 
 
 main: com.shweit.serverapi.MinecraftServerAPI
+
+commands:
+  webhooks:
+    description: Command to manage the Webhooks.
+    usage: /webhooks <command> [args]
+    permission: mcapi.webhooks
+    aliases:
+      - wh
