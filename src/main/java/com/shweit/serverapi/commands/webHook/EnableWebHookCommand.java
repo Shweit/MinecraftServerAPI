@@ -7,10 +7,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.Collections;
 import java.util.List;
 
-public class EnableWebHookCommand extends SubCommand {
+public final class EnableWebHookCommand extends SubCommand {
     @Override
     public String getName() {
         return "enable";
@@ -27,7 +26,7 @@ public class EnableWebHookCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, Command command, String label, String[] args) {
+    public void perform(final CommandSender commandSender, final Command command, final String label, final String[] args) {
         // Check the length of the arguments
         if (args.length != 2) {
             commandSender.sendMessage(ChatColor.RED + "Usage: /webhooks enable <webhook>");
@@ -49,7 +48,7 @@ public class EnableWebHookCommand extends SubCommand {
     }
 
     @Override
-    public List<String> getSubcommandArguments(CommandSender commandSender, Command command, String label, String[] args) {
+    public List<String> getSubcommandArguments(final CommandSender commandSender, final Command command, final String label, final String[] args) {
         if (args.length == 2) {
             return WebHookEnum.getValidHookList();
         }

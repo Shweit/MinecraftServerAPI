@@ -3,16 +3,15 @@ package com.shweit.serverapi.commands;
 import com.shweit.serverapi.commands.webHook.DisableWebHookCommand;
 import com.shweit.serverapi.commands.webHook.EnableWebHookCommand;
 import com.shweit.serverapi.commands.webHook.ListWebHook;
-import com.shweit.serverapi.utils.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
-public class RegisterCommands {
+public final class RegisterCommands {
     private JavaPlugin plugin;
 
-    public RegisterCommands(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public RegisterCommands(final JavaPlugin javaPlugin) {
+        this.plugin = javaPlugin;
     }
 
     public void register() {

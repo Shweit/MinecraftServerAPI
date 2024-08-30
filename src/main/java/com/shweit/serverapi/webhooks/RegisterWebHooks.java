@@ -12,11 +12,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-public class RegisterWebHooks {
+public final class RegisterWebHooks {
     private static List<String> urls;
     private static FileConfiguration configuration;
 
-    public static void registerWebHooks(FileConfiguration config) {
+    public void registerWebHooks(final FileConfiguration config) {
 
         urls = config.getStringList("webhooks.urls");
         configuration = config;
@@ -39,7 +39,7 @@ public class RegisterWebHooks {
         Logger.debug("Registered plugin_enable WebHook");
     }
 
-    public static void sendToAllUrls(JSONObject jsonObject) {
+    public static void sendToAllUrls(final JSONObject jsonObject) {
         if (urls == null || urls.isEmpty()) {
             Logger.warning("No WebHook URL's found in config.yml");
             return;
@@ -70,7 +70,7 @@ public class RegisterWebHooks {
         }
     }
 
-    public static boolean doActivateWebhook(String eventName) {
+    public static boolean doActivateWebhook(final String eventName) {
         String eventPath = "webhooks." + eventName;
 
         return configuration.getBoolean(eventPath, true);

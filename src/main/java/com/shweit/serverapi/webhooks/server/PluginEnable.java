@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.json.JSONObject;
 
-public class PluginEnable implements WebHook, Listener {
+public final class PluginEnable implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.PLUGIN_ENABLE.label;
 
@@ -22,7 +22,7 @@ public class PluginEnable implements WebHook, Listener {
     }
 
     @EventHandler
-    public void onPluginEnable(PluginEnableEvent event) {
+    public void onPluginEnable(final PluginEnableEvent event) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
         jsonObject.put("plugin_name", event.getPlugin().getName());

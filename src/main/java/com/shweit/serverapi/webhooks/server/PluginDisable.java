@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.json.JSONObject;
 
-public class PluginDisable implements WebHook, Listener {
+public final class PluginDisable implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.PLUGIN_DISABLE.label;
 
@@ -22,7 +22,7 @@ public class PluginDisable implements WebHook, Listener {
     }
 
     @EventHandler
-    public void onPluginDisable(PluginDisableEvent event) {
+    public void onPluginDisable(final PluginDisableEvent event) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
         jsonObject.put("plugin_name", event.getPlugin().getName());

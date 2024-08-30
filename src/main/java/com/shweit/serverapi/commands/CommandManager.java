@@ -7,23 +7,23 @@ import org.bukkit.command.TabExecutor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandManager implements TabExecutor {
+public final class CommandManager implements TabExecutor {
 
-    private ArrayList<SubCommand> subcommands = new ArrayList<>();
+    private final ArrayList<SubCommand> subcommands = new ArrayList<>();
 
-    public CommandManager(List<SubCommand> subcommands){
-        this.subcommands.addAll(subcommands);
+    public CommandManager(final List<SubCommand> subCommandList) {
+        this.subcommands.addAll(subCommandList);
     }
 
-    public ArrayList<SubCommand> getSubCommands(){
+    public ArrayList<SubCommand> getSubCommands() {
         return subcommands;
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
+    public boolean onCommand(final CommandSender commandSender, final Command command, final String label, final String[] args) {
         if (args.length > 0) {
-            for (int i = 0; i < getSubCommands().size(); i++){
-                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())){
+            for (int i = 0; i < getSubCommands().size(); i++) {
+                if (args[0].equalsIgnoreCase(getSubCommands().get(i).getName())) {
                     getSubCommands().get(i).perform(commandSender, command, label, args);
                 }
             }
@@ -34,13 +34,13 @@ public class CommandManager implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
         if (args.length == 1) {
-            List<String> subcommands = new ArrayList<>();
+            List<String> subcommandsList = new ArrayList<>();
             for (SubCommand subCommand : getSubCommands()) {
-                subcommands.add(subCommand.getName());
+                subcommandsList.add(subCommand.getName());
             }
-            return subcommands;
+            return subcommandsList;
         } else if (args.length > 1) {
             for (SubCommand subCommand : getSubCommands()) {
                 if (args[0].equalsIgnoreCase(subCommand.getName())) {

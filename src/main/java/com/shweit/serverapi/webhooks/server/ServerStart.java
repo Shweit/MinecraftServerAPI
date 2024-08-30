@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.json.JSONObject;
 
-public class ServerStart implements WebHook, Listener {
+public final class ServerStart implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.SERVER_START.label;
 
@@ -22,7 +22,7 @@ public class ServerStart implements WebHook, Listener {
     }
 
     @EventHandler
-    public void onServerLoad(ServerLoadEvent event) {
+    public void onServerLoad(final ServerLoadEvent event) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
 

@@ -1,12 +1,11 @@
 package com.shweit.serverapi.webhooks.server;
 
-import com.shweit.serverapi.MinecraftServerAPI;
 import com.shweit.serverapi.webhooks.WebHook;
 import com.shweit.serverapi.webhooks.RegisterWebHooks;
 import com.shweit.serverapi.webhooks.WebHookEnum;
 import org.json.JSONObject;
 
-public class ServerStop implements WebHook {
+public final class ServerStop implements WebHook {
 
     private final String eventName = WebHookEnum.SERVER_STOP.label;
 

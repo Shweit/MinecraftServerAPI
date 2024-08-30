@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListWebHook extends SubCommand {
+public final class ListWebHook extends SubCommand {
     private static final int ENTRIES_PER_PAGE = 10;
 
     @Override
@@ -29,7 +29,7 @@ public class ListWebHook extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, Command command, String label, String[] args) {
+    public void perform(final CommandSender commandSender, final Command command, final String label, final String[] args) {
         int page = 1;
 
         if (args.length == 2) {
@@ -48,7 +48,11 @@ public class ListWebHook extends SubCommand {
             return;
         }
 
-        commandSender.sendMessage(ChatColor.GRAY + "--------------------[" + ChatColor.LIGHT_PURPLE + " WebHooks - Page " + page + "/" + totalPages + ChatColor.GRAY + " ]--------------------");
+        commandSender.sendMessage(
+            ChatColor.GRAY + "--------------------["
+            + ChatColor.LIGHT_PURPLE + " WebHooks - Page " + page + "/" + totalPages + ChatColor.GRAY
+            + " ]--------------------"
+        );
         commandSender.sendMessage("");
         commandSender.sendMessage(ChatColor.WHITE + "Registered WebHooks (" + WebHookEnum.values().length + "):");
         commandSender.sendMessage("");
@@ -64,11 +68,15 @@ public class ListWebHook extends SubCommand {
         }
 
         commandSender.sendMessage("");
-        commandSender.sendMessage(ChatColor.GRAY + "--------------------[" + ChatColor.LIGHT_PURPLE + " Page " + page + " of " + totalPages + ChatColor.GRAY + " ]--------------------");
+        commandSender.sendMessage(
+                ChatColor.GRAY + "--------------------["
+                + ChatColor.LIGHT_PURPLE + " Page " + page + " of " + totalPages + ChatColor.GRAY
+                + " ]--------------------"
+        );
     }
 
     @Override
-    public List<String> getSubcommandArguments(CommandSender commandSender, Command command, String label, String[] args) {
+    public List<String> getSubcommandArguments(final CommandSender commandSender, final Command command, final String label, final String[] args) {
         // Calculate the number of pages
         int totalPages = (int) Math.ceil((double) WebHookEnum.values().length / ENTRIES_PER_PAGE);
 
