@@ -1,10 +1,7 @@
 package com.shweit.serverapi.webhooks;
 
 import com.shweit.serverapi.utils.Logger;
-import com.shweit.serverapi.webhooks.block.BlockBreak;
-import com.shweit.serverapi.webhooks.block.BlockBurn;
-import com.shweit.serverapi.webhooks.block.BlockPlace;
-import com.shweit.serverapi.webhooks.block.BlockRedstone;
+import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -53,6 +50,9 @@ public final class RegisterWebHooks {
 
         new BlockRedstone().register();
         Logger.debug("Registered block_redstone WebHook");
+
+        new NotePlay().register();
+        Logger.debug("Registered note_play WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
