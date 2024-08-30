@@ -10,7 +10,8 @@ public enum WebHookEnum {
     PLUGIN_ENABLE("plugin_enable", "Triggered when a plugin is enabled"),
     BLOCK_BREAK("block_break", "Triggered when a block is broken"),
     BLOCK_PLACE("block_place", "Triggered when a block is placed"),
-    BLOCK_BURN("block_burn", "Triggered when a block is burned"),;
+    BLOCK_BURN("block_burn", "Triggered when a block is burned"),
+    BLOCK_REDSTONE("block_redstone", "Triggered when a block is powered by redstone or a redstone current changes"),;
 
     public final String label;
     public final String description;
