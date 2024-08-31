@@ -6,12 +6,12 @@ import com.shweit.serverapi.webhooks.WebHook;
 import com.shweit.serverapi.webhooks.WebHookEnum;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.FurnaceBurnEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.json.JSONObject;
 
-public final class FurnaceBurn implements WebHook, Listener {
+public final class FurnaceSmelt implements WebHook, Listener {
 
-    private final String eventName = WebHookEnum.FURNACE_BURN.label;
+    private final String eventName = WebHookEnum.FURNACE_SMELT.label;
 
     @Override
     public void register() {
@@ -22,12 +22,12 @@ public final class FurnaceBurn implements WebHook, Listener {
     }
 
     @EventHandler
-    public void onFurnaceBurn(final FurnaceBurnEvent event) {
+    public void onFurnaceSmelt(final FurnaceSmeltEvent event) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
         jsonObject.put("location", event.getBlock().getLocation().toString());
-        jsonObject.put("burnTime", event.getBurnTime());
-        jsonObject.put("fuel", event.getFuel().getType().name());
+        jsonObject.put("result", event.getResult().getType().name());
+        jsonObject.put("source", event.getSource().getType().name());
 
         RegisterWebHooks.sendToAllUrls(jsonObject);
     }

@@ -9,11 +9,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.json.JSONObject;
 
-import java.net.http.WebSocket;
-
 public final class CraftItem implements WebHook, Listener {
 
-    private static final String eventName = WebHookEnum.CRAFT_ITEM.label;
+    private final String eventName = WebHookEnum.CRAFT_ITEM.label;
 
     @Override
     public void register() {

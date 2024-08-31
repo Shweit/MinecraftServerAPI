@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 public final class Brew implements WebHook, Listener {
 
-    private static final String eventName = WebHookEnum.BREW.label;
+    private final String eventName = WebHookEnum.BREW.label;
 
     @Override
     public void register() {

@@ -7,6 +7,7 @@ import com.shweit.serverapi.webhooks.entity.*;
 import com.shweit.serverapi.webhooks.inventory.Brew;
 import com.shweit.serverapi.webhooks.inventory.CraftItem;
 import com.shweit.serverapi.webhooks.inventory.FurnaceBurn;
+import com.shweit.serverapi.webhooks.inventory.FurnaceSmelt;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -97,6 +98,9 @@ public final class RegisterWebHooks {
 
         new FurnaceBurn().register();
         Logger.debug("Registered furnace_burn WebHook");
+
+        new FurnaceSmelt().register();
+        Logger.debug("Registered furnace_smelt WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
