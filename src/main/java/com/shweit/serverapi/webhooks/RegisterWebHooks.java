@@ -80,6 +80,9 @@ public final class RegisterWebHooks {
 
         new EntityTame().register();
         Logger.debug("Registered entity_tame WebHook");
+
+        new ExplosionPrime().register();
+        Logger.debug("Registered explosion_prime WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
