@@ -2,6 +2,7 @@ package com.shweit.serverapi.webhooks;
 
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.block.*;
+import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -56,6 +57,9 @@ public final class RegisterWebHooks {
 
         new SignChange().register();
         Logger.debug("Registered sign_change WebHook");
+
+        new EnchantItem().register();
+        Logger.debug("Registered enchant_item WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
