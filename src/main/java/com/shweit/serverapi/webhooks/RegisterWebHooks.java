@@ -16,6 +16,7 @@ import com.shweit.serverapi.webhooks.weather.LightningStrike;
 import com.shweit.serverapi.webhooks.weather.ThunderChange;
 import com.shweit.serverapi.webhooks.weather.WeatherChange;
 import com.shweit.serverapi.webhooks.world.WorldLoad;
+import com.shweit.serverapi.webhooks.world.WorldSave;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.json.JSONObject;
 
@@ -145,6 +146,9 @@ public final class RegisterWebHooks {
 
         new WorldLoad().register();
         Logger.debug("Registered world_load WebHook");
+
+        new WorldSave().register();
+        Logger.debug("Registered world_save WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
