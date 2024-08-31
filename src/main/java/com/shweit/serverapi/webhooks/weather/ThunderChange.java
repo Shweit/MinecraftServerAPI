@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.json.JSONObject;
 
-public class ThunderChange implements WebHook, Listener {
+public final class ThunderChange implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.THUNDER_CHANGE.label;
 

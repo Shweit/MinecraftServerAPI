@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.json.JSONObject;
 
-public class WeatherChange implements WebHook, Listener {
+public final class WeatherChange implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.WEATHER_CHANGE.label;
 

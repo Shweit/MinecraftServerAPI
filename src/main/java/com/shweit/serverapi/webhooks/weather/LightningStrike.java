@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.json.JSONObject;
 
-public class LightningStrike implements WebHook, Listener {
+public final class LightningStrike implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.LIGHTNING_STRIKE.label;
 
