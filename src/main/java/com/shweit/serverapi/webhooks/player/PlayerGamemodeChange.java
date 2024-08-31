@@ -6,12 +6,12 @@ import com.shweit.serverapi.webhooks.WebHook;
 import com.shweit.serverapi.webhooks.WebHookEnum;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.json.JSONObject;
 
-public final class PlayerLogin implements WebHook, Listener {
+public final class PlayerGamemodeChange implements WebHook, Listener {
 
-    private final String eventName = WebHookEnum.PLAYER_LOGIN.label;
+    private final String eventName = WebHookEnum.PLAYER_GAMEMODE_CHANGE.label;
 
     @Override
     public void register() {
@@ -22,14 +22,13 @@ public final class PlayerLogin implements WebHook, Listener {
     }
 
     @EventHandler
-    public void onPlayerLogin(final PlayerLoginEvent event) {
+    public void onPlayerGamemodeChange(final PlayerGameModeChangeEvent event) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
         jsonObject.put("player", event.getPlayer().getName());
         jsonObject.put("location", event.getPlayer().getLocation().toString());
-        jsonObject.put("ip", event.getAddress().getHostAddress());
+        jsonObject.put("gamemode", event.getNewGameMode().name());
 
         RegisterWebHooks.sendToAllUrls(jsonObject);
     }
-
 }

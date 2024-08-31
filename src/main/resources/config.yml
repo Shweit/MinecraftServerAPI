@@ -52,6 +52,7 @@ webhooks:
   player_chat: false # This is disabled by default, because it delays the delivery of the message to the server.
   player_login: true
   player_command: false # This is disabled by default, because it delays the delivery of the command to the server.
+  player_gamemode_change: true
 
 # Here you can list an extra set of Files or Directories which should be saved by the Backup-System.
 # Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config", "server.properties", "banned-ips.json", "banned-players.json", "ops.json", "whitelist.json"]
