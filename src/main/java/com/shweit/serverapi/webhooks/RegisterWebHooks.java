@@ -8,6 +8,7 @@ import com.shweit.serverapi.webhooks.inventory.Brew;
 import com.shweit.serverapi.webhooks.inventory.CraftItem;
 import com.shweit.serverapi.webhooks.inventory.FurnaceBurn;
 import com.shweit.serverapi.webhooks.inventory.FurnaceSmelt;
+import com.shweit.serverapi.webhooks.player.*;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -101,6 +102,33 @@ public final class RegisterWebHooks {
 
         new FurnaceSmelt().register();
         Logger.debug("Registered furnace_smelt WebHook");
+
+        new PlayerChat().register();
+        Logger.debug("Registered player_chat WebHook");
+
+        new PlayerLogin().register();
+        Logger.debug("Registered player_login WebHook");
+
+        new PlayerCommand().register();
+        Logger.debug("Registered player_command WebHook");
+
+        new PlayerGamemodeChange().register();
+        Logger.debug("Registered player_gamemode_change WebHook");
+
+        new PlayerItemBreak().register();
+        Logger.debug("Registered player_item_break WebHook");
+
+        new PlayerJoin().register();
+        Logger.debug("Registered player_join WebHook");
+
+        new PlayerKick().register();
+        Logger.debug("Registered player_kick WebHook");
+
+        new PlayerQuit().register();
+        Logger.debug("Registered player_quit WebHook");
+
+        new PlayerRespawn().register();
+        Logger.debug("Registered player_respawn WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {

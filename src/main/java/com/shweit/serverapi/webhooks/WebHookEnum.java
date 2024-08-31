@@ -26,7 +26,16 @@ public enum WebHookEnum {
     BREW("brew", "Triggered when a potion is brewed"),
     CRAFT_ITEM("craft_item", "Triggered when an item is crafted"),
     FURNACE_BURN("furnace_burn", "Triggered when a furnace burns an item as fuel"),
-    FURNACE_SMELT("furnace_smelt", "Triggered when a furnace smelts an item"),;
+    FURNACE_SMELT("furnace_smelt", "Triggered when a furnace smelts an item"),
+    PLAYER_CHAT("player_chat", "Triggered when a player sends a chat message"),
+    PLAYER_LOGIN("player_login", "Triggered when a player logs in"),
+    PLAYER_COMMAND("player_command", "Triggered when a player executes a command"),
+    PLAYER_GAMEMODE_CHANGE("player_gamemode_change", "Triggered when a player changes their gamemode"),
+    PLAYER_ITEM_BREAK("player_item_break", "Triggered when a player's item breaks"),
+    PLAYER_JOIN("player_join", "Triggered when a player joins the server"),
+    PLAYER_KICK("player_kick", "Triggered when a player is kicked from the server"),
+    PLAYER_QUIT("player_quit", "Triggered when a player quits the server"),
+    PLAYER_RESPAWN("player_respawn", "Triggered when a player respawns"),;
 
     public final String label;
     public final String description;
