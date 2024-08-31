@@ -14,7 +14,8 @@ public enum WebHookEnum {
     BLOCK_REDSTONE("block_redstone", "Triggered when a block is powered by redstone or a redstone current changes"),
     NOTE_PLAY("note_play", "Triggered when a note block plays a note"),
     SIGN_CHANGE("sign_change", "Triggered when a sign is changed"),
-    ENCHANT_ITEM("enchant_item", "Triggered when an item is enchanted"),;
+    ENCHANT_ITEM("enchant_item", "Triggered when an item is enchanted"),
+    CREEPER_POWER("creeper_power", "Triggered when a Creeper is hit by lightning and becomes supercharged"),;
 
     public final String label;
     public final String description;
