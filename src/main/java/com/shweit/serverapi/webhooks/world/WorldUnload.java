@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.json.JSONObject;
 
-public class WorldUnload implements WebHook, Listener {
+public final class WorldUnload implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.WORLD_UNLOAD.label;
 

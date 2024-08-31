@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.json.JSONObject;
 
-public class WorldSave implements WebHook, Listener {
+public final class WorldSave implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.WORLD_SAVE.label;
 
