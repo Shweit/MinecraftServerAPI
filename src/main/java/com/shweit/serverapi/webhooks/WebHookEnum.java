@@ -17,7 +17,8 @@ public enum WebHookEnum {
     ENCHANT_ITEM("enchant_item", "Triggered when an item is enchanted"),
     CREEPER_POWER("creeper_power", "Triggered when a Creeper is hit by lightning and becomes supercharged"),
     CREATURE_SPAWN("creature_spawn", "Triggered when a creature spawns"),
-    ENTITY_DEATH("entity_death", "Triggered when an entity dies"),;
+    ENTITY_DEATH("entity_death", "Triggered when an entity dies"),
+    ENTITY_EXPLODE("entity_explode", "Triggered when an entity explodes"),;
 
     public final String label;
     public final String description;
