@@ -5,10 +5,12 @@ import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
 import com.shweit.serverapi.webhooks.entity.CreatureSpawn;
 import com.shweit.serverapi.webhooks.entity.CreeperPower;
+import com.shweit.serverapi.webhooks.entity.EntityDeath;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.Listener;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -68,6 +70,9 @@ public final class RegisterWebHooks {
 
         new CreatureSpawn().register();
         Logger.debug("Registered creature_spawn WebHook");
+
+        new EntityDeath().register();
+        Logger.debug("Registered entity_death WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
