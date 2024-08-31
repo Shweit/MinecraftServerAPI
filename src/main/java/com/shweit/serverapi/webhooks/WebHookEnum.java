@@ -21,7 +21,8 @@ public enum WebHookEnum {
     ENTITY_EXPLODE("entity_explode", "Triggered when an entity explodes"),
     ENTITY_SHOOT_BOW("entity_shoot_bow", "Triggered when an entity shoots a bow"),
     ENTITY_TAME("entity_tame", "Triggered when an entity is tamed"),
-    EXPLOSION_PRIME("explosion_prime", "Triggered when an explosion is primed"),;
+    EXPLOSION_PRIME("explosion_prime", "Triggered when an explosion is primed"),
+    PLAYER_DEATH("player_death", "Triggered when a player dies"),;
 
     public final String label;
     public final String description;
