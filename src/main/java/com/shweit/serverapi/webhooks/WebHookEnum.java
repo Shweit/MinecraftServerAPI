@@ -38,7 +38,10 @@ public enum WebHookEnum {
     PLAYER_RESPAWN("player_respawn", "Triggered when a player respawns"),
     LIGHTNING_STRIKE("lightning_strike", "Triggered when lightning strikes"),
     WEATHER_CHANGE("weather_change", "Triggered when the weather changes"),
-    THUNDER_CHANGE("thunder_change", "Triggered when the thunder changes"),;
+    THUNDER_CHANGE("thunder_change", "Triggered when the thunder changes"),
+    WORLD_LOAD("world_load", "Triggered when a world is loaded"),
+    WORLD_SAVE("world_save", "Triggered when a world is saved"),
+    WORLD_UNLOAD("world_unload", "Triggered when a world is unloaded");
 
     public final String label;
     public final String description;
