@@ -49,6 +49,7 @@ webhooks:
   craft_item: false # This is disabled by default, because it can spam your Webhook-URLs.
   furnace_burn: true
   furnace_smelt: true
+  player_chat: true
 
 # Here you can list an extra set of Files or Directories which should be saved by the Backup-System.
 # Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config", "server.properties", "banned-ips.json", "banned-players.json", "ops.json", "whitelist.json"]
