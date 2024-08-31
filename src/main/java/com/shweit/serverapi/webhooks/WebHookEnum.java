@@ -14,7 +14,15 @@ public enum WebHookEnum {
     BLOCK_REDSTONE("block_redstone", "Triggered when a block is powered by redstone or a redstone current changes"),
     NOTE_PLAY("note_play", "Triggered when a note block plays a note"),
     SIGN_CHANGE("sign_change", "Triggered when a sign is changed"),
-    ENCHANT_ITEM("enchant_item", "Triggered when an item is enchanted"),;
+    ENCHANT_ITEM("enchant_item", "Triggered when an item is enchanted"),
+    CREEPER_POWER("creeper_power", "Triggered when a Creeper is hit by lightning and becomes supercharged"),
+    CREATURE_SPAWN("creature_spawn", "Triggered when a creature spawns"),
+    ENTITY_DEATH("entity_death", "Triggered when an entity dies"),
+    ENTITY_EXPLODE("entity_explode", "Triggered when an entity explodes"),
+    ENTITY_SHOOT_BOW("entity_shoot_bow", "Triggered when an entity shoots a bow"),
+    ENTITY_TAME("entity_tame", "Triggered when an entity is tamed"),
+    EXPLOSION_PRIME("explosion_prime", "Triggered when an explosion is primed"),
+    PLAYER_DEATH("player_death", "Triggered when a player dies"),;
 
     public final String label;
     public final String description;

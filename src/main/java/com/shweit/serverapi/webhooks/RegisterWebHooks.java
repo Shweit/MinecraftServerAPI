@@ -3,6 +3,7 @@ package com.shweit.serverapi.webhooks;
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
+import com.shweit.serverapi.webhooks.entity.*;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -60,6 +61,27 @@ public final class RegisterWebHooks {
 
         new EnchantItem().register();
         Logger.debug("Registered enchant_item WebHook");
+
+        new CreeperPower().register();
+        Logger.debug("Registered creeper_power WebHook");
+
+        new CreatureSpawn().register();
+        Logger.debug("Registered creature_spawn WebHook");
+
+        new EntityDeath().register();
+        Logger.debug("Registered entity_death WebHook");
+
+        new EntityExplode().register();
+        Logger.debug("Registered entity_explode WebHook");
+
+        new EntityShootBow().register();
+        Logger.debug("Registered entity_shot_bow WebHook");
+
+        new EntityTame().register();
+        Logger.debug("Registered entity_tame WebHook");
+
+        new ExplosionPrime().register();
+        Logger.debug("Registered explosion_prime WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
@@ -83,12 +105,12 @@ public final class RegisterWebHooks {
 
                 int responseCode = conn.getResponseCode();
                 if (responseCode == 200) {
-                    Logger.debug("WebHook sent successfully to " + url);
+                    Logger.debug("WebHook '" + jsonObject.get("event") + "' sent successfully to " + url);
                 } else {
-                    Logger.warning("Failed to send WebHook to " + url + ". Response code: " + responseCode);
+                    Logger.warning("Failed to send WebHook '" + jsonObject.get("event") + "' to " + url + ". Response code: " + responseCode);
                 }
             } catch (Exception e) {
-                Logger.error("Error sending WebHook to " + url + ": " + e.getMessage());
+                Logger.error("Error sending WebHook " + jsonObject.get("event") + " to " + url + ": " + e.getMessage());
             }
         }
     }

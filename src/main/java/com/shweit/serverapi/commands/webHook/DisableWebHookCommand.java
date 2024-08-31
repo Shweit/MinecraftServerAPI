@@ -42,9 +42,9 @@ public final class DisableWebHookCommand extends SubCommand {
         }
 
         // Enable the webhook
-        MinecraftServerAPI.getInstance().getConfig().set("webhooks." + webhookName, true);
+        MinecraftServerAPI.getInstance().getConfig().set("webhooks." + webhookName, false);
         MinecraftServerAPI.getInstance().saveConfig();
-        commandSender.sendMessage(ChatColor.GREEN + "Webhook " + webhookName + " enabled.");
+        commandSender.sendMessage(ChatColor.GREEN + "Webhook " + webhookName + " disabled.");
     }
 
     @Override

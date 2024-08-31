@@ -25,7 +25,7 @@ webhooks:
 
   # Here is a list of all available Webhooks.
   # You can enable or disable them here.
-  # Or via the command /mcapi webhooks <disable/enable> <webhook>
+  # Or via the command /webhooks <disable/enable> <webhook>
   server_start: true
   server_stop: true
   plugin_disable: true
@@ -37,6 +37,14 @@ webhooks:
   note_play: true
   sign_change: true
   enchant_item: true
+  creeper_power: true
+  creature_spawn: false # This is disabled by default, because it can spam your Webhook-URLs.
+  entity_death: false # This is disabled by default, because it can spam your Webhook-URLs.
+  entity_explode: true
+  entity_shoot_bow: true
+  entity_tame: true
+  explosion_prime: true
+  player_death: true
 
 # Here you can list an extra set of Files or Directories which should be saved by the Backup-System.
 # Following directories and files are already saved by default: ["world", "world_nether", "world_the_end", "plugins", "config", "server.properties", "banned-ips.json", "banned-players.json", "ops.json", "whitelist.json"]
