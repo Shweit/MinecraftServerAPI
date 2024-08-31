@@ -24,7 +24,8 @@ public enum WebHookEnum {
     EXPLOSION_PRIME("explosion_prime", "Triggered when an explosion is primed"),
     PLAYER_DEATH("player_death", "Triggered when a player dies"),
     BREW("brew", "Triggered when a potion is brewed"),
-    CRAFT_ITEM("craft_item", "Triggered when an item is crafted"),;
+    CRAFT_ITEM("craft_item", "Triggered when an item is crafted"),
+    FURNACE_BURN("furnace_burn", "Triggered when a furnace burns an item as fuel"),;
 
     public final String label;
     public final String description;
