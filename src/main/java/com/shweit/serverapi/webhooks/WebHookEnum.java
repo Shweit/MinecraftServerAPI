@@ -31,7 +31,8 @@ public enum WebHookEnum {
     PLAYER_LOGIN("player_login", "Triggered when a player logs in"),
     PLAYER_COMMAND("player_command", "Triggered when a player executes a command"),
     PLAYER_GAMEMODE_CHANGE("player_gamemode_change", "Triggered when a player changes their gamemode"),
-    PLAYER_ITEM_BREAK("player_item_break", "Triggered when a player's item breaks"),;
+    PLAYER_ITEM_BREAK("player_item_break", "Triggered when a player's item breaks"),
+    PLAYER_JOIN("player_join", "Triggered when a player joins the server"),;
 
     public final String label;
     public final String description;

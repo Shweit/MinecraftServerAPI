@@ -117,6 +117,9 @@ public final class RegisterWebHooks {
 
         new PlayerItemBreak().register();
         Logger.debug("Registered player_item_break WebHook");
+
+        new PlayerJoin().register();
+        Logger.debug("Registered player_join WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
