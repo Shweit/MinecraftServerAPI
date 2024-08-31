@@ -22,7 +22,11 @@ public enum WebHookEnum {
     ENTITY_SHOOT_BOW("entity_shoot_bow", "Triggered when an entity shoots a bow"),
     ENTITY_TAME("entity_tame", "Triggered when an entity is tamed"),
     EXPLOSION_PRIME("explosion_prime", "Triggered when an explosion is primed"),
-    PLAYER_DEATH("player_death", "Triggered when a player dies"),;
+    PLAYER_DEATH("player_death", "Triggered when a player dies"),
+    BREW("brew", "Triggered when a potion is brewed"),
+    CRAFT_ITEM("craft_item", "Triggered when an item is crafted"),
+    FURNACE_BURN("furnace_burn", "Triggered when a furnace burns an item as fuel"),
+    FURNACE_SMELT("furnace_smelt", "Triggered when a furnace smelts an item"),;
 
     public final String label;
     public final String description;

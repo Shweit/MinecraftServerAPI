@@ -4,6 +4,10 @@ import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
 import com.shweit.serverapi.webhooks.entity.*;
+import com.shweit.serverapi.webhooks.inventory.Brew;
+import com.shweit.serverapi.webhooks.inventory.CraftItem;
+import com.shweit.serverapi.webhooks.inventory.FurnaceBurn;
+import com.shweit.serverapi.webhooks.inventory.FurnaceSmelt;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -82,6 +86,21 @@ public final class RegisterWebHooks {
 
         new ExplosionPrime().register();
         Logger.debug("Registered explosion_prime WebHook");
+
+        new PlayerDeath().register();
+        Logger.debug("Registered player_death WebHook");
+
+        new Brew().register();
+        Logger.debug("Registered brew WebHook");
+
+        new CraftItem().register();
+        Logger.debug("Registered craft_item WebHook");
+
+        new FurnaceBurn().register();
+        Logger.debug("Registered furnace_burn WebHook");
+
+        new FurnaceSmelt().register();
+        Logger.debug("Registered furnace_smelt WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
