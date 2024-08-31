@@ -5,6 +5,7 @@ import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
 import com.shweit.serverapi.webhooks.entity.*;
 import com.shweit.serverapi.webhooks.inventory.Brew;
+import com.shweit.serverapi.webhooks.inventory.CraftItem;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -89,6 +90,9 @@ public final class RegisterWebHooks {
 
         new Brew().register();
         Logger.debug("Registered brew WebHook");
+
+        new CraftItem().register();
+        Logger.debug("Registered craft_item WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
