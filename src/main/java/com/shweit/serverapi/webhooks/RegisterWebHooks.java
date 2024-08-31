@@ -100,12 +100,12 @@ public final class RegisterWebHooks {
 
                 int responseCode = conn.getResponseCode();
                 if (responseCode == 200) {
-                    Logger.debug("WebHook sent successfully to " + url);
+                    Logger.debug("WebHook '" + jsonObject.get("event") + "' sent successfully to " + url);
                 } else {
-                    Logger.warning("Failed to send WebHook to " + url + ". Response code: " + responseCode);
+                    Logger.warning("Failed to send WebHook '" + jsonObject.get("event") + "' to " + url + ". Response code: " + responseCode);
                 }
             } catch (Exception e) {
-                Logger.error("Error sending WebHook to " + url + ": " + e.getMessage());
+                Logger.error("Error sending WebHook " + jsonObject.get("event") + " to " + url + ": " + e.getMessage());
             }
         }
     }

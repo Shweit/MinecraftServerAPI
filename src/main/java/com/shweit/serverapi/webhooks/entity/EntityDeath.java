@@ -31,8 +31,16 @@ public class EntityDeath implements WebHook, Listener {
         jsonObject.put("location", event.getEntity().getLocation().toString());
         jsonObject.put("drops", event.getDrops().toString());
         jsonObject.put("xp", event.getDroppedExp());
-        jsonObject.put("killedBy", Objects.requireNonNull(event.getEntity().getKiller()).getName());
-        jsonObject.put("cause", Objects.requireNonNull(event.getEntity().getLastDamageCause()).getCause().name());
+
+        if (event.getEntity().getKiller() != null) {
+            jsonObject.put("killedBy", event.getEntity().getKiller().getName());
+        } else {
+            jsonObject.put("killedBy", "null");
+        }
+
+        if (event.getEntity().getLastDamageCause() != null) {
+            jsonObject.put("cause", event.getEntity().getLastDamageCause().getCause().name());
+        }
 
         RegisterWebHooks.sendToAllUrls(jsonObject);
     }

@@ -38,7 +38,7 @@ webhooks:
   sign_change: true
   enchant_item: true
   creeper_power: true
-  creature_spawn: true
+  creature_spawn: false # This is disabled by default, because it can spam your Webhook-URLs.
   entity_death: true
   entity_explode: true
   entity_shoot_bow: true
