@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.json.JSONObject;
 
-public class PlayerRespawn implements WebHook, Listener {
+public final class PlayerRespawn implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.PLAYER_RESPAWN.label;
 
