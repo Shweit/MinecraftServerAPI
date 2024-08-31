@@ -12,6 +12,7 @@ import com.shweit.serverapi.webhooks.player.*;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
+import com.shweit.serverapi.webhooks.weather.LightningStrike;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.json.JSONObject;
 
@@ -129,6 +130,9 @@ public final class RegisterWebHooks {
 
         new PlayerRespawn().register();
         Logger.debug("Registered player_respawn WebHook");
+
+        new LightningStrike().register();
+        Logger.debug("Registered lightning_strike WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
