@@ -123,6 +123,12 @@ public final class RegisterWebHooks {
 
         new PlayerKick().register();
         Logger.debug("Registered player_kick WebHook");
+
+        new PlayerQuit().register();
+        Logger.debug("Registered player_quit WebHook");
+
+        new PlayerRespawn().register();
+        Logger.debug("Registered player_respawn WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {

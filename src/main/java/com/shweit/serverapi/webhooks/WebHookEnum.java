@@ -34,7 +34,8 @@ public enum WebHookEnum {
     PLAYER_ITEM_BREAK("player_item_break", "Triggered when a player's item breaks"),
     PLAYER_JOIN("player_join", "Triggered when a player joins the server"),
     PLAYER_KICK("player_kick", "Triggered when a player is kicked from the server"),
-    PLAYER_QUIT("player_quit", "Triggered when a player quits the server"),;
+    PLAYER_QUIT("player_quit", "Triggered when a player quits the server"),
+    PLAYER_RESPAWN("player_respawn", "Triggered when a player respawns"),;
 
     public final String label;
     public final String description;
