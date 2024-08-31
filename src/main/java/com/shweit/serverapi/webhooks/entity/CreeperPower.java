@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreeperPowerEvent;
 import org.json.JSONObject;
 
-public class CreeperPower implements WebHook, Listener {
+public final class CreeperPower implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.CREEPER_POWER.label;
 

@@ -9,9 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
-public class EntityDeath implements WebHook, Listener {
+public final class EntityDeath implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.ENTITY_DEATH.label;
 

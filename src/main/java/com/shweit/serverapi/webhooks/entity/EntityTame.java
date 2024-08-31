@@ -3,14 +3,15 @@ package com.shweit.serverapi.webhooks.entity;
 import com.shweit.serverapi.MinecraftServerAPI;
 import com.shweit.serverapi.webhooks.RegisterWebHooks;
 import com.shweit.serverapi.webhooks.WebHook;
+import com.shweit.serverapi.webhooks.WebHookEnum;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityTameEvent;
 import org.json.JSONObject;
 
-public final class CreatureSpawn implements WebHook, Listener {
+public final class EntityTame implements WebHook, Listener {
 
-    private final String eventName = "creature_spawn";
+    private final String eventName = WebHookEnum.ENTITY_TAME.label;
 
     @Override
     public void register() {
@@ -21,13 +22,14 @@ public final class CreatureSpawn implements WebHook, Listener {
     }
 
     @EventHandler
-    public void onCreatureSpawn(final CreatureSpawnEvent event) {
+    public void onEntityTame(final EntityTameEvent event) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
         jsonObject.put("entity", event.getEntity().getType().name());
         jsonObject.put("location", event.getEntity().getLocation().toString());
-        jsonObject.put("spawnReason", event.getSpawnReason().name());
+        jsonObject.put("owner", event.getOwner().getName());
 
         RegisterWebHooks.sendToAllUrls(jsonObject);
     }
+
 }

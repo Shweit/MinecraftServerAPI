@@ -77,6 +77,9 @@ public final class RegisterWebHooks {
 
         new EntityShootBow().register();
         Logger.debug("Registered entity_shot_bow WebHook");
+
+        new EntityTame().register();
+        Logger.debug("Registered entity_tame WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {

@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.json.JSONObject;
 import com.shweit.serverapi.webhooks.WebHookEnum;
 
-public class EntityShootBow implements WebHook, Listener {
+public final class EntityShootBow implements WebHook, Listener {
 
     private final String eventName = WebHookEnum.ENTITY_SHOOT_BOW.label;
 
