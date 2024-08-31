@@ -120,6 +120,9 @@ public final class RegisterWebHooks {
 
         new PlayerJoin().register();
         Logger.debug("Registered player_join WebHook");
+
+        new PlayerKick().register();
+        Logger.debug("Registered player_kick WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
