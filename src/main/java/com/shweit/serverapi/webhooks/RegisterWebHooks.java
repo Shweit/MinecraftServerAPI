@@ -3,10 +3,7 @@ package com.shweit.serverapi.webhooks;
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
-import com.shweit.serverapi.webhooks.entity.CreatureSpawn;
-import com.shweit.serverapi.webhooks.entity.CreeperPower;
-import com.shweit.serverapi.webhooks.entity.EntityDeath;
-import com.shweit.serverapi.webhooks.entity.EntityExplode;
+import com.shweit.serverapi.webhooks.entity.*;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -77,6 +74,9 @@ public final class RegisterWebHooks {
 
         new EntityExplode().register();
         Logger.debug("Registered entity_explode WebHook");
+
+        new EntityShootBow().register();
+        Logger.debug("Registered entity_shot_bow WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
