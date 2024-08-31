@@ -2,6 +2,7 @@ package com.shweit.serverapi.commands;
 
 import com.shweit.serverapi.commands.webHook.DisableWebHookCommand;
 import com.shweit.serverapi.commands.webHook.EnableWebHookCommand;
+import com.shweit.serverapi.commands.webHook.SendWebHookCommand;
 import com.shweit.serverapi.commands.webHook.ListWebHook;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,7 +19,8 @@ public final class RegisterCommands {
         List<SubCommand> subCommands = List.of(
             new ListWebHook(),
             new EnableWebHookCommand(),
-            new DisableWebHookCommand()
+            new DisableWebHookCommand(),
+            new SendWebHookCommand()
         );
 
         CommandManager webhookCommandManager = new CommandManager(subCommands);
