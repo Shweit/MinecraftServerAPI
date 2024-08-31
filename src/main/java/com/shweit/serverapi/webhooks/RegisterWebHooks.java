@@ -8,10 +8,7 @@ import com.shweit.serverapi.webhooks.inventory.Brew;
 import com.shweit.serverapi.webhooks.inventory.CraftItem;
 import com.shweit.serverapi.webhooks.inventory.FurnaceBurn;
 import com.shweit.serverapi.webhooks.inventory.FurnaceSmelt;
-import com.shweit.serverapi.webhooks.player.PlayerChat;
-import com.shweit.serverapi.webhooks.player.PlayerCommand;
-import com.shweit.serverapi.webhooks.player.PlayerGamemodeChange;
-import com.shweit.serverapi.webhooks.player.PlayerLogin;
+import com.shweit.serverapi.webhooks.player.*;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -117,6 +114,9 @@ public final class RegisterWebHooks {
 
         new PlayerGamemodeChange().register();
         Logger.debug("Registered player_gamemode_change WebHook");
+
+        new PlayerItemBreak().register();
+        Logger.debug("Registered player_item_break WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
