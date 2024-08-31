@@ -4,6 +4,7 @@ import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
 import com.shweit.serverapi.webhooks.entity.*;
+import com.shweit.serverapi.webhooks.inventory.Brew;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -82,6 +83,12 @@ public final class RegisterWebHooks {
 
         new ExplosionPrime().register();
         Logger.debug("Registered explosion_prime WebHook");
+
+        new PlayerDeath().register();
+        Logger.debug("Registered player_death WebHook");
+
+        new Brew().register();
+        Logger.debug("Registered brew WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
