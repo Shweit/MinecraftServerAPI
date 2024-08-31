@@ -36,7 +36,9 @@ public enum WebHookEnum {
     PLAYER_KICK("player_kick", "Triggered when a player is kicked from the server"),
     PLAYER_QUIT("player_quit", "Triggered when a player quits the server"),
     PLAYER_RESPAWN("player_respawn", "Triggered when a player respawns"),
-    LIGHTNING_STRIKE("lightning_strike", "Triggered when lightning strikes"),;
+    LIGHTNING_STRIKE("lightning_strike", "Triggered when lightning strikes"),
+    WEATHER_CHANGE("weather_change", "Triggered when the weather changes"),
+    THUNDER_CHANGE("thunder_change", "Triggered when the thunder changes"),;
 
     public final String label;
     public final String description;
