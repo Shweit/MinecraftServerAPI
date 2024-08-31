@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ListWebHook extends SubCommand {
-    private static final int ENTRIES_PER_PAGE = 10;
+    private static final int ENTRIES_PER_PAGE = 7;
 
     @Override
     public String getName() {
@@ -49,9 +49,9 @@ public final class ListWebHook extends SubCommand {
         }
 
         commandSender.sendMessage(
-            ChatColor.GRAY + "--------------------["
+            ChatColor.GRAY + "----------------["
             + ChatColor.LIGHT_PURPLE + " WebHooks - Page " + page + "/" + totalPages + ChatColor.GRAY
-            + " ]--------------------"
+            + " ]----------------"
         );
         commandSender.sendMessage("");
         commandSender.sendMessage(ChatColor.WHITE + "Registered WebHooks (" + WebHookEnum.values().length + "):");
