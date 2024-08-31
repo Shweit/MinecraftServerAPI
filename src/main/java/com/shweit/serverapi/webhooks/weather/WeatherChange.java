@@ -26,7 +26,7 @@ public final class WeatherChange implements WebHook, Listener {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", eventName);
         jsonObject.put("world", event.getWorld().getName());
-        jsonObject.put("weather", event.toWeatherState());
+        jsonObject.put("rain", event.toWeatherState());
 
         RegisterWebHooks.sendToAllUrls(jsonObject);
     }
