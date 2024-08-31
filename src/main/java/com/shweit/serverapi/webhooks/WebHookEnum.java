@@ -27,7 +27,8 @@ public enum WebHookEnum {
     CRAFT_ITEM("craft_item", "Triggered when an item is crafted"),
     FURNACE_BURN("furnace_burn", "Triggered when a furnace burns an item as fuel"),
     FURNACE_SMELT("furnace_smelt", "Triggered when a furnace smelts an item"),
-    PLAYER_CHAT("player_chat", "Triggered when a player sends a chat message"),;
+    PLAYER_CHAT("player_chat", "Triggered when a player sends a chat message"),
+    PLAYER_LOGIN("player_login", "Triggered when a player logs in"),;
 
     public final String label;
     public final String description;

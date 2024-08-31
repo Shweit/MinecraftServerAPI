@@ -9,6 +9,7 @@ import com.shweit.serverapi.webhooks.inventory.CraftItem;
 import com.shweit.serverapi.webhooks.inventory.FurnaceBurn;
 import com.shweit.serverapi.webhooks.inventory.FurnaceSmelt;
 import com.shweit.serverapi.webhooks.player.PlayerChat;
+import com.shweit.serverapi.webhooks.player.PlayerLogin;
 import com.shweit.serverapi.webhooks.server.PluginDisable;
 import com.shweit.serverapi.webhooks.server.PluginEnable;
 import com.shweit.serverapi.webhooks.server.ServerStart;
@@ -105,6 +106,9 @@ public final class RegisterWebHooks {
 
         new PlayerChat().register();
         Logger.debug("Registered player_chat WebHook");
+
+        new PlayerLogin().register();
+        Logger.debug("Registered player_login WebHook");
     }
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
