@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Minecraft Test Server ###
+/src/test/resources/minecraft-test-server/*

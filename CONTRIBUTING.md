@@ -1,4 +1,7 @@
 # Contributing
+> You can add yourself to the contributors in `src/main/resources/plugin.yml` when you make your first contribution.
+
+If you contribute to this project, you agree to abide by the [code of conduct](CODE_OF_CONDUCT.md). Please read the guidelines below before contributing.
 ## Best Practice
 1. **Fork the Repository:** Fork the repository to your GitHub account.
 2. **Create a New Branch:** Create a new branch for your feature or bug fix.

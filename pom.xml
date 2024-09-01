@@ -4,8 +4,7 @@
   <groupId>org.example</groupId>
   <artifactId>MinecraftServerAPI</artifactId>
   <version>1.0</version>
-  <name>Archetype - MinecraftServerAPI</name>
-  <url>http://maven.apache.org</url>
+  <name>MinecraftServerAPI</name>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
@@ -18,6 +17,10 @@
     <repository>
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>citizens-repo</id>
+      <url>https://maven.citizensnpcs.co/repo</url>
     </repository>
   </repositories>
 
@@ -62,12 +65,11 @@
       <groupId>eu.kennytv.maintenance</groupId>
       <artifactId>maintenance-api</artifactId>
       <version>4.2.1</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20230227</version>
+      <version>20231013</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -82,10 +84,40 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>4.0.0</version>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>1.20.0</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>1.17.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.5.6</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.16</version>
+    </dependency>
+    <dependency>
+      <groupId>net.citizensnpcs</groupId>
+      <artifactId>citizens-main</artifactId>
+      <version>2.0.35-SNAPSHOT</version>
+      <scope>test</scope>
+      <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
@@ -106,16 +138,6 @@
         <version>3.5.0</version>
         <configuration>
           <createDependencyReducedPom>false</createDependencyReducedPom>
-          <filters>
-            <filter>
-              <artifact>*:*</artifact>
-              <excludes>
-                <exclude>META-INF/*.SF</exclude>
-                <exclude>META-INF/*.DSA</exclude>
-                <exclude>META-INF/*.RSA</exclude>
-              </excludes>
-            </filter>
-          </filters>
         </configuration>
         <executions>
           <execution>
