@@ -1,4 +1,8 @@
 # MinecraftServerAPI
+<img src="https://img.shields.io/github/actions/workflow/status/Shweit/MinecraftServerAPI/runtime.yml" />
+<img src="https://img.shields.io/github/v/release/Shweit/MinecraftServerAPI" />
+<img src="https://img.shields.io/github/license/Shweit/MinecraftServerAPI" />
+<img src="https://img.shields.io/github/downloads/Shweit/MinecraftServerAPI/total" />
 
 ## Overview
 **MinecraftServerAPI** is a powerful and flexible plugin for Minecraft servers, providing RESTful APIs to interact with the server programmatically. This project allows server administrators to automate tasks, gather information, manage the server more efficiently, and even trigger WebHooks for various server events.
