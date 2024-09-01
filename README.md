@@ -1,10 +1,7 @@
 # MinecraftServerAPI
 
 ## Overview
-MinecraftServerAPI is a powerful and flexible plugin for Minecraft servers, 
-providing RESTful APIs to interact with the server programmatically. 
-This project allows server administrators to automate tasks, gather 
-information, and manage the server more efficiently.
+**MinecraftServerAPI** is a powerful and flexible plugin for Minecraft servers, providing RESTful APIs to interact with the server programmatically. This project allows server administrators to automate tasks, gather information, manage the server more efficiently, and even trigger WebHooks for various server events.
 
 ## Prerequisites
 - **Java:** JDK 21
@@ -40,7 +37,7 @@ java -Xmx1024M -Xms1024M -jar paper-1.21.jar nogui
 ### Accessing the API
 6. The API is accessible at `http://localhost:7000/`. You can test it by sending a GET request to the following endpoint: `GET http://localhost:7000/api/v1/ping`.
 
-## Usage
+## API Usage
 ### Example API Requests
 - **Get all Players:**
 ```bash
@@ -49,7 +46,39 @@ curl -X 'GET' \
   -H 'accept: application/json' \
   -H 'Authorization: <API_KEY>'
 ```
-### Configuration
+
+## WebHook Usage
+### Configuring WebHooks
+MinecraftServerAPI supports WebHooks, allowing you to trigger HTTP requests to specified URLs when certain events occur on your server (e.g., server start, server stop, plugin enable/disable).
+
+### Setting up WebHooks
+1. **Define WebHooks URLs:** In your `config.yml` located in the `plugins/MinecraftServerAPI`, specify the URLs you want to trigger for different events.
+2. **Enable/Disable WebHooks:** You can enable or disable WebHooks for specific events by setting the `enabled` flag to `true` or `false` in the `config.yml` file. Or you can enable/disable the WebHooks with the following commands:
+- **Enable a WebHook:**
+```
+/webhook enable <event>
+```
+- **Disable a WebHook:**
+```
+/webhook disable <event>
+```
+- **List all WebHooks:**
+```
+/webhook list
+```
+
+### Sending a custom WebHook
+MinecraftServerAPI allows you to send custom WebHook events to the URLs specified in your config.yml file. This feature enables you to trigger specific WebHook notifications manually.
+
+To send a custom WebHook event, use the following command in-game or via the server console:
+```
+/webhook send <event>
+```
+
+### More Information
+For a detailed list of all available WebHooks and their default settings, please refer to the [WebHooks Documentation](webhooks.md).
+
+## Configuration
 The plugin is configured via a `config.yml` file in the `plugins/MinecraftServerAPI directory. Here, you can set the authentication key and other settings.
 
 ## Contributing
