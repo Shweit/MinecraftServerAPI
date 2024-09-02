@@ -24,11 +24,7 @@ public final class CheckForUpdate implements Listener {
         if (latestVersion != null) {
             String currentVersion = MinecraftServerAPI.getInstance().getDescription().getVersion();
 
-            if (!latestVersion.equals(currentVersion)) {
-                return true;
-            } else {
-                return false;
-            }
+            return !latestVersion.equals(currentVersion);
         } else {
             Logger.warning("Failed to fetch the latest version from GitHub API.");
         }

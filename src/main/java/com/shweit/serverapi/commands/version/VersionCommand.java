@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class VersionCommand extends SubCommand {
+public final class VersionCommand extends SubCommand {
     @Override
     public String getName() {
         return "version";
@@ -25,12 +25,12 @@ public class VersionCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, Command command, String label, String[] args) {
+    public void perform(final CommandSender commandSender, final Command command, final String label, final String[] args) {
         commandSender.sendMessage(ChatColor.GREEN + "MinecraftServerAPI version: " + ChatColor.GOLD + MinecraftServerAPI.getInstance().getDescription().getVersion());
     }
 
     @Override
-    public List<String> getSubcommandArguments(CommandSender commandSender, Command command, String label, String[] args) {
+    public List<String> getSubcommandArguments(final CommandSender commandSender, final Command command, final String label, final String[] args) {
         return List.of();
     }
 }
