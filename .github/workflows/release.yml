@@ -32,26 +32,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload to Modrinth
-        uses: dsx137/modrinth-release-action@main
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        with:
-          name: ${{ github.event.release.tag_name }}
-          project_id: H4i6sdRk
-          loaders: spigot, paper, bukkit
-          game_versions: 1.9:1.21.1
-          version_number: ${{ github.event.release.tag_name }}
-          files: |
-            ./target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar
-          changelog: ${{ github.event.release.body }}
-          version_type: release # or beta, alpha
-          featured: true
-          status: 'listed' # or archived, draft, unlisted, scheduled, unknown
-          requested_status: 'listed' # or archived, draft, unlisted
-          updatable: false # default true, means updating existing version
-          delete_old_files: false # default true
-
-      - name: Upload to Modrinth
         uses: RubixDev/modrinth-upload@v1
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
