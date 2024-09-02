@@ -3,7 +3,6 @@ package com.shweit.serverapi;
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.utils.RouteDefinition;
 import fi.iki.elonen.NanoHTTPD;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.InputStream;
 import java.util.ArrayList;

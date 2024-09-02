@@ -19,7 +19,6 @@ import com.shweit.serverapi.webhooks.weather.WeatherChange;
 import com.shweit.serverapi.webhooks.world.WorldLoad;
 import com.shweit.serverapi.webhooks.world.WorldSave;
 import com.shweit.serverapi.webhooks.world.WorldUnload;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
