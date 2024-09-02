@@ -1,5 +1,6 @@
 package com.shweit.serverapi.commands;
 
+import com.shweit.serverapi.commands.version.VersionCommand;
 import com.shweit.serverapi.commands.webHook.DisableWebHookCommand;
 import com.shweit.serverapi.commands.webHook.EnableWebHookCommand;
 import com.shweit.serverapi.commands.webHook.SendWebHookCommand;
@@ -16,14 +17,20 @@ public final class RegisterCommands {
     }
 
     public void register() {
-        List<SubCommand> subCommands = List.of(
+        List<SubCommand> webHookSubCommands = List.of(
             new ListWebHook(),
             new EnableWebHookCommand(),
             new DisableWebHookCommand(),
             new SendWebHookCommand()
         );
-
-        CommandManager webhookCommandManager = new CommandManager(subCommands);
+        CommandManager webhookCommandManager = new CommandManager(webHookSubCommands);
         plugin.getCommand("webhooks").setExecutor(webhookCommandManager);
+
+
+        List<SubCommand> mcapiSubCommands = List.of(
+            new VersionCommand()
+        );
+        CommandManager versionCommandManager = new CommandManager(mcapiSubCommands);
+        plugin.getCommand("mcapi").setExecutor(versionCommandManager);
     }
 }

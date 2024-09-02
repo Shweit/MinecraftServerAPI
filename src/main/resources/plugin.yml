@@ -19,3 +19,8 @@ commands:
     permission: mcapi.webhooks
     aliases:
       - wh
+
+  mcapi:
+    description: Main command for the MinecraftServerAPI.
+    usage: /mcapi <command> [args]
+    permission: mcapi
