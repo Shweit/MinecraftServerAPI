@@ -115,6 +115,41 @@ function filterEndpoints() {
   });
 }
 
+const EndpointInformationPlugin = (endpointElementId, htmlText) => {
+  return {
+    afterLoad: function(system) {
+      const observer = new MutationObserver(() => {
+        const container = document.getElementById(endpointElementId);
+
+        if (container && !document.getElementById('maintenance-info')) {
+          // Create a maintenance information div
+          const maintenanceInfo = document.createElement("div");
+          maintenanceInfo.id = "maintenance-info";
+          maintenanceInfo.style.fontSize = "12px";
+          maintenanceInfo.style.color = "#555";
+          maintenanceInfo.style.textAlign = "left";
+          maintenanceInfo.style.marginTop = "8px";  // Add margin to position it below the header
+          maintenanceInfo.style.width = "100%";     // Ensure it takes full width
+
+          const infoText = document.createElement("p");
+          infoText.style.margin = "0";
+          infoText.innerHTML = htmlText;
+
+          maintenanceInfo.appendChild(infoText);
+
+          // Insert the maintenance information right after the first child of the header
+          const headerTitle = container.querySelector('span');
+          headerTitle.parentNode.insertBefore(maintenanceInfo, headerTitle.nextSibling);
+
+          observer.disconnect();
+        }
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  };
+}
+
 window.onload = function() {
   window.ui = SwaggerUIBundle({
     url: "/api-docs",
@@ -126,7 +161,8 @@ window.onload = function() {
     ],
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl,
-      SearchPlugin
+      SearchPlugin,
+      EndpointInformationPlugin("operations-tag-Maintenance", "These API Endpoints depend on the Maintenance plugin. If you don't have the plugin installed, you won't be able to access these endpoints. You can install it <a href='https://www.spigotmc.org/resources/maintenance-bungee-and-spigot-support.40699/'>here</a>.")
     ],
     layout: "StandaloneLayout",
   });
