@@ -1,5 +1,5 @@
 name: MinecraftServerAPI
-version: 1.0
+version: 1.5
 description: Provides RESTful APIs and WebHooks for managing and automating your Minecraft server.
 website: https://github.com/Shweit/MinecraftServerAPI
 author: Shweit

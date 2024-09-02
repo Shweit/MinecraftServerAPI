@@ -124,9 +124,6 @@ public final class RegisterWebHooks {
         new PlayerItemBreak().register();
         Logger.debug("Registered player_item_break WebHook");
 
-        new PlayerJoin().register();
-        Logger.debug("Registered player_join WebHook");
-
         new PlayerKick().register();
         Logger.debug("Registered player_kick WebHook");
 
