@@ -62,7 +62,7 @@ public class MinecraftServerAPI extends JavaPlugin  {
 
         new RegisterEndpoints(server).registerEndpoints();
 
-        new RegisterWebHooks().registerWebHooks(config);
+        new RegisterWebHooks().registerWebHooks();
 
         new RegisterCommands(this).register();
 
