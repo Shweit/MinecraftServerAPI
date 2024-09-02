@@ -1,4 +1,5 @@
 name: Maven Release
+
 'on':
   release:
     types: [published]
@@ -14,7 +15,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
+          java-version: '21' # Make sure to set the correct Java version for your project
           distribution: temurin
 
       - name: Set maven project version
@@ -23,11 +24,32 @@ jobs:
       - name: Build and package Maven project
         run: mvn clean package -DskipTests
 
-      - name: Upload to Modrinth
-        uses: cloudnode-pro/modrinth-publish@1.0.0
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.MODRINTH_TOKEN }}
-          project: H4i6sdRk
-          file: target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar
-          changelog: ${{ github.event.release.body }}
-          loaders: paper, spigot, bukkit
+          files: target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Modrinth
+        run: |
+          curl -X POST https://api.modrinth.com/v2/version \
+          -H "Authorization: Bearer ${{ secrets.MODRINTH_TOKEN }}" \
+          -H "Content-Type: multipart/form-data" \
+          -F "data={
+              \"name\": \"${{ github.event.release.tag_name }}\",
+              \"version_number\": \"${{ github.event.release.tag_name }}\",
+              \"changelog\": \"${{ github.event.release.body }}\",
+              \"dependencies\": [],
+              \"game_versions\": [\"1.16.5\", \"1.17.1\"],
+              \"version_type\": \"release\",
+              \"loaders\": [\"fabric\", \"forge\", \"spigot\"],
+              \"featured\": true,
+              \"status\": \"listed\",
+              \"requested_status\": \"listed\"
+            }" \
+          -F "file=@target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar" \
+          -F "file_parts=file" \
+          -F "primary_file=file"
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
