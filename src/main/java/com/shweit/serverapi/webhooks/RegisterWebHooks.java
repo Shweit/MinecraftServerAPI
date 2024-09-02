@@ -21,10 +21,7 @@ import com.shweit.serverapi.webhooks.world.WorldSave;
 import com.shweit.serverapi.webhooks.world.WorldUnload;
 import org.json.JSONObject;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -33,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 public final class RegisterWebHooks {
     private static List<String> urls;
-    private static final HttpClient httpClient = HttpClient.newHttpClient();
+    private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
     public void registerWebHooks() {
 
@@ -167,7 +164,7 @@ public final class RegisterWebHooks {
         }
     }
 
-    private static void sendWebHook(String url, JSONObject jsonObject) {
+    private static void sendWebHook(final String url, final JSONObject jsonObject) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -175,7 +172,7 @@ public final class RegisterWebHooks {
                     .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
                     .build();
 
-            CompletableFuture<HttpResponse<String>> response = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+            CompletableFuture<HttpResponse<String>> response = HTTP_CLIENT.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
             response.thenAccept(httpResponse -> {
                 if (httpResponse.statusCode() == 200) {
