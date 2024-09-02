@@ -17,8 +17,10 @@ components:
       type: apiKey
       in: header
       name: Authorization
+servers:
+  - url: /v1
 paths:
-  /v1/players:
+  /players:
     get:
       summary: Retrieve the list of online players
       description: >
@@ -53,7 +55,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/banned-players:
+  /banned-players:
     get:
       summary: Retrieve the list of banned players
       description: |
@@ -87,7 +89,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/offline-players:
+  /offline-players:
     get:
       summary: Retrieve the list of offline players
       description: >
@@ -122,7 +124,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  "/v1/players/{username}":
+  "/players/{username}":
     get:
       summary: Retrieve player information by username
       description: >
@@ -252,7 +254,7 @@ paths:
           description: Player not found
         "500":
           description: Internal server error
-  "/v1/players/{username}/stats":
+  "/players/{username}/stats":
     get:
       summary: Retrieve player statistics by username
       description: >
@@ -287,7 +289,7 @@ paths:
           description: Player not found
         "500":
           description: Internal server error
-  "/v1/players/{username}/advancements":
+  "/players/{username}/advancements":
     get:
       summary: Retrieve player advancements by username
       description: >
@@ -322,7 +324,7 @@ paths:
           description: Player not found or Player is not online
         "500":
           description: Internal server error
-  "/v1/players/{username}/inventory":
+  "/players/{username}/inventory":
     get:
       summary: Retrieve player inventory by username
       description: >
@@ -357,7 +359,7 @@ paths:
           description: Player not found or Player is not online
         "500":
           description: Internal server error
-  "/v1/players/{username}/inventory/{slot}":
+  "/players/{username}/inventory/{slot}":
     get:
       summary: Retrieve player inventory slot by username and slot number
       description: >
@@ -398,7 +400,7 @@ paths:
           description: Player not found or Player is not online
         "500":
           description: Internal server error
-  "/v1/players/{username}/kick":
+  "/players/{username}/kick":
     post:
       summary: Kick a player by username
       description: >
@@ -430,7 +432,7 @@ paths:
           description: Player not found or Player is not online
         "500":
           description: Internal server error
-  "/v1/players/{username}/ban":
+  "/players/{username}/ban":
     post:
       summary: Ban a player by username
       description: >
@@ -468,7 +470,7 @@ paths:
           description: Player not found or Player is not online
         "500":
           description: Internal server error
-  "/v1/players/{username}/pardon":
+  "/players/{username}/pardon":
     post:
       summary: Unban a player by username
       description: |
@@ -493,7 +495,7 @@ paths:
           description: Player not found
         "500":
           description: Internal server error
-  "/v1/players/{username}/location":
+  "/players/{username}/location":
     get:
       summary: Retrieve player location by username
       description: >
@@ -624,7 +626,7 @@ paths:
           description: Player not found or Player is not online
         "500":
           description: Internal server error
-  /v1/ping:
+  /ping:
     get:
       summary: Ping the server
       description: >
@@ -641,7 +643,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server:
+  /server:
     get:
       summary: Retrieve server information
       description: |
@@ -754,7 +756,7 @@ paths:
                     type: integer
                     description: The view distance in chunks
                     example: 10
-  /v1/server/health:
+  /server/health:
     get:
       summary: Check the health of the server
       description: |
@@ -860,7 +862,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/tps:
+  /server/tps:
     get:
       summary: Retrieve the server's TPS (ticks per second)
       description: >
@@ -887,7 +889,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/uptime:
+  /server/uptime:
     get:
       summary: Retrieve the server's uptime
       description: |
@@ -912,7 +914,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/properties:
+  /server/properties:
     get:
       summary: Retrieve all server properties
       description: >
@@ -987,7 +989,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/exec:
+  /server/exec:
     post:
       summary: Execute a command on the server
       description: |
@@ -1028,7 +1030,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/reload:
+  /server/reload:
     post:
       summary: Reload the server
       description: |
@@ -1044,7 +1046,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/reboot:
+  /server/reboot:
     post:
       summary: Reboot the server
       description: >
@@ -1062,7 +1064,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/shutdown:
+  /server/shutdown:
     post:
       summary: Shutdown the server
       description: |
@@ -1078,7 +1080,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/broadcast:
+  /server/broadcast:
     post:
       summary: Broadcast a message to all players
       description: |
@@ -1111,7 +1113,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/chat:
+  /server/chat:
     get:
       summary: Retrieve the server chat
       description: |
@@ -1150,7 +1152,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/server/log:
+  /server/log:
     get:
       summary: Retrieve the server log
       description: |
@@ -1189,7 +1191,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/whitelist:
+  /whitelist:
     get:
       summary: Retrieve the whitelist
       description: |
@@ -1281,7 +1283,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/whitelist/activate:
+  /whitelist/activate:
     post:
       summary: Activate the whitelist
       description: |
@@ -1304,7 +1306,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/whitelist/deactivate:
+  /whitelist/deactivate:
     post:
       summary: Deactivate the whitelist
       description: |
@@ -1320,7 +1322,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/plugins:
+  /plugins:
     get:
       summary: Retrieve a list of plugins
       description: >
@@ -1411,7 +1413,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/plugins/activate:
+  /plugins/activate:
     post:
       summary: Activate a plugin
       description: |
@@ -1436,7 +1438,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/plugins/deactivate:
+  /plugins/deactivate:
     post:
       summary: Deactivate a plugin
       description: |
@@ -1461,7 +1463,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  "/v1/plugins/{plugin}":
+  "/plugins/{plugin}":
     get:
       summary: Retrieve information about a specific plugin
       description: >
@@ -1550,7 +1552,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/worlds:
+  /worlds:
     get:
       summary: Retrieve a list of worlds
       description: |
@@ -1719,7 +1721,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/worlds/{world}:
+  /worlds/{world}:
     get:
       summary: Retrieve information about a specific world
       description: >
@@ -1966,7 +1968,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/backups:
+  /backups:
     get:
       summary: Retrieve a list of backups
       description: |
@@ -2043,7 +2045,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/backups/status:
+  /backups/status:
     get:
       summary: Retrieve the status of the latest backup
       description: |
@@ -2099,7 +2101,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/backups/{name}:
+  /backups/{name}:
     get:
       summary: Retrieve information about a specific backup
       description: >
@@ -2147,7 +2149,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/backups/{name}/download:
+  /backups/{name}/download:
     get:
       summary: Download a backup
       description: |
@@ -2173,7 +2175,7 @@ paths:
           description: Unauthorized access - invalid or missing authentication key
         "500":
           description: Internal server error
-  /v1/maintenance:
+  /maintenance:
     description: |
       The maintenance endpoints allow setting the maintenance status of the
       Minecraft server. You need to have the [Maintenance Plugin](https://www.spigotmc.org/resources/maintenance-bungee-and-spigot-support.40699/) installed on your server to use these endpoints.
@@ -2270,7 +2272,7 @@ paths:
           description: Maintenance plugin not found
         "500":
           description: Internal server error
-  /v1/maintenance/whitelist:
+  /maintenance/whitelist:
     get:
       summary: Retrieve the maintenance whitelist
       description: |

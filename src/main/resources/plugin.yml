@@ -5,6 +5,7 @@ website: https://github.com/Shweit/MinecraftServerAPI
 author: Shweit
 contributors:
   - Shweit
+  - Flix-29
 api-version: 1.21
 softdepend:
   - Maintenance
