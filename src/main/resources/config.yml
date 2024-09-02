@@ -3,6 +3,9 @@
 # The port the API should listen on.
 port: 7000
 
+# Enable swagger documentation for the API endpoints
+swagger: true
+
 # If you want to enable Authentication, set this to true.
 # It is not recommended to disable this. If you do, everyone can access the API.
 authentication:

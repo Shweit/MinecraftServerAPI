@@ -1,5 +1,6 @@
 package com.shweit.serverapi.webhooks;
 
+import com.shweit.serverapi.MinecraftServerAPI;
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.block.*;
 import com.shweit.serverapi.webhooks.enchantment.EnchantItem;
@@ -18,7 +19,6 @@ import com.shweit.serverapi.webhooks.weather.WeatherChange;
 import com.shweit.serverapi.webhooks.world.WorldLoad;
 import com.shweit.serverapi.webhooks.world.WorldSave;
 import com.shweit.serverapi.webhooks.world.WorldUnload;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -28,12 +28,10 @@ import java.util.List;
 
 public final class RegisterWebHooks {
     private static List<String> urls;
-    private static FileConfiguration configuration;
 
-    public void registerWebHooks(final FileConfiguration config) {
+    public void registerWebHooks() {
 
-        urls = config.getStringList("webhooks.urls");
-        configuration = config;
+        urls = MinecraftServerAPI.config.getStringList("webhooks.urls");
 
         if (urls.isEmpty()) {
             Logger.warning("No WebHook URL's found in config.yml");
@@ -189,6 +187,6 @@ public final class RegisterWebHooks {
     public static boolean doActivateWebhook(final String eventName) {
         String eventPath = "webhooks." + eventName;
 
-        return configuration.getBoolean(eventPath, true);
+        return MinecraftServerAPI.config.getBoolean(eventPath, true);
     }
 }

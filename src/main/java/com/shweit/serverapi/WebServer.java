@@ -28,15 +28,20 @@ public final class WebServer extends NanoHTTPD {
         String uri = session.getUri();
         NanoHTTPD.Method method = session.getMethod();
         Map<String, String> params = new HashMap<>();
+        boolean swaggerDocumentation = MinecraftServerAPI.config.getBoolean("swagger", true);
 
         Logger.debug("Received request for: " + uri + " with method: " + method);
 
         // Define Map of allowed origins
-        List<String> allowedPaths = List.of(
-                "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css",
-                "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js", "/favicon-32x32.png",
-                "/swagger-ui.css.map", "/favicon-16x16.png"
-        );
+        List<String> allowedPaths = List.of();
+
+        if (swaggerDocumentation) {
+            allowedPaths = List.of(
+                    "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css",
+                    "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js", "/favicon-32x32.png",
+                    "/swagger-ui.css.map", "/favicon-16x16.png"
+            );
+        }
 
         // Check if the path is allowed
         AtomicBoolean isAllowedPath = new AtomicBoolean(false);
@@ -61,28 +66,32 @@ public final class WebServer extends NanoHTTPD {
             }
         }
 
-        // Serve OpenAPI spec
-        if ("/api-docs".equalsIgnoreCase(uri)) {
-            InputStream apiSpecStream = getClass().getResourceAsStream("/api.yaml");
-            if (apiSpecStream != null) {
-                return newChunkedResponse(Response.Status.OK, "application/yaml", apiSpecStream);
-            } else {
-                return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "API documentation not found");
+        if (swaggerDocumentation) {
+            // Serve OpenAPI spec
+            if ("/api-docs".equalsIgnoreCase(uri)) {
+                InputStream apiSpecStream = getClass().getResourceAsStream("/api.yaml");
+                if (apiSpecStream != null) {
+                    return newChunkedResponse(Response.Status.OK, "application/yaml", apiSpecStream);
+                } else {
+                    return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "API documentation not found");
+                }
             }
         }
 
         // Serve Swagger UI files on root path
-        if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger") || isAllowedPath.get()) {
-            if ("/".equals(uri)) {
-                uri = "/index.html"; // Redirect to the main Swagger UI page
-            }
-            InputStream resourceStream = getClass().getResourceAsStream("/swagger" + uri);
-            if (resourceStream != null) {
-                String mimeType = determineMimeType(uri);
-                return newChunkedResponse(Response.Status.OK, mimeType, resourceStream);
-            } else {
-                Logger.debug("Resource not found: " + uri);
-                return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Route not Found");
+        if (swaggerDocumentation) {
+            if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger") || isAllowedPath.get()) {
+                if ("/".equals(uri)) {
+                    uri = "/index.html"; // Redirect to the main Swagger UI page
+                }
+                InputStream resourceStream = getClass().getResourceAsStream("/swagger" + uri);
+                if (resourceStream != null) {
+                    String mimeType = determineMimeType(uri);
+                    return newChunkedResponse(Response.Status.OK, mimeType, resourceStream);
+                } else {
+                    Logger.debug("Resource not found: " + uri);
+                    return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Route not Found");
+                }
             }
         }
 
