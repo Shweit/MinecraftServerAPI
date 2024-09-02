@@ -14,7 +14,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '21'  # Ensure the correct Java version for your project
+          java-version: '21'
           distribution: temurin
 
       - name: Set maven project version
@@ -22,12 +22,6 @@ jobs:
 
       - name: Build and package Maven project
         run: mvn clean package -DskipTests
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: MinecraftServerAPI-${{ github.event.release.tag_name }}.jar
-          path: target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
