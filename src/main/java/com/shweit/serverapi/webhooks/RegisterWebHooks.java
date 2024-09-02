@@ -21,13 +21,16 @@ import com.shweit.serverapi.webhooks.world.WorldSave;
 import com.shweit.serverapi.webhooks.world.WorldUnload;
 import org.json.JSONObject;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public final class RegisterWebHooks {
     private static List<String> urls;
+    private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
     public void registerWebHooks() {
 
@@ -41,7 +44,7 @@ public final class RegisterWebHooks {
         new ServerStart().register();
         Logger.debug("Registered server_start WebHook");
 
-        // ServerStop is not registered because it is triggered when the plugin gets disabled
+        // ServerStop is not registered here, because it is triggered when the plugin gets disabled
         Logger.debug("Registered server_stop WebHook");
 
         new PluginDisable().register();
@@ -152,32 +155,38 @@ public final class RegisterWebHooks {
 
     public static void sendToAllUrls(final JSONObject jsonObject) {
         if (urls == null || urls.isEmpty()) {
-            Logger.warning("No WebHook URL's found in config.yml");
+            Logger.warning("Keine WebHook-URLs in der config.yml gefunden");
             return;
         }
 
         for (String url : urls) {
-            try {
-                URL webhookUrl = new URL(url);
-                HttpURLConnection conn = (HttpURLConnection) webhookUrl.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.setDoOutput(true);
+            sendWebHook(url, jsonObject);
+        }
+    }
 
-                try (OutputStream os = conn.getOutputStream()) {
-                    byte[] input = jsonObject.toString().getBytes("utf-8");
-                    os.write(input, 0, input.length);
-                }
+    private static void sendWebHook(final String url, final JSONObject jsonObject) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+                    .build();
 
-                int responseCode = conn.getResponseCode();
-                if (responseCode == 200) {
-                    Logger.debug("WebHook '" + jsonObject.get("event") + "' sent successfully to " + url);
+            CompletableFuture<HttpResponse<String>> response = HTTP_CLIENT.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+            response.thenAccept(httpResponse -> {
+                if (httpResponse.statusCode() == 200) {
+                    Logger.debug("WebHook '" + jsonObject.get("event") + "' erfolgreich an " + url + "gesendet");
                 } else {
-                    Logger.warning("Failed to send WebHook '" + jsonObject.get("event") + "' to " + url + ". Response code: " + responseCode);
+                    Logger.warning("Fehler beim Senden des WebHooks '" + jsonObject.get("event") + "' an " + url + ". Antwortcode: " + httpResponse.statusCode());
                 }
-            } catch (Exception e) {
-                Logger.error("Error sending WebHook " + jsonObject.get("event") + " to " + url + ": " + e.getMessage());
-            }
+            }).exceptionally(e -> {
+                Logger.error("Fehler beim Senden des WebHooks " + jsonObject.get("event") + " an " + url + ": " + e.getMessage());
+                return null;
+            });
+
+        } catch (Exception e) {
+            Logger.error("Fehler beim Senden des WebHooks " + jsonObject.get("event") + " an " + url + ": " + e.getMessage());
         }
     }
 
