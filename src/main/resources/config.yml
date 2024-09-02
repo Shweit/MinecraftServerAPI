@@ -30,10 +30,10 @@ webhooks:
   server_stop: true
   plugin_disable: true
   plugin_enable: true
-  block_break: true
-  block_place: true
-  block_burn: true
-  block_redstone: true
+  block_break: false # This is disabled by default, because it can spam your Webhook-URLs.
+  block_place: false # This is disabled by default, because it can spam your Webhook-URLs.
+  block_burn: false # This is disabled by default, because it can spam your Webhook-URLs.
+  block_redstone: false # This is disabled by default, because it can spam your Webhook-URLs.
   note_play: true
   sign_change: true
   enchant_item: true
@@ -47,8 +47,8 @@ webhooks:
   player_death: true
   brew: true
   craft_item: false # This is disabled by default, because it can spam your Webhook-URLs.
-  furnace_burn: true
-  furnace_smelt: true
+  furnace_burn: true # This is disabled by default, because it can spam your Webhook-URLs.
+  furnace_smelt: true # This is disabled by default, because it can spam your Webhook-URLs.
   player_chat: false # This is disabled by default, because it delays the delivery of the message to the server.
   player_login: true
   player_command: false # This is disabled by default, because it delays the delivery of the command to the server.
