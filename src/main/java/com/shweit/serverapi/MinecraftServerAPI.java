@@ -11,6 +11,7 @@ package com.shweit.serverapi;
 
 import com.shweit.serverapi.commands.RegisterCommands;
 import com.shweit.serverapi.endpoints.RegisterEndpoints;
+import com.shweit.serverapi.utils.CheckForUpdate;
 import com.shweit.serverapi.utils.Logger;
 import com.shweit.serverapi.webhooks.RegisterWebHooks;
 import com.shweit.serverapi.webhooks.server.ServerStop;
@@ -40,6 +41,9 @@ public class MinecraftServerAPI extends JavaPlugin  {
 
     @Override
     public final void onEnable() {
+        // Check for Updates
+        getServer().getPluginManager().registerEvents(new CheckForUpdate(), this);
+
         registerEvents();
         createConfig();
 
