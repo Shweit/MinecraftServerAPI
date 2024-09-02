@@ -1,0 +1,42 @@
+name: Maven Release
+'on':
+  release:
+    types: [ published ]
+jobs:
+  publish:
+    name: Build and Upload JARs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21' # Make sure to set the correct Java version for your project
+          distribution: temurin
+
+      # This step changes the version in your pom.xml to match the release tag
+      # This change only happens in the workflow and is not committed to your repository.
+      # You could set the version in your repository to something like `0.0.0-SNAPSHOT` and
+      # it will always be overwritten to the correct version here when a release is created.
+      - name: Set maven project ver
+        run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
+
+      - name: Build and package Maven project
+        run: mvn clean package -DskipTests
+
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar application/java-archive
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Upload to Modrinth
+        uses: cloudnode-pro/modrinth-publish@1.0.0
+        with:
+          token: '${{ secrets.MODRINTH_TOKEN }}'
+          project: H4i6sdRk
+          file: 'target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar'
+          changelog: '${{ github.event.release.body }}'
+          loaders: 'paper, spigot, bukkit'
