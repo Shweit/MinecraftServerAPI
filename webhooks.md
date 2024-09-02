@@ -13,10 +13,10 @@ Below is a list of all possible WebHooks supported by MinecraftServerAPI, along 
 | `server_stop`          | Triggered when the server stops.                                                 | Enabled        |
 | `plugin_disable`       | Triggered when a plugin is disabled.                                             | Enabled        |
 | `plugin_enable`        | Triggered when a plugin is enabled.                                              | Enabled        |
-| `block_break`          | Triggered when a block is broken.                                                | Enabled        |
-| `block_place`          | Triggered when a block is placed.                                                | Enabled        |
-| `block_burn`           | Triggered when a block burns.                                                    | Enabled        |
-| `block_redstone`       | Triggered when a redstone event occurs.                                          | Enabled        |
+| `block_break`          | Triggered when a block is broken.                                                | Disabled       |
+| `block_place`          | Triggered when a block is placed.                                                | Disabled       |
+| `block_burn`           | Triggered when a block burns.                                                    | Disabled       |
+| `block_redstone`       | Triggered when a redstone event occurs.                                          | Disabled       |
 | `note_play`            | Triggered when a note block is played.                                           | Enabled        |
 | `sign_change`          | Triggered when a sign is changed.                                                | Enabled        |
 | `enchant_item`         | Triggered when an item is enchanted.                                             | Enabled        |
@@ -30,8 +30,8 @@ Below is a list of all possible WebHooks supported by MinecraftServerAPI, along 
 | `player_death`         | Triggered when a player dies.                                                    | Enabled        |
 | `brew`                 | Triggered when a brewing event occurs.                                           | Enabled        |
 | `craft_item`           | Triggered when an item is crafted.                                               | Disabled       |
-| `furnace_burn`         | Triggered when a furnace starts burning.                                         | Enabled        |
-| `furnace_smelt`        | Triggered when a furnace smelts an item.                                         | Enabled        |
+| `furnace_burn`         | Triggered when a furnace starts burning.                                         | Disabled       |
+| `furnace_smelt`        | Triggered when a furnace smelts an item.                                         | Disabled       |
 | `player_chat`          | Triggered when a player sends a chat message.                                    | Disabled       |
 | `player_login`         | Triggered when a player logs in.                                                 | Enabled        |
 | `player_command`       | Triggered when a player issues a command.                                        | Disabled       |
