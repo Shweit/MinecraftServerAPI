@@ -16,7 +16,7 @@ public final class CheckForUpdate implements Listener {
 
     private static final String GITHUB_API_URL = "https://api.github.com/repos/Shweit/MinecraftServerAPI/releases/latest";
     private static final String USER_AGENT = "Mozilla/5.0";
-    private String latestVersion;
+    public String latestVersion;
 
     public boolean checkForPluginUpdate() {
         latestVersion = fetchLatestVersion();
