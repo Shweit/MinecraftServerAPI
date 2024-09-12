@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
@@ -29,8 +30,15 @@ public final class Helper {
             response = java.net.http.HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
             JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
             playerUUID = UUID.fromString(jsonObject.get("id").getAsString().replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
+        } catch (InterruptedException e) {
+            Logger.error("Request was interrupted: " + e.getMessage());
+            Thread.currentThread().interrupt();
+            return null;
+        } catch (IOException e) {
+            Logger.error("Failed to convert username to UUID: " + username + " - " + e.getMessage());
+            return null;
         } catch (Exception e) {
-            Logger.warning("Failed to convert username to UUID: " + username);
+            Logger.error("Unexpected error occurred: " + e.getMessage());
             return null;
         }
 

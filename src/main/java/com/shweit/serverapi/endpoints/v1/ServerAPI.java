@@ -236,6 +236,7 @@ public final class ServerAPI {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 Logger.error(e.getMessage());
+                Thread.currentThread().interrupt();
             }
         }
 

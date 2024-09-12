@@ -108,7 +108,9 @@ public final class BackupAPI {
 
                 // Rename file to remove .loading
                 File finalBackupFile = new File(backupFolder, name + ".zip");
-                backupFile.renameTo(finalBackupFile);
+                if (!(backupFile.renameTo(finalBackupFile))) {
+                    Logger.error("Failed to rename backup file: " + backupFile.getName());
+                }
 
                 Logger.info("Backup created successfully: " + finalBackupFile.getName());
 

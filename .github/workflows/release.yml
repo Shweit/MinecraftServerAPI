@@ -31,12 +31,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Modrinth Publish
+      - name: CurseForge & Modrinth Publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: 'H4i6sdRk'
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           modrinth-featured: true
+
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          curseforge-id: '1101540'
+
           files: |
             target/MinecraftServerAPI-${{ github.event.release.tag_name }}.jar
           loaders: |
@@ -47,5 +51,3 @@ jobs:
             >=1.9 <=1.21.1
           game-version-filter: 'releases'
           java: 21
-
-

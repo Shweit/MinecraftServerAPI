@@ -32,42 +32,30 @@ public final class WebServer extends NanoHTTPD {
 
         Logger.debug("Received request for: " + uri + " with method: " + method);
 
-        // Define Map of allowed origins
-        List<String> allowedPaths = List.of();
-
-        if (swaggerDocumentation) {
-            allowedPaths = List.of(
-                    "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css",
-                    "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js", "/favicon-32x32.png",
-                    "/swagger-ui.css.map", "/favicon-16x16.png"
-            );
+        // Handle Swagger documentation and static files
+        Response swaggerResponse = handleSwaggerDocumentation(uri, session, swaggerDocumentation);
+        if (swaggerResponse != null) {
+            return swaggerResponse;
         }
 
-        // Check if the path is allowed
-        AtomicBoolean isAllowedPath = new AtomicBoolean(false);
-        String finalUri = uri;
-        allowedPaths.forEach(path -> {
-            if (finalUri.equals(path) || finalUri.startsWith("/swagger")) {
-                isAllowedPath.set(true);
-            }
-        });
-
-        // Exception for the root path, swagger files and /api-docs from authentication
-        if (isAuthenticated) {
-            if (isAllowedPath.get()) {
-                Logger.debug("Allowed path: " + uri);
-            } else {
-                Logger.debug("Checking authentication for: " + uri);
-                String authHeader = session.getHeaders().get("authorization");
-                if (authHeader == null || !authHeader.equals(authKey)) {
-                    Logger.debug("Unauthorized request for: " + uri);
-                    return newFixedLengthResponse(Response.Status.UNAUTHORIZED, MIME_PLAINTEXT, "Unauthorized");
-                }
+        // Handle authentication
+        if (isAuthenticated && !isAllowedPath(uri, swaggerDocumentation)) {
+            Response authResponse = handleAuthentication(session, uri);
+            if (authResponse != null) {
+                return authResponse;
             }
         }
 
+        // Extract query parameters
+        extractQueryParams(session, params);
+
+        // Match routes and return appropriate response
+        return handleRouteMatching(uri, method, params);
+    }
+
+    // Method to handle Swagger documentation and static files
+    private Response handleSwaggerDocumentation(String uri, IHTTPSession session, boolean swaggerDocumentation) {
         if (swaggerDocumentation) {
-            // Serve OpenAPI spec
             if ("/api-docs".equalsIgnoreCase(uri)) {
                 InputStream apiSpecStream = getClass().getResourceAsStream("/api.yaml");
                 if (apiSpecStream != null) {
@@ -76,11 +64,8 @@ public final class WebServer extends NanoHTTPD {
                     return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "API documentation not found");
                 }
             }
-        }
 
-        // Serve Swagger UI files on root path
-        if (swaggerDocumentation) {
-            if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger") || isAllowedPath.get()) {
+            if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger")) {
                 if ("/".equals(uri)) {
                     uri = "/index.html"; // Redirect to the main Swagger UI page
                 }
@@ -94,23 +79,48 @@ public final class WebServer extends NanoHTTPD {
                 }
             }
         }
+        return null;
+    }
 
-        // Extract query parameters and add them to the params map
+    // Method to handle authentication
+    private Response handleAuthentication(IHTTPSession session, String uri) {
+        String authHeader = session.getHeaders().get("authorization");
+        if (authHeader == null || !authHeader.equals(authKey)) {
+            Logger.debug("Unauthorized request for: " + uri);
+            return newFixedLengthResponse(Response.Status.UNAUTHORIZED, MIME_PLAINTEXT, "Unauthorized");
+        }
+        return null;
+    }
+
+    // Method to check if a path is allowed without authentication
+    private boolean isAllowedPath(String uri, boolean swaggerDocumentation) {
+        List<String> allowedPaths = swaggerDocumentation ? List.of(
+                "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css",
+                "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js",
+                "/favicon-32x32.png", "/swagger-ui.css.map", "/favicon-16x16.png"
+        ) : List.of();
+
+        return allowedPaths.stream().anyMatch(path -> uri.equals(path) || uri.startsWith("/swagger"));
+    }
+
+    // Method to extract query parameters
+    private void extractQueryParams(IHTTPSession session, Map<String, String> params) {
         if (session.getQueryParameterString() != null) {
             session.getParameters().forEach((key, value) -> params.put(key, value.get(0)));
         }
+    }
 
+    // Method to handle route matching
+    private Response handleRouteMatching(String uri, NanoHTTPD.Method method, Map<String, String> params) {
         for (RouteDefinition route : routes) {
             if (route.matches(uri, method, params)) {
                 return route.getHandler().apply(params);
             }
         }
-
         Logger.debug("No route found for: " + uri + " with method: " + method);
-
-        // Default response
         return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not Found");
     }
+
 
     // Method to determine MIME type
     private String determineMimeType(final String uri) {
