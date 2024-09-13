@@ -4,7 +4,7 @@ info:
   title: Minecraft Server API
   description: This API provides endpoints for interacting with and managing
     various aspects of a Minecraft server.
-  version: 1.0.0
+  version: 1.0.3
   contact:
     name: Dennis van den Brock
     email: dennisvandenbrock54@gmail.com
