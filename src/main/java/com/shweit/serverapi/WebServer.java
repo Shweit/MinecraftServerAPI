@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 public final class WebServer extends NanoHTTPD {
@@ -54,9 +53,10 @@ public final class WebServer extends NanoHTTPD {
     }
 
     // Method to handle Swagger documentation and static files
-    private Response handleSwaggerDocumentation(String uri, IHTTPSession session, boolean swaggerDocumentation) {
+    private Response handleSwaggerDocumentation(final String uri, final IHTTPSession session, final boolean swaggerDocumentation) {
+        String finalUri = uri;
         if (swaggerDocumentation) {
-            if ("/api-docs".equalsIgnoreCase(uri)) {
+            if ("/api-docs".equalsIgnoreCase(finalUri)) {
                 InputStream apiSpecStream = getClass().getResourceAsStream("/api.yaml");
                 if (apiSpecStream != null) {
                     return newChunkedResponse(Response.Status.OK, "application/yaml", apiSpecStream);
@@ -65,16 +65,16 @@ public final class WebServer extends NanoHTTPD {
                 }
             }
 
-            if (uri.equalsIgnoreCase("/") || uri.startsWith("/swagger")) {
-                if ("/".equals(uri)) {
-                    uri = "/index.html"; // Redirect to the main Swagger UI page
+            if (finalUri.equalsIgnoreCase("/") || finalUri.startsWith("/swagger")) {
+                if ("/".equals(finalUri)) {
+                    finalUri = "/index.html"; // Redirect to the main Swagger UI page
                 }
-                InputStream resourceStream = getClass().getResourceAsStream("/swagger" + uri);
+                InputStream resourceStream = getClass().getResourceAsStream("/swagger" + finalUri);
                 if (resourceStream != null) {
-                    String mimeType = determineMimeType(uri);
+                    String mimeType = determineMimeType(finalUri);
                     return newChunkedResponse(Response.Status.OK, mimeType, resourceStream);
                 } else {
-                    Logger.debug("Resource not found: " + uri);
+                    Logger.debug("Resource not found: " + finalUri);
                     return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "Route not Found");
                 }
             }
@@ -83,7 +83,7 @@ public final class WebServer extends NanoHTTPD {
     }
 
     // Method to handle authentication
-    private Response handleAuthentication(IHTTPSession session, String uri) {
+    private Response handleAuthentication(final IHTTPSession session, final String uri) {
         String authHeader = session.getHeaders().get("authorization");
         if (authHeader == null || !authHeader.equals(authKey)) {
             Logger.debug("Unauthorized request for: " + uri);
@@ -93,7 +93,7 @@ public final class WebServer extends NanoHTTPD {
     }
 
     // Method to check if a path is allowed without authentication
-    private boolean isAllowedPath(String uri, boolean swaggerDocumentation) {
+    private boolean isAllowedPath(final String uri, final boolean swaggerDocumentation) {
         List<String> allowedPaths = swaggerDocumentation ? List.of(
                 "/", "/swagger-ui-bundle.js", "/swagger-ui.css", "/api-docs", "/index.css",
                 "/searchPlugin.js", "/swagger-ui-standalone-preset.js", "/swagger-initializer.js",
@@ -104,14 +104,14 @@ public final class WebServer extends NanoHTTPD {
     }
 
     // Method to extract query parameters
-    private void extractQueryParams(IHTTPSession session, Map<String, String> params) {
+    private void extractQueryParams(final IHTTPSession session, final Map<String, String> params) {
         if (session.getQueryParameterString() != null) {
             session.getParameters().forEach((key, value) -> params.put(key, value.get(0)));
         }
     }
 
     // Method to handle route matching
-    private Response handleRouteMatching(String uri, NanoHTTPD.Method method, Map<String, String> params) {
+    private Response handleRouteMatching(final String uri, final NanoHTTPD.Method method, final Map<String, String> params) {
         for (RouteDefinition route : routes) {
             if (route.matches(uri, method, params)) {
                 return route.getHandler().apply(params);
