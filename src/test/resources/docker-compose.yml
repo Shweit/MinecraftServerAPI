@@ -10,7 +10,7 @@ services:
       - "7001:7001"
     environment:
       EULA: "TRUE"
-      VERSION: "1.21"
+      VERSION: "1.20"
       TYPE: "PAPER"
     volumes:
       - ./minecraft-test-server:/data
