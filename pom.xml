@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.example</groupId>
   <artifactId>MinecraftServerAPI</artifactId>
-  <version>1.21.x</version>
+  <version>1.20.x</version>
   <name>MinecraftServerAPI</name>
 
   <properties>
