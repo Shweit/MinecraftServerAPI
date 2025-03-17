@@ -6,7 +6,7 @@ author: Shweit
 contributors:
   - Shweit
   - Flix-29
-api-version: 1.20
+api-version: '1.19'
 softdepend:
   - Maintenance
 
