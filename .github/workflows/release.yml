@@ -18,45 +18,6 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-      - name: Extract branch name and determine Minecraft version
-        id: extract_branch
-        run: |
-          BRANCH_NAME=${GITHUB_REF_NAME}
-          echo "Branch name: $BRANCH_NAME"
-          
-          # Extract Minecraft version from branch name (e.g., 1.19.x -> 1.19)
-          if [[ $BRANCH_NAME =~ ([0-9]+\.[0-9]+)\.x ]]; then
-            MC_VERSION=${BASH_REMATCH[1]}
-            echo "Detected Minecraft version: $MC_VERSION"
-            echo "mc_version=$MC_VERSION" >> $GITHUB_OUTPUT
-            
-            # Create a list of compatible game versions based on the branch
-            if [[ $MC_VERSION == "1.19" ]]; then
-              echo "game_versions=1.19,1.19.1,1.19.2,1.19.3,1.19.4" >> $GITHUB_OUTPUT
-            elif [[ $MC_VERSION == "1.20" ]]; then
-              echo "game_versions=1.20,1.20.1,1.20.2,1.20.3,1.20.4" >> $GITHUB_OUTPUT
-            elif [[ $MC_VERSION == "1.21" ]]; then
-              echo "game_versions=1.21,1.21.1" >> $GITHUB_OUTPUT
-            elif [[ $MC_VERSION == "1.18" ]]; then
-              echo "game_versions=1.18,1.18.1,1.18.2" >> $GITHUB_OUTPUT
-            else
-              # For other versions, use the exact version and ensure it's not empty
-              echo "game_versions=$MC_VERSION" >> $GITHUB_OUTPUT
-              # Add a fallback in case the version extraction fails
-              if [[ -z "$MC_VERSION" ]]; then
-                echo "Fallback to a default version"
-                echo "game_versions=1.19,1.20,1.21" >> $GITHUB_OUTPUT
-              fi
-            fi
-
-            # Store the game versions for debugging
-            GAME_VERSIONS=$(grep -oP 'game_versions=\K.*' $GITHUB_OUTPUT)
-            echo "Compatible game versions: $GAME_VERSIONS"
-          else
-            echo "Could not determine Minecraft version from branch name: $BRANCH_NAME"
-            exit 1
-          fi
-
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
@@ -77,9 +38,11 @@ jobs:
 
           files: ${{ steps.artifact.outputs.jar_path }}
 
-          name: MinecraftServerAPI ${GITHUB_REF_NAME}
-          version: ${GITHUB_REF_NAME}-${{ steps.artifact.outputs.version }}
+          name: MinecraftServerAPI ${{ GITHUB_REF_NAME }}
+          version: msa-${{ steps.artifact.outputs.version }}
           version-type: release
+          game-versions: |
+            >=1.19 <1.20
           loaders: |
             paper
             spigot
