@@ -80,8 +80,6 @@ jobs:
           name: MinecraftServerAPI ${GITHUB_REF_NAME}
           version: ${GITHUB_REF_NAME}-${{ steps.artifact.outputs.version }}
           version-type: release
-          game-versions: |
-            ${{ steps.extract_branch.outputs.game_versions }}
           loaders: |
             paper
             spigot
