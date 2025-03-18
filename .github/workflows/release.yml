@@ -50,10 +50,9 @@ jobs:
           changelog: |
             See [GitHub Release](${{ github.event.release.html_url }}) for changelog.
 
-      - name: Upload Jar to GitHub Release
-        uses: actions/upload-release-asset@v1
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ steps.artifact.outputs.jar_path }}
-          asset_name: MinecraftServerAPI-${{ steps.artifact.outputs.version }}.jar
-          asset_content_type: application/java-archive
+          files: target/MinecraftServerAPI-*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
