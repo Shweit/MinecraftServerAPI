@@ -38,7 +38,7 @@ jobs:
 
           files: ${{ steps.artifact.outputs.jar_path }}
 
-          name: MinecraftServerAPI ${{ GITHUB_REF_NAME }}
+          name: MinecraftServerAPI ${{ github.ref_name }}
           version: msa-${{ steps.artifact.outputs.version }}
           version-type: release
           game-versions: |
