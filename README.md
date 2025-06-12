@@ -4,7 +4,7 @@
 ## Overview
 **MinecraftServerAPI** is a powerful and flexible plugin for Minecraft servers, providing RESTful APIs to interact with the server programmatically. This project allows server administrators to automate tasks, gather information, manage the server more efficiently, and even trigger WebHooks for various server events.
 
-You can find a public list of all available Endpoints in [api.yaml](api.yaml) file.
+You can find a public list of all available Endpoints [here](https://msa.shweit.com/).
 
 ## Prerequisites
 - **Java:** JDK 20 or higher is required to build and run the project.
