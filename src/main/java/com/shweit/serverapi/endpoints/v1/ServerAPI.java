@@ -12,7 +12,7 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.json.JSONArray; // Add this import
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -25,7 +25,7 @@ import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.Base64;
-import java.util.HashMap; // For session.parseBody()
+import java.util.HashMap; 
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -251,102 +251,88 @@ public final class ServerAPI {
         return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", jsonResponse.toString());
     }
 
-public NanoHTTPD.Response execMultipleCommands(final NanoHTTPD.IHTTPSession session) {
-    Map<String, String> files = new HashMap<>();
-    try {
-        session.parseBody(files);
-    } catch (IOException | NanoHTTPD.ResponseException e) {
-        Logger.error("Error parsing request body: " + e.getMessage());
-        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "application/json", "{\"error\":\"Error parsing request body\"}");
-    }
-
-    String postBody = files.get("postData");
-    if (postBody == null) {
-        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"Missing request body\"}");
-    }
-
-    JSONObject requestJson;
-    try {
-        requestJson = new JSONObject(postBody);
-    } catch (Exception e) {
-        Logger.error("Error parsing JSON request body: " + e.getMessage());
-        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"Invalid JSON format\"}");
-    }
-
-    if (!requestJson.has("commands")) {
-        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"Missing 'commands' field in JSON payload\"}");
-    }
-
-    JSONArray commandsJsonArray;
-    try {
-        commandsJsonArray = requestJson.getJSONArray("commands");
-    } catch (Exception e) {
-        Logger.error("Error parsing 'commands' array: " + e.getMessage());
-        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.BAD_REQUEST, "application/json", "{\"error\":\"'commands' field must be a JSON array\"}");
-    }
-
-    JSONArray resultsArray = new JSONArray();
-
-    for (int i = 0; i < commandsJsonArray.length(); i++) {
-        String command = commandsJsonArray.optString(i);
-        if (command == null || command.trim().isEmpty()) {
-            JSONObject result = new JSONObject();
-            result.put("command", JSONObject.NULL);
-            result.put("success", false);
-            result.put("output", "Empty command string provided.");
-            resultsArray.put(result);
-            continue;
+    public NanoHTTPD.Response execMultipleCommands(final Map<String, String> params) {
+        String commandsParam = params.get("commands");
+        if (commandsParam == null) {
+            return NanoHTTPD.newFixedLengthResponse(
+                NanoHTTPD.Response.Status.BAD_REQUEST, 
+                "application/json", 
+                "{\"error\":\"Missing 'commands' parameter\"}"
+            );
         }
 
-        AtomicBoolean success = new AtomicBoolean(false);
-        CommandOutputCapture outputCapture = new CommandOutputCapture();
-        JSONObject result = new JSONObject();
-        result.put("command", command);
-
+        JSONArray commandsJsonArray;
         try {
-            BukkitTask task = Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
-                success.set(Bukkit.getServer().dispatchCommand(outputCapture, command));
-            });
+            commandsJsonArray = new JSONArray(commandsParam);
+        } catch (Exception e) {
+            Logger.error("Error parsing 'commands' array: " + e.getMessage());
+            return NanoHTTPD.newFixedLengthResponse(
+                NanoHTTPD.Response.Status.BAD_REQUEST, 
+                "application/json", 
+                "{\"error\":\"'commands' parameter must be a valid JSON array\"}"
+            );
+        }
 
-            // Wait for the command to complete
-            while (!task.isCancelled() && (Bukkit.getScheduler().isCurrentlyRunning(task.getTaskId()) || Bukkit.getScheduler().isQueued(task.getTaskId()))) {
-                try {
-                    Thread.sleep(50); // Check every 50ms
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+        JSONArray resultsArray = new JSONArray();
+
+        for (int i = 0; i < commandsJsonArray.length(); i++) {
+            String command = commandsJsonArray.optString(i);
+            if (command == null || command.trim().isEmpty()) {
+                JSONObject result = new JSONObject();
+                result.put("command", JSONObject.NULL);
+                result.put("success", false);
+                result.put("output", "Empty command string provided.");
+                resultsArray.put(result);
+                continue;
+            }
+
+            AtomicBoolean success = new AtomicBoolean(false);
+            CommandOutputCapture outputCapture = new CommandOutputCapture();
+            JSONObject result = new JSONObject();
+            result.put("command", command);
+
+            try {
+                BukkitTask task = Bukkit.getScheduler().runTask(MinecraftServerAPI.getInstance(), () -> {
+                    success.set(Bukkit.getServer().dispatchCommand(outputCapture, command));
+                });
+
+                while (!task.isCancelled() && (Bukkit.getScheduler().isCurrentlyRunning(task.getTaskId()) || Bukkit.getScheduler().isQueued(task.getTaskId()))) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        Logger.error("Command execution interrupted: " + command);
+                        result.put("success", false);
+                        result.put("output", "Command execution was interrupted.");
+                        break;
+                    }
+                }
+                
+                if (Thread.currentThread().isInterrupted()){
                     Logger.error("Command execution interrupted: " + command);
                     result.put("success", false);
                     result.put("output", "Command execution was interrupted.");
-                    break;
                 }
-            }
-             if (Thread.currentThread().isInterrupted()){
-                 // If the thread was interrupted outside the sleep.
-                 Logger.error("Command execution interrupted: " + command);
-                 result.put("success", false);
-                 result.put("output", "Command execution was interrupted.");
+
+            } catch (Exception e) {
+                Logger.error("Error executing command '" + command + "': " + e.getMessage());
+                result.put("success", false);
+                result.put("output", "Error executing command: " + e.getMessage());
             }
 
-
-        } catch (Exception e) {
-            Logger.error("Error executing command '" + command + "': " + e.getMessage());
-            result.put("success", false);
-            result.put("output", "Error executing command: " + e.getMessage());
+            if (!result.has("success")) {
+                result.put("success", success.get());
+                result.put("output", outputCapture.getOutputMessages());
+            }
+            resultsArray.put(result);
         }
 
-        // Ensure result is populated even if interruption occurred before outputCapture could be populated.
-        if (!result.has("success")) { // if not already set by interruption logic
-            result.put("success", success.get());
-            result.put("output", outputCapture.getOutputMessages());
-        }
-        resultsArray.put(result);
+        JSONObject responseJson = new JSONObject();
+        responseJson.put("results", resultsArray);
+
+        return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", responseJson.toString());
     }
 
-    JSONObject responseJson = new JSONObject();
-    responseJson.put("results", resultsArray);
-
-    return NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", responseJson.toString());
-}
 
     public NanoHTTPD.Response reload(final Map<String, String> ignoredParams) {
         NanoHTTPD.Response response = NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.OK, "application/json", "{}");
