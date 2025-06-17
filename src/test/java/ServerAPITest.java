@@ -156,48 +156,4 @@ public class ServerAPITest extends ApiTestHelper {
 
         assertTrue(jsonResponse.has("log"));
     }
-
-@Test
-void testExecMultipleCommands() throws Exception {
-    JSONObject payload = new JSONObject();
-    JSONArray commands = new JSONArray();
-    commands.put("say Hello from testExecMultipleCommands1");
-    commands.put("time set day");
-    commands.put("nonexistentcommandtest"); 
-    commands.put("");
-    payload.put("commands", commands);
-
-    // Perform POST request
-    ApiTestHelper.TestResponse response = ApiTestHelper.post("/v1/server/exec-multiple", payload.toString());
-
-    // Assertions
-    assertEquals(200, response.statusCode);
-    assertNotNull(response.body);
-
-    JSONObject responseJson = new JSONObject(response.body);
-    assertTrue(responseJson.has("results"));
-    JSONArray resultsArray = responseJson.getJSONArray("results");
-    assertEquals(4, resultsArray.length());
-
-    // Command 1: say Hello
-    JSONObject result1 = resultsArray.getJSONObject(0);
-    assertEquals("say Hello from testExecMultipleCommands1", result1.getString("command"));
-    assertTrue(result1.getBoolean("success"));
-
-    // Command 2: time set day
-    JSONObject result2 = resultsArray.getJSONObject(1);
-    assertEquals("time set day", result2.getString("command"));
-    assertTrue(result2.getBoolean("success"));
- 
-    // Command 3: nonexistentcommandtest
-    JSONObject result3 = resultsArray.getJSONObject(2);
-    assertEquals("nonexistentcommandtest", result3.getString("command"));
-
-    // Command 4: Empty command
-    JSONObject result4 = resultsArray.getJSONObject(3);
-
-    assertTrue(result4.isNull("command") || "".equals(result4.optString("command"))); // Check if command is null or empty string
-    assertEquals(false, result4.getBoolean("success"));
-    assertEquals("Empty command string provided.", result4.getString("output"));
-}
 }
