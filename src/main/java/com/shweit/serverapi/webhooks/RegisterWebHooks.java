@@ -166,10 +166,45 @@ public final class RegisterWebHooks {
 
     private static void sendWebHook(final String url, final JSONObject jsonObject) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+            URI uri = URI.create(url);
+            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                    .uri(uri);
+            
+            // Check for Basic Authentication in URL
+            String userInfo = uri.getUserInfo();
+            if (userInfo != null && userInfo.contains(":")) {
+                // Extract username and password from URL
+                String[] credentials = userInfo.split(":", 2);
+                String username = credentials[0];
+                String password = credentials[1];
+                
+                // Create Basic Auth header
+                String auth = username + ":" + password;
+                String encodedAuth = java.util.Base64.getEncoder().encodeToString(auth.getBytes());
+                requestBuilder.header("Authorization", "Basic " + encodedAuth);
+                
+                // Rebuild URI without auth info
+                String cleanUrl = url.replaceFirst(userInfo + "@", "");
+                uri = URI.create(cleanUrl);
+                requestBuilder.uri(uri);
+            }
+            
+            // Check if only message should be sent
+            boolean onlyMessage = MinecraftServerAPI.config.getBoolean("webhooks.onlyMessage", false);
+            String bodyContent;
+            
+            if (onlyMessage && jsonObject.has("message")) {
+                // Send only the message content as plain text
+                bodyContent = jsonObject.getString("message");
+                requestBuilder.header("Content-Type", "text/plain; charset=UTF-8");
+            } else {
+                // Send full JSON object
+                bodyContent = jsonObject.toString();
+                requestBuilder.header("Content-Type", "application/json");
+            }
+            
+            HttpRequest request = requestBuilder
+                    .POST(HttpRequest.BodyPublishers.ofString(bodyContent))
                     .build();
 
             CompletableFuture<HttpResponse<String>> response = HTTP_CLIENT.sendAsync(request, HttpResponse.BodyHandlers.ofString());
@@ -178,15 +213,16 @@ public final class RegisterWebHooks {
                 if (httpResponse.statusCode() == 200) {
                     Logger.debug("WebHook '" + jsonObject.get("event") + "' erfolgreich an " + url + "gesendet");
                 } else {
-                    Logger.warning("Fehler beim Senden des WebHooks '" + jsonObject.get("event") + "' an " + url + ". Antwortcode: " + httpResponse.statusCode());
+                    Logger.warning("Error while sending webhook event '" + jsonObject.get("event") + "' to " + url + ". Responde Code: " + httpResponse.statusCode());
+                    Logger.warning(httpResponse.body());
                 }
             }).exceptionally(e -> {
-                Logger.error("Fehler beim Senden des WebHooks " + jsonObject.get("event") + " an " + url + ": " + e.getMessage());
+                Logger.error("Error while sending webhook event " + jsonObject.get("event") + " to " + url + ": " + e.getMessage());
                 return null;
             });
 
         } catch (Exception e) {
-            Logger.error("Fehler beim Senden des WebHooks " + jsonObject.get("event") + " an " + url + ": " + e.getMessage());
+            Logger.error("Error while sending webhook event " + jsonObject.get("event") + " to " + url + ": " + e.getMessage());
         }
     }
 

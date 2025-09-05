@@ -39,3 +39,5 @@ build/
 
 ### Minecraft Test Server ###
 /src/test/resources/minecraft-test-server/*
+
+test-server

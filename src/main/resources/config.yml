@@ -25,6 +25,12 @@ webhooks:
   urls:
     - "https://example.com/webhook1"
     - "https://example.com/webhook2"
+  
+  # If set to true, only the message content will be sent to the webhook endpoints
+  # instead of the full JSON object with event, load_type, and message fields.
+  # Example with onlyMessage: false -> {"load_type":"STARTUP","event":"server_start","message":"Server has started"}
+  # Example with onlyMessage: true  -> "Server has started"
+  onlyMessage: false
 
   # Here is a list of all available Webhooks.
   # You can enable or disable them here.
